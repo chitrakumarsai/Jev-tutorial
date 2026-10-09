@@ -1,0 +1,124 @@
+/* Source documents: a working paper with each side's quotes marked in the margin colours. */
+.source {
+  display: grid;
+  gap: var(--space-3);
+  min-inline-size: 0;
+}
+
+.pane-heading {
+  font-family: var(--font-text);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.source__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.source__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-block-size: 28px;
+  padding: 0 var(--space-2);
+  border: var(--rule-hairline);
+  border-radius: var(--radius-none);
+  background: transparent;
+  color: var(--color-ink);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-out-expo),
+    color var(--duration-fast) var(--ease-out-expo);
+}
+
+.source__tab:hover {
+  border-color: var(--color-ink);
+}
+
+.source__tab[aria-selected='true'] {
+  background: var(--color-ink);
+  border-color: var(--color-ink);
+  color: var(--color-paper);
+}
+
+.source__count {
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+  opacity: 0.8;
+}
+
+.source__legend {
+  display: flex;
+  gap: var(--space-3);
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+}
+
+.source__panel {
+  max-block-size: min(70vh, 40rem);
+  overflow: auto;
+  padding: var(--space-4);
+  border: var(--rule-hairline);
+}
+
+.source__notice {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-review);
+}
+
+.source__text {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: var(--line);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* Quotes: a tint plus an underline style, so the sides differ without colour too. */
+.quote {
+  color: inherit;
+  background: transparent;
+  text-decoration-line: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.quote--jev {
+  background-color: color-mix(in oklab, var(--color-jev) 16%, transparent);
+  text-decoration-color: var(--color-jev);
+  text-decoration-style: solid;
+}
+
+.quote--llm {
+  background-color: color-mix(in oklab, var(--color-llm) 16%, transparent);
+  text-decoration-color: var(--color-llm);
+  text-decoration-style: dotted;
+}
+
+.quote--both {
+  background-color: color-mix(in oklab, var(--color-jev) 12%, var(--color-llm) 12%);
+  text-decoration-color: var(--color-ink);
+  text-decoration-style: double;
+}
+
+@media (forced-colors: active) {
+  .source__tab[aria-selected='true'] {
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  .quote {
+    background: Mark;
+    color: MarkText;
+  }
+}

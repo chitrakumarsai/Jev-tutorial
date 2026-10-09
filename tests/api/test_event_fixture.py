@@ -1,4 +1,5 @@
-"""The web tests play a real replay's events from a fixture; keep it in step with the backend.
+"""The web tests play a real replay's events (and show its documents) from fixtures; keep them
+in step with the backend.
 
 Regenerate: uv run python -m tests.api.test_event_fixture
 """
@@ -12,7 +13,9 @@ from jev.config import Settings
 from jev.runs.events import RunEvent
 from jev.runs.service import RunService
 
-FIXTURE = Path(__file__).parents[2] / "web" / "src" / "test" / "fixtures" / "s1-replay-events.json"
+FIXTURES = Path(__file__).parents[2] / "web" / "src" / "test" / "fixtures"
+FIXTURE = FIXTURES / "s1-replay-events.json"
+DOCS_FIXTURE = FIXTURES / "s1-documents.json"
 RUN_ID = "run-fixture"
 
 
@@ -23,6 +26,12 @@ def replay_events(recording_id: str | None) -> list[dict[str, Any]]:
         service.replay(RUN_ID, recording_id=recording_id, on_event=events.append, pace=False)
     )
     return [event.model_dump(mode="json") for event in events]
+
+
+def documents() -> list[dict[str, str]]:
+    """As `GET /api/scenarios/{id}/documents` returns them."""
+    docs = RunService(Settings(_env_file=None)).documents.documents  # type: ignore[call-arg]
+    return [{"doc_id": d.doc_id, "text": d.text} for d in docs]
 
 
 def _timeless(event: dict[str, Any]) -> str:
@@ -59,7 +68,14 @@ def test_fixture_is_one_complete_ordered_run() -> None:
     assert fixture[-1]["type"] == "run_completed"
 
 
+def test_documents_fixture_matches_the_scenario() -> None:
+    assert json.loads(DOCS_FIXTURE.read_text(encoding="utf-8")) == documents(), (
+        "web documents fixture is stale: run `uv run python -m tests.api.test_event_fixture`"
+    )
+
+
 if __name__ == "__main__":  # pragma: no cover - regeneration helper
-    FIXTURE.parent.mkdir(parents=True, exist_ok=True)
+    FIXTURES.mkdir(parents=True, exist_ok=True)
     FIXTURE.write_text(json.dumps(replay_events(None), indent=2) + "\n", encoding="utf-8")
-    print(f"Wrote {FIXTURE}.")
+    DOCS_FIXTURE.write_text(json.dumps(documents(), indent=2) + "\n", encoding="utf-8")
+    print(f"Wrote {FIXTURE} and {DOCS_FIXTURE}.")
