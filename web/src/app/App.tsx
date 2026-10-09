@@ -1,5 +1,5 @@
 import { MotionConfig } from 'motion/react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { getScenarios } from '../api/client';
 import type { ApiError } from '../api/types';
@@ -16,20 +16,28 @@ const CATALOG = 'catalog';
 const NO_SCENARIOS: ApiError = { code: 'NO_SCENARIOS', message: 'No scenarios are available.' };
 const loadCatalog = (_key: string, signal: AbortSignal) => getScenarios({ signal });
 
-function Problem({ error }: { error: ApiError }) {
+function Problem({ error, onRetry }: { error: ApiError; onRetry: () => void }) {
   return (
-    <p role="alert" className="workspace__problem">
-      {error.message}
-    </p>
+    <div role="alert" className="workspace__problem">
+      <p>{error.message}</p>
+      <button type="button" className="workspace__retry" onClick={onRetry}>
+        Try again
+      </button>
+    </div>
   );
 }
 
 export function App() {
-  const catalog = useResource(CATALOG, loadCatalog);
+  // Bumped by "Try again", each only when its own load failed, so healthy data (and a run
+  // in progress) is kept.
+  const [catalogAttempt, setCatalogAttempt] = useState(0);
+  const [scenarioAttempt, setScenarioAttempt] = useState(0);
+  const workspace = useRef<HTMLElement>(null);
+  const catalog = useResource(CATALOG, loadCatalog, catalogAttempt);
   const [chosenScenario, setChosenScenario] = useState<string | null>(null);
   const scenarioId =
     chosenScenario ?? (catalog.status === 'ready' ? (catalog.data[0]?.id ?? null) : null);
-  const scenario = useResource(scenarioId, loadScenario);
+  const scenario = useResource(scenarioId, loadScenario, scenarioAttempt);
   // A run belongs to the scenario it was started for; picking another clears it.
   const [run, setRun] = useState<{ scenarioId: string; runId: string } | null>(null);
   const runView = useRunEvents(run && run.scenarioId === scenarioId ? run.runId : null);
@@ -61,6 +69,7 @@ export function App() {
           <RunControl
             key={scenarioId}
             scenarioId={scenario.status === 'ready' ? scenarioId : null}
+            isLiveEnabled={scenario.status === 'ready' && scenario.data.detail.live_enabled}
             view={runView}
             onStarted={(runId) => {
               if (scenarioId) setRun({ scenarioId, runId });
@@ -69,9 +78,17 @@ export function App() {
           <ThemeToggle />
         </div>
       </header>
-      <main className="workspace">
+      <main ref={workspace} className="workspace" tabIndex={-1}>
         {problem ? (
-          <Problem error={problem} />
+          <Problem
+            error={problem}
+            onRetry={() => {
+              if (catalog.status === 'error') setCatalogAttempt((count) => count + 1);
+              if (scenario.status === 'error') setScenarioAttempt((count) => count + 1);
+              // The alert (and its button) is about to go: keep focus in the workspace.
+              workspace.current?.focus();
+            }}
+          />
         ) : scenario.status === 'ready' ? (
           <Comparison key={scenarioId} scenario={scenario.data} runView={runView} />
         ) : (
