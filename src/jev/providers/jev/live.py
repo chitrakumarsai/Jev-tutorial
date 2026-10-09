@@ -14,13 +14,14 @@ from typesafe_sdk import (
     RetryPolicy,
     Score,
     SystemOneResponse,
+    TypeSafeAPIError,
     TypeSafeError,
 )
 
 from jev.budget.estimator import estimate_call_cost
 from jev.budget.guard import BudgetGuard, key_fingerprint
 from jev.budget.pricing import cost_usd, price_for
-from jev.providers.errors import ProviderError
+from jev.providers.errors import ProviderError, safe_failure
 from jev.providers.jev.types import (
     ChoiceA,
     ChoiceQ,
@@ -113,9 +114,7 @@ class LiveJevClient:
             # been billed: keep the pessimistic estimate so the reservation never stays open.
             await asyncio.to_thread(self._guard.commit, reservation, actual=None)
             if isinstance(exc, TypeSafeError | ValueError | TypeError):
-                raise ProviderError(
-                    "typesafe", f"Jev request failed ({type(exc).__name__})"
-                ) from None
+                raise ProviderError("typesafe", f"Jev request failed ({_failure(exc)})") from None
             raise
         await asyncio.to_thread(self._guard.commit, reservation, actual=actual)
         return result
@@ -127,6 +126,12 @@ class LiveJevClient:
 
     async def aclose(self) -> None:
         await self._client.aclose()
+
+
+def _failure(exc: BaseException) -> str:
+    if isinstance(exc, TypeSafeAPIError):
+        return safe_failure(exc, status=exc.status, request_id=exc.request_id)
+    return safe_failure(exc)
 
 
 def _to_result(response: SystemOneResponse, latency_ms: int) -> JevResult:

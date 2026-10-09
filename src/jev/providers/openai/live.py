@@ -16,7 +16,7 @@ from pydantic import BaseModel, SecretStr, ValidationError
 from jev.budget.estimator import estimate_call_cost
 from jev.budget.guard import BudgetGuard, key_fingerprint
 from jev.budget.pricing import cost_usd, price_for
-from jev.providers.errors import ProviderError
+from jev.providers.errors import ProviderError, safe_failure
 from jev.providers.openai.types import LlmRequest, LlmResult, LlmUsage
 
 DEFAULT_MAX_RETRIES = 2
@@ -92,9 +92,7 @@ class LiveOpenAIClient:
             # billed: keep the pessimistic estimate so the reservation never stays open.
             await asyncio.to_thread(self._guard.commit, reservation, actual=None)
             if isinstance(exc, openai.OpenAIError | ValueError | TypeError):
-                raise ProviderError(
-                    "openai", f"OpenAI request failed ({type(exc).__name__})"
-                ) from None
+                raise ProviderError("openai", f"OpenAI request failed ({_failure(exc)})") from None
             raise
         await asyncio.to_thread(self._guard.commit, reservation, actual=actual)
         latency_ms = round((perf_counter() - started) * 1000)
@@ -102,6 +100,18 @@ class LiveOpenAIClient:
 
     async def aclose(self) -> None:
         await self._client.close()
+
+
+def _failure(exc: BaseException) -> str:
+    if isinstance(exc, openai.APIStatusError):
+        return safe_failure(
+            exc,
+            status=exc.status_code,
+            code=exc.code,
+            param=exc.param,
+            request_id=exc.request_id,
+        )
+    return safe_failure(exc)
 
 
 def _input_chars(request: LlmRequest, schema: type[BaseModel]) -> int:
