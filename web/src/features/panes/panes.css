@@ -1,0 +1,59 @@
+/* The two contenders: a coloured rule marks whose column it is. */
+.side-pane {
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+  min-inline-size: 0;
+  padding-block-start: var(--space-3);
+  border-block-start: 3px solid var(--side-colour);
+}
+
+.side-pane--llm {
+  --side-colour: var(--color-llm);
+}
+
+.side-pane--jev {
+  --side-colour: var(--color-jev);
+}
+
+.side-pane__heading {
+  color: var(--side-colour);
+}
+
+.side-pane__model,
+.side-pane__tally {
+  margin: 0;
+}
+
+.side-pane__model code {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+
+.side-pane__tally {
+  color: var(--color-muted);
+}
+
+.side-pane__tally .figure--headline {
+  color: var(--color-ink);
+}
+
+.prompt summary {
+  cursor: pointer;
+  font-size: var(--text-sm);
+  color: var(--color-ink);
+}
+
+.prompt pre {
+  max-block-size: 16rem;
+  overflow: auto;
+  margin: var(--space-2) 0 0;
+  padding: var(--space-3);
+  border: var(--rule-hairline);
+  background: var(--color-surface);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

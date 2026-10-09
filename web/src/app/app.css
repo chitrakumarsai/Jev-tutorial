@@ -12,6 +12,132 @@
   margin: 0 0 var(--space-1);
 }
 
+.masthead__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--space-4) var(--space-6);
+}
+
+.scenario-picker {
+  display: grid;
+  gap: var(--space-1);
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+
+.scenario-picker select {
+  min-block-size: 32px;
+  inline-size: 100%;
+  max-inline-size: min(22rem, 100%);
+  padding: 0 var(--space-2);
+  border: var(--rule-hairline);
+  border-radius: var(--radius-none);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font: inherit;
+  font-size: var(--text-sm);
+}
+
+.run-control {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.run-control__button {
+  min-block-size: 32px;
+  padding: 0 var(--space-4);
+  border: 2px solid var(--color-ink);
+  border-radius: var(--radius-none);
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--duration-fast) var(--ease-out-expo);
+}
+
+.run-control__button:hover:not(:disabled, [aria-disabled='true']) {
+  transform: translateY(-1px);
+}
+
+.run-control__button:active:not(:disabled, [aria-disabled='true']) {
+  transform: translateY(1px);
+}
+
+.run-control__button:disabled,
+.run-control__button[aria-disabled='true'] {
+  border-color: var(--color-rule);
+  background: transparent;
+  color: var(--color-muted);
+  cursor: not-allowed;
+}
+
+.run-control__status {
+  min-inline-size: 8rem;
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+
 .workspace {
+  display: grid;
+  gap: var(--space-8);
   padding: var(--space-section) var(--gutter);
+}
+
+.workspace__intro {
+  display: grid;
+  gap: var(--space-2);
+  max-inline-size: 60ch;
+}
+
+.workspace__description,
+.workspace__loading {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.workspace__problem {
+  margin: 0;
+  padding: var(--space-4);
+  border-inline-start: 4px solid var(--color-discrepancy);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+/* Ledger spine: source | LLM | Jev on wide screens; source above the pair on medium. */
+.workspace__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-8) var(--space-6);
+}
+
+@media (min-width: 45rem) {
+  .workspace__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .workspace__grid > .source {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 72rem) {
+  .workspace__grid {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .workspace__grid > .source {
+    grid-column: auto;
+  }
+}
+
+@media (forced-colors: active) {
+  .run-control__button {
+    border-color: ButtonText;
+  }
 }

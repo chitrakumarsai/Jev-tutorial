@@ -31,6 +31,8 @@
   /* Typography */
   --font-display: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
   --font-text: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* Source documents: the system monospace, so Markdown tables stay aligned (no web font). */
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
 
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
