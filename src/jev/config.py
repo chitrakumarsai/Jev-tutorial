@@ -27,6 +27,9 @@ class Settings(BaseSettings):
     # May be lowered via env, never raised above the hard cap.
     budget_cap_usd: Decimal = Field(default=HARD_BUDGET_CAP_USD, gt=0, le=HARD_BUDGET_CAP_USD)
     review_threshold: float = Field(default=DEFAULT_REVIEW_THRESHOLD, gt=0, lt=1)
+    # The API is local-only: trusted Host headers (DNS-rebinding defence) and the Vite origin.
+    allowed_hosts: list[str] = ["127.0.0.1", "localhost"]
+    cors_origins: list[str] = ["http://localhost:5173", "http://127.0.0.1:5173"]
     # Anchored to the project root, not the working directory, so running from another
     # folder can't silently start a fresh budget (ADR 0002).
     ledger_path: Path = PROJECT_ROOT / "var" / "ledger.jsonl"

@@ -3,6 +3,7 @@
 import asyncio
 import json
 from collections.abc import Callable
+from decimal import Decimal
 from time import perf_counter
 from typing import Any, Literal, TypeVar
 
@@ -50,13 +51,21 @@ class LiveOpenAIClient:
             http_client=http_client,
         )
 
-    async def parse(self, request: LlmRequest, schema: type[T]) -> LlmResult[T]:
-        estimate = estimate_call_cost(
+    @property
+    def key_fp(self) -> str:
+        return self._key_fp
+
+    def estimate(self, request: LlmRequest, schema: type[BaseModel]) -> Decimal:
+        """Worst-case cost of one request, used for reservations and whole-run pre-flight."""
+        return estimate_call_cost(
             self._model,
             input_chars=_input_chars(request, schema),
             max_output_tokens=request.max_output_tokens,
             attempts=self._attempts,
         )
+
+    async def parse(self, request: LlmRequest, schema: type[T]) -> LlmResult[T]:
+        estimate = self.estimate(request, schema)
         # Ledger I/O (file lock + fsync) runs off the event loop.
         reservation = await asyncio.to_thread(
             self._guard.reserve, "openai", self._key_fp, estimate, run_id=request.run_id

@@ -79,13 +79,21 @@ class LiveJevClient:
             transport=transport,
         )
 
-    async def evaluate(self, request: JevRequest) -> JevResult:
-        estimate = estimate_call_cost(
+    @property
+    def key_fp(self) -> str:
+        return self._key_fp
+
+    def estimate(self, request: JevRequest) -> Decimal:
+        """Worst-case cost of one request, used for reservations and whole-run pre-flight."""
+        return estimate_call_cost(
             self._model,
             input_chars=_pessimistic_input_chars(request, self._model),
             max_output_tokens=0,
             attempts=self._attempts,
         )
+
+    async def evaluate(self, request: JevRequest) -> JevResult:
+        estimate = self.estimate(request)
         # Ledger I/O (file lock + fsync) runs off the event loop.
         reservation = await asyncio.to_thread(
             self._guard.reserve, "typesafe", self._key_fp, estimate, run_id=request.run_id

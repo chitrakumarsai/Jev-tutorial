@@ -201,3 +201,29 @@ def test_failed_save_leaves_no_temp_file(tmp_path: Path, monkeypatch: pytest.Mon
         store.save(recording)
 
     assert list((tmp_path / "s1").glob("*.tmp")) == []
+
+
+async def test_paced_replay_waits_the_recorded_latency(monkeypatch: pytest.MonkeyPatch) -> None:
+    import asyncio as asyncio_module
+
+    waits: list[float] = []
+
+    async def fake_sleep(seconds: float) -> None:
+        waits.append(seconds)
+
+    recorder = RecordingJevClient(FakeJev(), model="jev-latest")
+    await recorder.evaluate(jev_request())
+    llm_recorder = RecordingLlmClient(FakeLlm(), model="gpt-6-luna")
+    await llm_recorder.parse(llm_request(), Answer)
+    recording = Recording.create(
+        "s1",
+        jev_model="jev-latest",
+        llm_model="gpt-6-luna",
+        calls=[*recorder.calls, *llm_recorder.calls],
+    )
+    monkeypatch.setattr(asyncio_module, "sleep", fake_sleep)
+
+    await ReplayJevClient(recording, pace=True).evaluate(jev_request())
+    await ReplayLlmClient(recording, pace=True).parse(llm_request(), Answer)
+
+    assert waits == [0.141, 2.3]

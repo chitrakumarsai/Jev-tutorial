@@ -1,5 +1,6 @@
 """Recording wrappers (live → file) and replay clients (file → pipeline), per provider."""
 
+import asyncio
 from collections import defaultdict, deque
 from typing import TypeVar
 
@@ -81,21 +82,31 @@ class _ReplayIndex:
         return queue.popleft()
 
 
+async def _pace(call: RecordedCall, pace: bool) -> None:
+    """Optionally wait the recorded latency so a replay animates with its original timing."""
+    if pace:
+        await asyncio.sleep(call.latency_ms / 1000)
+
+
 class ReplayJevClient:
-    def __init__(self, recording: Recording) -> None:
+    def __init__(self, recording: Recording, *, pace: bool = False) -> None:
         self._model = recording.jev_model
         self._index = _ReplayIndex(recording, "typesafe")
+        self._pace = pace
 
     async def evaluate(self, request: JevRequest) -> JevResult:
         call = self._index.next(request_hash(request.payload(self._model)), request.purpose)
+        await _pace(call, self._pace)
         return JevResult.model_validate(call.result)
 
 
 class ReplayLlmClient:
-    def __init__(self, recording: Recording) -> None:
+    def __init__(self, recording: Recording, *, pace: bool = False) -> None:
         self._model = recording.llm_model
         self._index = _ReplayIndex(recording, "openai")
+        self._pace = pace
 
     async def parse(self, request: LlmRequest, schema: type[T]) -> LlmResult[T]:
         call = self._index.next(request_hash(request.payload(self._model, schema)), request.purpose)
+        await _pace(call, self._pace)
         return LlmResult[schema].model_validate(call.result)  # type: ignore[valid-type]
