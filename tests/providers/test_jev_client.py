@@ -221,3 +221,10 @@ async def test_malformed_answer_closes_the_reservation_and_raises(guard: BudgetG
         await client(guard, Recorder(body=body)).evaluate(make_request())
 
     assert guard.status("typesafe", key_fingerprint(API_KEY)).reserved == 0
+
+
+def test_estimate_and_fingerprint_are_exposed_for_preflight(guard: BudgetGuard) -> None:
+    jev = client(guard, Recorder())
+
+    assert jev.key_fp == key_fingerprint(API_KEY)
+    assert jev.estimate(make_request()) > 0

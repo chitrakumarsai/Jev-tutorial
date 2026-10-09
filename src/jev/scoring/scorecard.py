@@ -5,7 +5,7 @@ from collections.abc import Sequence
 from decimal import Decimal
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, computed_field
 
 from jev.domain.findings import Finding
 from jev.scoring.answer_key import AnswerKey, KeyItem
@@ -30,18 +30,22 @@ class Scorecard(BaseModel):
     total_variance_expected: Decimal
     total_variance_reported: Decimal | None
 
+    @computed_field  # type: ignore[prop-decorator]
     @property
     def of(self) -> int:
         return len(self.items)
 
+    @computed_field  # type: ignore[prop-decorator]
     @property
     def correct(self) -> int:
         return sum(item.status == "correct" for item in self.items)
 
+    @computed_field  # type: ignore[prop-decorator]
     @property
     def correct_in_review(self) -> int:
         return sum(item.status == "correct_in_review" for item in self.items)
 
+    @computed_field  # type: ignore[prop-decorator]
     @property
     def total_variance_exact(self) -> bool:
         return self.total_variance_reported == self.total_variance_expected

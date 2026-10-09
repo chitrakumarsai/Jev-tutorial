@@ -273,3 +273,10 @@ async def test_key_whitespace_does_not_create_a_second_budget(guard: BudgetGuard
     await llm.parse(request(), Answer)
 
     assert guard.status("openai", key_fingerprint(API_KEY)).spent == Decimal("0.0003")
+
+
+def test_estimate_and_fingerprint_are_exposed_for_preflight(guard: BudgetGuard) -> None:
+    llm = client(guard, Recorder())
+
+    assert llm.key_fp == key_fingerprint(API_KEY)
+    assert llm.estimate(request(), Answer) > 0
