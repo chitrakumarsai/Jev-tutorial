@@ -15,6 +15,9 @@ def _blocked_create_connection(address: tuple[str, int], *args: Any, **kwargs: A
 @pytest.fixture(autouse=True)
 def _force_replay_mode(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("LIVE_ENABLED", "false")
+    # Keys exported in a developer's shell must not leak into tests (or change their result).
+    for key in ("TYPESAFE_API_KEY", "OPENAI_API_KEY"):
+        monkeypatch.delenv(key, raising=False)
 
 
 @pytest.fixture(autouse=True)

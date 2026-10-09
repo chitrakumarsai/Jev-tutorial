@@ -18,7 +18,7 @@ RUN_ID = "run-fixture"
 
 def replay_events(recording_id: str | None) -> list[dict[str, Any]]:
     events: list[RunEvent] = []
-    service = RunService(Settings())
+    service = RunService(Settings(_env_file=None))  # type: ignore[call-arg]
     asyncio.run(
         service.replay(RUN_ID, recording_id=recording_id, on_event=events.append, pace=False)
     )

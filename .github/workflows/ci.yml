@@ -52,6 +52,8 @@ jobs:
           cache: npm
           cache-dependency-path: web/package-lock.json
       - run: npm ci
+      - name: Generated API types match openapi.json
+        run: npm run gen:api && git diff --exit-code -- src/api/schema.gen.ts
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run format:check
