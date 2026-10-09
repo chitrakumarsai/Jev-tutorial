@@ -2,10 +2,12 @@
 
 uv run python -m jev.cli data validate
 uv run python -m jev.cli budget init
+uv run python -m jev.cli openapi   # refresh web/openapi.json for the web client
 """
 
 import argparse
 import asyncio
+import json
 import sys
 import uuid
 from collections.abc import Callable, Sequence
@@ -24,6 +26,7 @@ from jev.runs.service import PreparedLive, RunService
 from jev.scenarios.s1_reconciliation.documents import DocumentTooLargeError, validate_s1_data
 
 DEFAULT_DATA_DIR = Path("data")
+DEFAULT_OPENAPI_OUT = Path("web/openapi.json")
 
 
 def _validate(data_dir: Path) -> int:
@@ -50,6 +53,19 @@ def _budget_init(ledger_path: Path | None) -> int:
         print(f"A spend ledger already exists at {path}; it is never reset.", file=sys.stderr)
         return 1
     print(f"Created an empty spend ledger at {path}.")
+    return 0
+
+
+def openapi_json() -> str:
+    """The API spec as stable, diff-friendly JSON (the web client is generated from it)."""
+    from jev.api.app import create_app  # local: the other commands don't need the web app
+
+    return json.dumps(create_app().openapi(), indent=2, sort_keys=True, ensure_ascii=False) + "\n"
+
+
+def _openapi(out: Path) -> int:
+    out.write_text(openapi_json(), encoding="utf-8")
+    print(f"Wrote {out}.")
     return 0
 
 
@@ -138,11 +154,16 @@ def main(argv: Sequence[str] | None = None) -> int:
     rec.add_argument("scenario", choices=["s1"])
     rec.add_argument("--runs", type=_runs_arg, default=1)
 
+    spec = groups.add_parser("openapi", help="export the API spec for the web client")
+    spec.add_argument("--out", type=Path, default=DEFAULT_OPENAPI_OUT)
+
     args = parser.parse_args(argv)
     if args.group == "record":  # pragma: no cover - interactive, exercised via record()
         return record(RunService(Settings()), runs=args.runs)
     if args.group == "budget":
         return _budget_init(args.ledger_path)
+    if args.group == "openapi":
+        return _openapi(args.out)
     return _validate(args.data_dir)
 
 
