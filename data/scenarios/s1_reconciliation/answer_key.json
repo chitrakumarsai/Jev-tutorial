@@ -1,0 +1,280 @@
+{
+  "scenario_id": "s1_reconciliation",
+  "version": 1,
+  "authored_at": "2026-10-09",
+  "contract_terms": {
+    "zone_a_rate": "1250.00",
+    "zone_b_rate": "1480.00",
+    "detention_rate": "85.00",
+    "discount_threshold_loads": 1000,
+    "discount_pct": "5",
+    "fuel_cap_pct": "18",
+    "late_fee_pct": "1.5",
+    "late_fee_grace_days": 30
+  },
+  "cumulative_loads_by_month": {
+    "2026-01": 160,
+    "2026-02": 335,
+    "2026-03": 515,
+    "2026-04": 715,
+    "2026-05": 895,
+    "2026-06": 1085,
+    "2026-07": 1275,
+    "2026-08": 1465,
+    "2026-09": 1645,
+    "2026-10": 1845,
+    "2026-11": 2025,
+    "2026-12": 2235
+  },
+  "items": [
+    {
+      "id": "K01",
+      "kind": "surcharge_over_cap",
+      "doc_id": "inv-2026-04",
+      "line_ref": "L3",
+      "billed": "57530.00",
+      "expected": "47070.00",
+      "variance": "10460.00",
+      "evidence": [
+        {
+          "doc_id": "msa",
+          "quote": "may not exceed 18% of line-haul charges"
+        }
+      ]
+    },
+    {
+      "id": "K02",
+      "kind": "discount_not_applied",
+      "doc_id": "inv-2026-07",
+      "line_ref": "L1+L2",
+      "billed": "247850.00",
+      "expected": "235457.50",
+      "variance": "12392.50",
+      "evidence": [
+        {
+          "doc_id": "msa",
+          "quote": "Customer receives a discount of 5% off all line-haul charges"
+        },
+        {
+          "doc_id": "msa",
+          "quote": "The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000"
+        }
+      ]
+    },
+    {
+      "id": "K03",
+      "kind": "surcharge_on_undiscounted_base",
+      "doc_id": "inv-2026-07",
+      "line_ref": "L3",
+      "billed": "43373.75",
+      "expected": "41205.06",
+      "variance": "2168.69",
+      "evidence": [
+        {
+          "doc_id": "msa",
+          "quote": "calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount)"
+        }
+      ]
+    },
+    {
+      "id": "K04",
+      "kind": "discount_not_applied",
+      "doc_id": "inv-2026-08",
+      "line_ref": "L1+L2",
+      "billed": "246700.00",
+      "expected": "234365.00",
+      "variance": "12335.00",
+      "evidence": [
+        {
+          "doc_id": "msa",
+          "quote": "Customer receives a discount of 5% off all line-haul charges"
+        },
+        {
+          "doc_id": "msa",
+          "quote": "The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000"
+        }
+      ]
+    },
+    {
+      "id": "K05",
+      "kind": "surcharge_on_undiscounted_base",
+      "doc_id": "inv-2026-08",
+      "line_ref": "L3",
+      "billed": "41939.00",
+      "expected": "39842.05",
+      "variance": "2096.95",
+      "evidence": [
+        {
+          "doc_id": "msa",
+          "quote": "calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount)"
+        }
+      ]
+    },
+    {
+      "id": "K06",
+      "kind": "discount_not_applied",
+      "doc_id": "inv-2026-09",
+      "line_ref": "L1+L2",
+      "billed": "236500.00",
+      "expected": "224675.00",
+      "variance": "11825.00",
+      "evidence": [
+        {
+          "doc_id": "msa",
+          "quote": "Customer receives a discount of 5% off all line-haul charges"
+        },
+        {
+          "doc_id": "msa",
+          "quote": "The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000"
+        }
+      ]
+    },
+    {
+      "id": "K07",
+      "kind": "surcharge_on_undiscounted_base",
+      "doc_id": "inv-2026-09",
+      "line_ref": "L3",
+      "billed": "39022.50",
+      "expected": "37071.38",
+      "variance": "1951.12",
+      "evidence": [
+        {
+          "doc_id": "msa",
+          "quote": "calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount)"
+        }
+      ]
+    },
+    {
+      "id": "K08",
+      "kind": "discount_not_applied",
+      "doc_id": "inv-2026-10",
+      "line_ref": "L1+L2",
+      "billed": "260350.00",
+      "expected": "247332.50",
+      "variance": "13017.50",
+      "evidence": [
+        {
+          "doc_id": "msa",
+          "quote": "Customer receives a discount of 5% off all line-haul charges"
+        },
+        {
+          "doc_id": "msa",
+          "quote": "The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000"
+        }
+      ]
+    },
+    {
+      "id": "K09",
+      "kind": "surcharge_on_undiscounted_base",
+      "doc_id": "inv-2026-10",
+      "line_ref": "L3",
+      "billed": "41656.00",
+      "expected": "39573.20",
+      "variance": "2082.80",
+      "evidence": [
+        {
+          "doc_id": "msa",
+          "quote": "calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount)"
+        }
+      ]
+    },
+    {
+      "id": "K10",
+      "kind": "duplicate_line",
+      "doc_id": "inv-2026-10",
+      "line_ref": "L5",
+      "billed": "510.00",
+      "expected": "0.00",
+      "variance": "510.00",
+      "evidence": [
+        {
+          "doc_id": "msa",
+          "quote": "billed at $85.00 per hour, per occurrence, as a single line"
+        }
+      ]
+    },
+    {
+      "id": "K11",
+      "kind": "discount_not_applied",
+      "doc_id": "inv-2026-11",
+      "line_ref": "L1+L2",
+      "billed": "234200.00",
+      "expected": "222490.00",
+      "variance": "11710.00",
+      "evidence": [
+        {
+          "doc_id": "msa",
+          "quote": "Customer receives a discount of 5% off all line-haul charges"
+        },
+        {
+          "doc_id": "msa",
+          "quote": "The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000"
+        }
+      ]
+    },
+    {
+      "id": "K12",
+      "kind": "surcharge_on_undiscounted_base",
+      "doc_id": "inv-2026-11",
+      "line_ref": "L3",
+      "billed": "38643.00",
+      "expected": "36710.85",
+      "variance": "1932.15",
+      "evidence": [
+        {
+          "doc_id": "msa",
+          "quote": "calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount)"
+        }
+      ]
+    },
+    {
+      "id": "K13",
+      "kind": "discount_not_applied",
+      "doc_id": "inv-2026-12",
+      "line_ref": "L1+L2",
+      "billed": "274000.00",
+      "expected": "260300.00",
+      "variance": "13700.00",
+      "evidence": [
+        {
+          "doc_id": "msa",
+          "quote": "Customer receives a discount of 5% off all line-haul charges"
+        },
+        {
+          "doc_id": "msa",
+          "quote": "The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000"
+        }
+      ]
+    },
+    {
+      "id": "K14",
+      "kind": "surcharge_on_undiscounted_base",
+      "doc_id": "inv-2026-12",
+      "line_ref": "L3",
+      "billed": "46580.00",
+      "expected": "44251.00",
+      "variance": "2329.00",
+      "evidence": [
+        {
+          "doc_id": "msa",
+          "quote": "calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount)"
+        }
+      ]
+    }
+  ],
+  "clean_invoices": [
+    "inv-2026-01",
+    "inv-2026-02",
+    "inv-2026-03",
+    "inv-2026-05",
+    "inv-2026-06"
+  ],
+  "non_issues": [
+    {
+      "doc_id": "inv-2026-05",
+      "line_ref": "L5",
+      "note": "Legitimate late fee: INV-2026-03 was paid 41 days after its invoice date, so 1.5% of its balance is allowed (MSA 6.3)."
+    }
+  ],
+  "total_variance": "98510.71"
+}

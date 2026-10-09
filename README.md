@@ -32,6 +32,8 @@ uv run ruff check --fix .         # lint
 uv run ruff format .              # format
 uv run mypy src                   # strict types
 uv run uvicorn jev.api.app:create_app --factory --reload --port 8000
+uv run python -m jev.cli data validate    # answer key ↔ documents consistency
+uv run python -m jev.cli budget init      # create the spend ledger once (needed before Live)
 
 # Frontend (from repo root)
 npm --prefix web run dev          # http://localhost:5173, proxies /api to :8000
