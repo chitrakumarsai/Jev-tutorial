@@ -1,0 +1,47 @@
+.confidence-ring {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted);
+}
+
+.confidence-ring--jev {
+  --ring-colour: var(--color-jev);
+}
+
+.confidence-ring--review {
+  --ring-colour: var(--color-review);
+}
+
+.confidence-ring__svg {
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  transform: rotate(-90deg);
+}
+
+.confidence-ring__track,
+.confidence-ring__fill {
+  fill: none;
+  stroke-width: 4;
+}
+
+.confidence-ring__track {
+  stroke: var(--color-rule);
+}
+
+.confidence-ring__fill {
+  stroke: var(--ring-colour);
+  stroke-linecap: round;
+}
+
+.confidence-ring__figure {
+  color: var(--color-ink);
+}
+
+@media (forced-colors: active) {
+  .confidence-ring__fill {
+    stroke: CanvasText;
+  }
+}

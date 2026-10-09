@@ -111,6 +111,12 @@
   text-decoration-style: double;
 }
 
+/* The passage a figure was traced to. */
+.quote--focused {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
 @media (forced-colors: active) {
   .source__tab[aria-selected='true'] {
     background: Highlight;

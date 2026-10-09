@@ -1,16 +1,15 @@
-import { useMemo, useState } from 'react';
+import { MotionConfig } from 'motion/react';
+import { useState } from 'react';
 
 import { getScenarios } from '../api/client';
 import type { ApiError } from '../api/types';
 import { ThemeToggle } from '../components/theme-toggle/ThemeToggle';
-import { DocumentViewer } from '../features/documents/DocumentViewer';
-import { highlightsByDocument } from '../features/documents/highlights';
-import { SidePane } from '../features/panes/SidePane';
 import { RunControl } from '../features/run/RunControl';
 import { useRunEvents } from '../features/run/useRunEvents';
 import { ScenarioPicker } from '../features/scenario/ScenarioPicker';
-import { loadScenario, type LoadedScenario } from '../features/scenario/loadScenario';
+import { loadScenario } from '../features/scenario/loadScenario';
 import { useResource } from '../hooks/useResource';
+import { Comparison } from './Comparison';
 import './app.css';
 
 const CATALOG = 'catalog';
@@ -22,43 +21,6 @@ function Problem({ error }: { error: ApiError }) {
     <p role="alert" className="workspace__problem">
       {error.message}
     </p>
-  );
-}
-
-function Comparison({
-  scenario,
-  runView,
-}: {
-  scenario: LoadedScenario;
-  runView: ReturnType<typeof useRunEvents>;
-}) {
-  const [chosenDoc, setChosenDoc] = useState<string | null>(null);
-  const highlights = useMemo(() => highlightsByDocument(runView), [runView]);
-  const { detail, documents } = scenario;
-  const selectedDoc = chosenDoc ?? documents[0]?.doc_id ?? '';
-
-  return (
-    <>
-      <div className="workspace__intro">
-        <h2 className="workspace__title">{detail.title}</h2>
-        <p className="workspace__description">{detail.description}</p>
-      </div>
-      <div className="workspace__grid">
-        <DocumentViewer
-          documents={documents}
-          highlights={highlights}
-          selected={selectedDoc}
-          onSelect={setChosenDoc}
-        />
-        <SidePane side="llm" model={detail.models.llm} progress={runView?.sides.llm ?? null}>
-          <details className="prompt">
-            <summary>Exact prompt sent to the LLM</summary>
-            <pre>{detail.llm_prompt}</pre>
-          </details>
-        </SidePane>
-        <SidePane side="jev" model={detail.models.jev} progress={runView?.sides.jev ?? null} />
-      </div>
-    </>
   );
 }
 
@@ -78,7 +40,8 @@ export function App() {
     null;
 
   return (
-    <>
+    // reducedMotion="user": with the OS setting on, motion drops transforms and keeps fades.
+    <MotionConfig reducedMotion="user">
       <header className="masthead">
         <div className="masthead__title">
           <p className="eyebrow">Typed decisions vs. a plain LLM</p>
@@ -117,6 +80,6 @@ export function App() {
           </p>
         )}
       </main>
-    </>
+    </MotionConfig>
   );
 }

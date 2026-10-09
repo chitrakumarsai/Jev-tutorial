@@ -1,0 +1,103 @@
+/* Results: two ruled tables, figures right-aligned in their columns. */
+.results {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.results__tables {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-6);
+}
+
+@media (min-width: 60rem) {
+  .results__tables {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.results-table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+
+.results-table caption {
+  margin-block-end: var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  text-align: start;
+}
+
+.results-table th,
+.results-table td {
+  padding: var(--space-2) var(--space-2) var(--space-2) 0;
+  border-block-end: var(--rule-hairline);
+  text-align: start;
+  vertical-align: top;
+}
+
+.results-table thead th {
+  border-block-end: var(--rule-strong);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+
+.results-table__side--llm {
+  color: var(--color-llm);
+}
+
+.results-table__side--jev {
+  color: var(--color-jev);
+}
+
+.results-table tbody th {
+  font-weight: 400;
+  color: var(--color-muted);
+}
+
+.results-table td {
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.results-table__glyph {
+  display: inline-block;
+  inline-size: 1.25em;
+  font-weight: 700;
+  color: var(--color-verified);
+}
+
+.results-table__off,
+.results-table__off .results-table__glyph {
+  color: var(--color-discrepancy);
+}
+
+.meter-bar {
+  display: block;
+  block-size: 4px;
+  margin-block-start: var(--space-1);
+  background: var(--color-rule);
+}
+
+.meter-bar__fill {
+  display: block;
+  block-size: 100%;
+  transform-origin: left center;
+}
+
+.meter-bar__fill--llm {
+  background: var(--color-llm);
+}
+
+.meter-bar__fill--jev {
+  background: var(--color-jev);
+}
+
+@media (forced-colors: active) {
+  .meter-bar__fill {
+    background: CanvasText;
+  }
+}

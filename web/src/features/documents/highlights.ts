@@ -2,6 +2,11 @@
 import type { Highlight } from '../../lib/segments';
 import type { RunView } from '../run/runReducer';
 
+/** The id of a finding's i-th evidence span, shared by the viewer and the trace line. */
+export function evidenceHighlightId(findingId: string, index: number): string {
+  return `${findingId}#${String(index)}`;
+}
+
 export function highlightsByDocument(
   view: RunView | null,
 ): ReadonlyMap<string, readonly Highlight[]> {
@@ -11,7 +16,7 @@ export function highlightsByDocument(
     for (const finding of view.sides[tone].findings) {
       finding.evidence.forEach((span, i) => {
         const highlight: Highlight = {
-          id: `${finding.id}#${String(i)}`,
+          id: evidenceHighlightId(finding.id, i),
           start: span.start,
           end: span.end,
           text: span.text,

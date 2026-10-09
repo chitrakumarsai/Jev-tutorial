@@ -22,6 +22,8 @@ export const motionTokens = {
   },
   distance: { xs: 4, sm: 8, md: 16, lg: 24, xl: 48 },
   scale: { subtle: 0.98, press: 0.95, pop: 1.04 },
+  /** Horizontal keyframes for a discrepancy: a short, damped shake (pixels). */
+  shake: [0, -6, 6, -4, 4, -2, 0] as readonly number[],
 } as const;
 
 export const springs = {

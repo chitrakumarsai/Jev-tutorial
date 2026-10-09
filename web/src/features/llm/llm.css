@@ -1,0 +1,91 @@
+/* The plain LLM: one long wait, then a block of parsed output. */
+.llm-wait {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+
+.llm-wait__pulse {
+  flex: none;
+  inline-size: 0.625rem;
+  block-size: 0.625rem;
+  border-radius: var(--radius-chip);
+  background: var(--color-llm);
+  animation: llm-pulse 1.2s var(--ease-out-expo) infinite alternate;
+}
+
+@keyframes llm-pulse {
+  from {
+    opacity: 0.25;
+    transform: scale(0.8);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.llm-response {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.llm-response__arrived,
+.llm-response__problem,
+.llm-response__caption {
+  margin: 0;
+  font-size: var(--text-sm);
+}
+
+.llm-response__arrived {
+  color: var(--color-muted);
+}
+
+.llm-response__arrived data {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.llm-response__problem {
+  color: var(--color-discrepancy);
+}
+
+.llm-response__text {
+  max-block-size: 14rem;
+  overflow: auto;
+  margin: 0;
+  padding: var(--space-3);
+  border-inline-start: 3px solid var(--color-llm);
+  background: var(--color-surface);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.llm-response__caret {
+  display: inline-block;
+  inline-size: 0.5em;
+  block-size: 1em;
+  margin-inline-start: 1px;
+  vertical-align: text-bottom;
+  background: var(--color-llm);
+  animation: llm-caret 0.9s steps(1) infinite;
+}
+
+@keyframes llm-caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+.llm-response__caption {
+  font-style: italic;
+  color: var(--color-muted);
+}
