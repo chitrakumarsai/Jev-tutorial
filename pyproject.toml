@@ -1,0 +1,54 @@
+[project]
+name = "jev"
+version = "0.1.0"
+description = "Jev Audit Lens: TypeSafe Jev + code vs. a plain LLM on synthetic audit tasks."
+readme = "README.md"
+authors = [
+    { name = "Chitra Kumar Sai", email = "chitrakumarsai@gmail.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi==0.143.0",
+    "openai==3.26.1",
+    "pydantic==2.14.0",
+    "pydantic-settings==2.15.0",
+    "typesafe-sdk==0.7.2",
+    "uvicorn==0.54.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "mypy>=2.4.0",
+    "pre-commit>=4.6.2",
+    "pytest>=9.1.1",
+    "pytest-asyncio==1.4.0",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.16.10",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+# Markdown code blocks in docs/ are illustrative design notes, not source.
+extend-exclude = ["*.md"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "S", "N"]
+
+[tool.ruff.lint.per-file-ignores]
+# pytest uses bare `assert`; rule S101 would flag every test (accepted in docs/PLAN.md §7).
+"tests/**" = ["S101"]
+
+[tool.mypy]
+strict = true
+files = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=jev --cov-report=term-missing --cov-fail-under=80"
+asyncio_mode = "auto"
