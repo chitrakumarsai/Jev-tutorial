@@ -29,7 +29,7 @@ DOMAIN_ERRORS: dict[type[Exception], tuple[int, str]] = {
     LedgerCorruptError: (409, "LEDGER_CORRUPT"),
     UnknownModelError: (409, "UNKNOWN_MODEL"),
     NoRecordingError: (404, "NO_RECORDING"),
-    ReplayStoreError: (404, "NO_RECORDING"),
+    ReplayStoreError: (500, "RECORDING_INVALID"),  # unreadable or corrupt, not missing
 }
 
 
@@ -57,6 +57,11 @@ def install_error_handlers(app: FastAPI) -> None:
         first = exc.errors()[0] if exc.errors() else {}
         where = ".".join(str(p) for p in first.get("loc", ()))
         return _envelope(422, "INVALID_REQUEST", f"{where}: {first.get('msg', 'invalid request')}")
+
+    @app.exception_handler(Exception)
+    async def unexpected(_: Request, exc: Exception) -> JSONResponse:
+        # Starlette re-raises after this response, so the server logs the traceback once.
+        return _envelope(500, "INTERNAL_ERROR", "Something went wrong on the server.")
 
     @app.exception_handler(StarletteHTTPException)
     async def http_error(_: Request, exc: StarletteHTTPException) -> JSONResponse:

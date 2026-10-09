@@ -5,7 +5,10 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict
 
-EventType = Literal["run_started", "step", "finding", "side_completed", "run_completed", "error"]
+# `run_failed`, not `error`: a named SSE `error` event would clash with EventSource's own.
+EventType = Literal[
+    "run_started", "step", "finding", "side_completed", "run_completed", "run_failed"
+]
 
 
 class RunEvent(BaseModel):

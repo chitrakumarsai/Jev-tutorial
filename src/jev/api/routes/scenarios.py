@@ -1,13 +1,21 @@
 """Scenario catalogue, documents (for click-to-source), recordings, and the LLM prompt."""
 
-from typing import Annotated, Any
+from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
 from jev.api.deps import get_service, get_settings
 from jev.api.errors import ApiError
+from jev.api.models import (
+    DocumentText,
+    ModelNames,
+    ScenarioDetail,
+    ScenarioSummary,
+    error_responses,
+)
 from jev.api.schemas import Envelope
 from jev.config import Settings
+from jev.replay.models import RecordingMeta
 from jev.runs.service import RunService
 from jev.scenarios.s1_reconciliation.documents import SCENARIO_ID
 from jev.scenarios.s1_reconciliation.llm_pipeline import INSTRUCTIONS
@@ -22,39 +30,45 @@ def _known(scenario_id: str) -> None:
         raise ApiError(404, "UNKNOWN_SCENARIO", f"Unknown scenario {scenario_id!r}")
 
 
-@router.get("")
-def list_scenarios() -> Envelope[list[dict[str, str]]]:
-    return Envelope.ok([{"id": SCENARIO_ID, "title": TITLE, "description": DESCRIPTION}])
+SUMMARY = ScenarioSummary(id=SCENARIO_ID, title=TITLE, description=DESCRIPTION)
 
 
-@router.get("/{scenario_id}")
+@router.get("", summary="List scenarios")
+def list_scenarios() -> Envelope[list[ScenarioSummary]]:
+    return Envelope.ok([SUMMARY])
+
+
+@router.get("/{scenario_id}", summary="Scenario detail", responses=error_responses(404))
 def scenario(
     scenario_id: str, settings: Annotated[Settings, Depends(get_settings)]
-) -> Envelope[dict[str, Any]]:
+) -> Envelope[ScenarioDetail]:
     _known(scenario_id)
     return Envelope.ok(
-        {
-            "id": SCENARIO_ID,
-            "title": TITLE,
-            "description": DESCRIPTION,
-            "llm_prompt": INSTRUCTIONS,
-            "models": {"jev": settings.jev_model, "llm": settings.openai_model},
-            "live_enabled": settings.live_enabled,
-        }
+        ScenarioDetail(
+            **SUMMARY.model_dump(),
+            llm_prompt=INSTRUCTIONS,
+            models=ModelNames(jev=settings.jev_model, llm=settings.openai_model),
+            live_enabled=settings.live_enabled,
+        )
     )
 
 
-@router.get("/{scenario_id}/documents")
+@router.get("/{scenario_id}/documents", summary="Document text", responses=error_responses(404))
 def documents(
     scenario_id: str, service: Annotated[RunService, Depends(get_service)]
-) -> Envelope[list[dict[str, str]]]:
+) -> Envelope[list[DocumentText]]:
     _known(scenario_id)
-    return Envelope.ok([{"doc_id": d.doc_id, "text": d.text} for d in service.documents.documents])
+    docs = service.documents.documents
+    return Envelope.ok([DocumentText(doc_id=d.doc_id, text=d.text) for d in docs])
 
 
-@router.get("/{scenario_id}/recordings")
+@router.get(
+    "/{scenario_id}/recordings",
+    summary="Recordings available for replay, newest first",
+    responses=error_responses(404, 500),
+)
 def recordings(
     scenario_id: str, service: Annotated[RunService, Depends(get_service)]
-) -> Envelope[list[dict[str, Any]]]:
+) -> Envelope[list[RecordingMeta]]:
     _known(scenario_id)
-    return Envelope.ok([m.model_dump(mode="json") for m in service.recordings()])
+    return Envelope.ok(service.recordings())

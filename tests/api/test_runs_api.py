@@ -247,3 +247,103 @@ async def test_concurrent_live_starts_cannot_both_pass_the_one_run_check(tmp_pat
         )
 
     assert sorted([first.status_code, second.status_code]) == [202, 409]
+
+
+def test_reconnecting_with_last_event_id_skips_events_already_seen(tmp_path: Path) -> None:
+    client = make_client(tmp_path)
+    run_id = client.post(
+        "/api/runs", json={"scenario_id": "s1_reconciliation", "mode": "live"}
+    ).json()["data"]["run_id"]
+    wait_done(client, run_id)
+
+    with client.stream(
+        "GET", f"/api/runs/{run_id}/events", headers={"Last-Event-ID": "2"}
+    ) as stream:
+        ids = [int(line[4:]) for line in stream.iter_lines() if line.startswith("id: ")]
+
+    assert ids[0] == 3 and ids == sorted(ids)
+
+
+async def test_idle_streams_send_keepalive_comments() -> None:
+    import asyncio
+
+    from jev.api.routes.runs import event_stream
+    from jev.runs.store import RunStore
+
+    gate = asyncio.Event()
+
+    async def slow(on_event):  # type: ignore[no-untyped-def]
+        await gate.wait()
+
+    state = RunStore().start("r", "replay", slow)
+    stream = event_stream(state, after=-1, keepalive_s=0.01)
+
+    assert await anext(stream) == ": keepalive\n\n"
+    gate.set()
+    await stream.aclose()
+
+
+def test_unknown_recording_is_a_404_before_the_run_starts(tmp_path: Path) -> None:
+    client = make_client(tmp_path)
+
+    response = client.post(
+        "/api/runs",
+        json={"scenario_id": "s1_reconciliation", "mode": "replay", "recording_id": "nope-123"},
+    )
+
+    assert response.status_code == 404
+    assert response.json()["error"]["code"] == "NO_RECORDING"
+
+
+def test_unexpected_errors_become_an_internal_error_envelope(tmp_path: Path) -> None:
+    client = make_client(tmp_path)
+    app = client.app
+
+    @app.get("/api/boom")  # type: ignore[attr-defined, untyped-decorator]
+    def boom() -> None:
+        raise RuntimeError("secret detail")
+
+    response = TestClient(app, raise_server_exceptions=False).get("/api/boom")
+
+    assert response.status_code == 500
+    assert response.json() == {
+        "success": False,
+        "data": None,
+        "error": {"code": "INTERNAL_ERROR", "message": "Something went wrong on the server."},
+    }
+
+
+def test_openapi_documents_typed_payloads_and_envelope_errors(tmp_path: Path) -> None:
+    spec = make_client(tmp_path).get("/openapi.json").json()
+    start = spec["paths"]["/api/runs"]["post"]["responses"]
+    events = spec["paths"]["/api/runs/{run_id}/events"]["get"]["responses"]["200"]["content"]
+
+    assert "RunStarted" in json.dumps(start["202"]) and "409" in start and "422" in start
+    assert "HTTPValidationError" not in json.dumps(start["422"])
+    assert "text/event-stream" in events
+    schemas = spec["components"]["schemas"]
+    assert {"ScenarioDetail", "RunStatus", "BudgetReport", "DocumentText"} <= set(schemas)
+
+
+def test_a_corrupt_recording_is_reported_as_invalid_not_missing(tmp_path: Path) -> None:
+    client = make_client(tmp_path)
+    folder = tmp_path / "replays" / "s1_reconciliation"
+    folder.mkdir(parents=True)
+    (folder / "broken-1.json").write_text("{not json")
+
+    response = client.get("/api/scenarios/s1_reconciliation/recordings")
+
+    assert response.status_code == 500
+    assert response.json()["error"]["code"] == "RECORDING_INVALID"
+
+
+def test_resuming_a_finished_run_after_its_last_event_is_a_204(tmp_path: Path) -> None:
+    client = make_client(tmp_path)
+    run_id = client.post(
+        "/api/runs", json={"scenario_id": "s1_reconciliation", "mode": "live"}
+    ).json()["data"]["run_id"]
+    wait_done(client, run_id)
+
+    response = client.get(f"/api/runs/{run_id}/events", headers={"Last-Event-ID": "100000"})
+
+    assert response.status_code == 204  # tells EventSource to stop reconnecting
