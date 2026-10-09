@@ -1,0 +1,26 @@
+# Local hooks: tool versions come from uv.lock / web/package-lock.json, not from pinned revs.
+repos:
+  - repo: local
+    hooks:
+      - id: ruff-check
+        name: ruff check
+        entry: uv run ruff check --fix
+        language: system
+        types: [python]
+      - id: ruff-format
+        name: ruff format
+        entry: uv run ruff format
+        language: system
+        types: [python]
+      - id: mypy
+        name: mypy (strict)
+        entry: uv run mypy src
+        language: system
+        types: [python]
+        pass_filenames: false
+      - id: web-lint
+        name: web lint + typecheck + format check
+        entry: scripts/hooks/web_checks.sh
+        language: system
+        files: ^web/
+        pass_filenames: false
