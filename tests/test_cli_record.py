@@ -101,3 +101,20 @@ def test_cli_rejects_out_of_range_runs_before_anything_else(runs: str) -> None:
     with pytest.raises(SystemExit) as exit_info:
         main(["record", "s1", "--runs", runs])
     assert exit_info.value.code == 2
+
+
+def test_a_provider_failure_shows_its_sanitised_reason(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    from jev.providers.errors import ProviderError
+    from tests.runs.test_service import FakeLiveClients, FakeLiveLlm, _FailingLlm
+    from tests.s1.test_llm_pipeline import perfect_report
+
+    class _RejectedLlm(_FailingLlm):
+        async def parse(self, request, schema):  # type: ignore[no-untyped-def]
+            raise ProviderError("openai", "OpenAI request failed (NotFoundError, HTTP 404)")
+
+    clients = FakeLiveClients(llm=FakeLiveLlm(inner=_RejectedLlm(perfect_report())))
+
+    assert record(service(tmp_path, clients), runs=1, input_fn=lambda p: "RECORD") == 1
+    assert "openai: OpenAI request failed (NotFoundError, HTTP 404)" in capsys.readouterr().err

@@ -18,6 +18,7 @@ from jev.budget.guard import BudgetExceededError
 from jev.budget.ledger import Ledger, LedgerCorruptError, LedgerMissingError
 from jev.budget.pricing import UnknownModelError
 from jev.config import Settings
+from jev.providers.errors import ProviderError
 from jev.providers.factory import LiveDisabledError, MissingKeyError
 from jev.runs.service import PreparedLive, RunService
 from jev.scenarios.s1_reconciliation.documents import DocumentTooLargeError, validate_s1_data
@@ -104,9 +105,10 @@ def record(service: RunService, *, runs: int, input_fn: Callable[[str], str] = i
             return 1
         try:
             result = asyncio.run(service.run_prepared(prepared, lambda event: None))
-        except Exception as exc:  # the class only: provider messages can carry request text
+        except Exception as exc:  # provider messages are sanitised; others show the class only
+            reason = str(exc) if isinstance(exc, ProviderError) else type(exc).__name__
             print(
-                f"Run {n}/{runs} failed ({type(exc).__name__}); money may have been spent. "
+                f"Run {n}/{runs} failed ({reason}); money may have been spent. "
                 "Check `budget` before retrying.",
                 file=sys.stderr,
             )

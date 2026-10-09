@@ -280,3 +280,32 @@ def test_estimate_and_fingerprint_are_exposed_for_preflight(guard: BudgetGuard) 
 
     assert llm.key_fp == key_fingerprint(API_KEY)
     assert llm.estimate(request(), Answer) > 0
+
+
+async def test_provider_errors_name_status_code_and_param_but_never_body_text(
+    guard: BudgetGuard,
+) -> None:
+    body = {
+        "error": {
+            "message": "The model SECRET-BODY-TEXT does not exist",
+            "type": "invalid_request_error",
+            "code": "model_not_found",
+            "param": "model",
+        }
+    }
+
+    with pytest.raises(ProviderError) as info:
+        await client(guard, Recorder(status=404, body=body)).parse(request(), Answer)
+
+    message = str(info.value)
+    assert "HTTP 404" in message and "code=model_not_found" in message
+    assert "param=model" in message and "SECRET-BODY-TEXT" not in message
+
+
+async def test_unsafe_error_codes_are_dropped(guard: BudgetGuard) -> None:
+    body = {"error": {"message": "x", "type": "t", "code": "evil code <script>"}}
+
+    with pytest.raises(ProviderError) as info:
+        await client(guard, Recorder(status=400, body=body)).parse(request(), Answer)
+
+    assert "HTTP 400" in str(info.value) and "evil" not in str(info.value)

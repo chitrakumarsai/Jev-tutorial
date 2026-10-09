@@ -228,3 +228,12 @@ def test_estimate_and_fingerprint_are_exposed_for_preflight(guard: BudgetGuard) 
 
     assert jev.key_fp == key_fingerprint(API_KEY)
     assert jev.estimate(make_request()) > 0
+
+
+async def test_provider_errors_name_the_status_but_never_body_text(guard: BudgetGuard) -> None:
+    recorder = Recorder(status=401, body={"error": "SECRET-BODY-TEXT"})
+
+    with pytest.raises(ProviderError) as info:
+        await client(guard, recorder).evaluate(make_request())
+
+    assert "HTTP 401" in str(info.value) and "SECRET-BODY-TEXT" not in str(info.value)
