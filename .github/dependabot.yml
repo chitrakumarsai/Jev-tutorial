@@ -8,6 +8,16 @@ updates:
     directory: /web
     schedule: { interval: weekly }
     open-pull-requests-limit: 5
+    ignore:
+      # typescript-eslint 8.71 supports TypeScript < 6.1 (README "Pinned tool versions").
+      - dependency-name: "typescript"
+        versions: [">=6.1.0"]
+      # jsdom 30 requires Node >= 22.22; the project is pinned to Node 22.14 (.nvmrc).
+      - dependency-name: "jsdom"
+        versions: [">=30.0.0"]
+      # Types must match the Node major we run (22).
+      - dependency-name: "@types/node"
+        versions: [">=23.0.0"]
   - package-ecosystem: github-actions
     directory: /
     schedule: { interval: weekly }
