@@ -49,10 +49,20 @@ def _to_sdk(question: Question) -> SdkQuestion:
     return Score(instructions=question.instructions, criteria=list(question.criteria))
 
 
+# Recorded usage (2026-10-09) shows input is billed once per request at 0.37-0.47 tokens per
+# payload char, plus a fixed overhead of ~90-160 tokens. The estimator assumes 0.4 tokens per
+# char, so the payload is scaled by 5/4 (=> 0.5 tokens per char) and 640 chars (~256 tokens)
+# cover the overhead.
+_PAYLOAD_SCALE_NUM, _PAYLOAD_SCALE_DEN = 5, 4
+_REQUEST_OVERHEAD_CHARS = 640
+
+
 def _pessimistic_input_chars(request: JevRequest, model: str) -> int:
-    """Assume the state is billed once per question until real usage proves otherwise."""
-    state_chars = len(json.dumps(request.state))
-    return state_chars * len(request.questions) + len(json.dumps(request.payload(model)))
+    """The payload (state + questions) once per request, padded for token-dense text, plus
+    Jev's fixed per-request overhead. tests/golden checks it against committed recordings."""
+    payload_chars = len(json.dumps(request.payload(model)))
+    scaled = -(-payload_chars * _PAYLOAD_SCALE_NUM // _PAYLOAD_SCALE_DEN)
+    return scaled + _REQUEST_OVERHEAD_CHARS
 
 
 class LiveJevClient:

@@ -14,6 +14,7 @@ from jev.runs.models import Mode, RunResult
 
 Status = Literal["running", "completed", "failed"]
 log = logging.getLogger(__name__)
+KEEP_FINISHED_RUNS = 20  # finished runs (events + results) kept for late readers
 
 
 @dataclass
@@ -51,8 +52,9 @@ class RunState:
 
 
 class RunStore:
-    def __init__(self) -> None:
+    def __init__(self, *, keep_finished: int = KEEP_FINISHED_RUNS) -> None:
         self._runs: dict[str, RunState] = {}
+        self._keep_finished = keep_finished
         self._live_claimed = False  # held from the 409 check until the live run is registered
 
     def get(self, run_id: str) -> RunState | None:
@@ -77,6 +79,7 @@ class RunStore:
 
     def start(self, run_id: str, mode: Mode, work_for: Any) -> RunState:
         """`work_for(on_event)` returns the awaitable that performs the run."""
+        self._evict_finished()
         state = RunState(run_id=run_id, mode=mode)
         self._runs[run_id] = state
         if mode == "live":
@@ -85,6 +88,13 @@ class RunStore:
         state._task = asyncio.create_task(self._run(state, work))
         state._task.add_done_callback(self._fail_if_cancelled_early(state, work))
         return state
+
+    def _evict_finished(self) -> None:
+        """Drop the oldest finished runs beyond the limit; running ones are never dropped."""
+        finished = [rid for rid, r in self._runs.items() if r.status != "running"]
+        excess = len(finished) - self._keep_finished
+        for run_id in finished[: max(excess, 0)]:
+            del self._runs[run_id]
 
     @staticmethod
     def _fail_if_cancelled_early(state: RunState, work: Awaitable[RunResult]) -> Any:
@@ -113,5 +123,5 @@ def _fail(state: RunState, exc_name: str) -> None:
     state.error = {"code": "RUN_FAILED", "message": f"The run failed ({exc_name})."}
     seq = len(state.events)
     t_ms = state.events[-1].t_ms if state.events else 0
-    state.publish(RunEvent(seq=seq, t_ms=t_ms, type="error", data=state.error))
+    state.publish(RunEvent(seq=seq, t_ms=t_ms, type="run_failed", data=state.error))
     state._finish("failed")

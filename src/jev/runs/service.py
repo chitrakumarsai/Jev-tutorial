@@ -134,7 +134,7 @@ class RunService:
                     f"No recordings for {SCENARIO_ID} yet; record a live run first."
                 )
             recording_id = metas[0].id
-        rec = self._store.load(SCENARIO_ID, recording_id)
+        rec = await asyncio.to_thread(self._store.load, SCENARIO_ID, recording_id)
 
         def provenance(side: Side, output: SideOutput) -> Provenance:
             return Provenance(
@@ -205,7 +205,7 @@ class RunService:
                     llm_model=s.openai_model,
                     calls=[*jev_rec.calls, *llm_rec.calls],
                 )
-                self._store.save(recording)
+                await asyncio.to_thread(self._store.save, recording)
                 recording_id = recording.id
             return self._complete(emit, prepared.run_id, "live", sides, recording_id)
         finally:

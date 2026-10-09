@@ -20,7 +20,7 @@ async def test_failed_run_publishes_an_error_and_is_marked_failed() -> None:
 
     assert state.status == "failed"
     assert state.error == {"code": "RUN_FAILED", "message": "The run failed (RuntimeError)."}
-    assert [e.type for e in state.events] == ["run_started", "error"]
+    assert [e.type for e in state.events] == ["run_started", "run_failed"]
 
 
 async def test_subscribing_after_completion_gets_history_then_end() -> None:
@@ -96,3 +96,27 @@ async def test_starting_the_claimed_live_run_hands_the_claim_to_it() -> None:
     await asyncio.sleep(0.01)
 
     assert not store.live_in_progress() and store.try_claim_live()
+
+
+async def test_old_finished_runs_are_evicted_but_running_ones_are_kept() -> None:
+    store = RunStore(keep_finished=2)
+    gate = asyncio.Event()
+
+    async def quick(on_event):  # type: ignore[no-untyped-def]
+        return None
+
+    async def slow(on_event):  # type: ignore[no-untyped-def]
+        await gate.wait()
+
+    store.start("running", "replay", slow)
+    for n in range(4):
+        store.start(f"done-{n}", "replay", quick)
+        await asyncio.sleep(0.01)
+    store.start("trigger", "replay", quick)
+
+    assert store.get("running") is not None
+    assert [r for r in ("done-0", "done-1", "done-2", "done-3") if store.get(r)] == [
+        "done-2",
+        "done-3",
+    ]
+    gate.set()
