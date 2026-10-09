@@ -1,0 +1,1285 @@
+{
+  "id": "20261009T182217Z-fb69ce88",
+  "scenario_id": "s1_reconciliation",
+  "recorded_at": "2026-10-09T18:22:17.661581+00:00",
+  "jev_model": "jev-latest",
+  "llm_model": "gpt-6-luna",
+  "calls": [
+    {
+      "request_hash": "1f04c5c76a9c3457481b9181849243523a33a18a8d058fe559497ae68f6cd687",
+      "provider": "typesafe",
+      "purpose": "s1.contract",
+      "model": "jev-latest",
+      "latency_ms": 331,
+      "result": {
+        "model": "jev-1.13.0",
+        "latency_ms": 331,
+        "choices": {
+          "zone_a_rate": {
+            "choice": "$1,250.00",
+            "probabilities": {
+              "$1,250.00": 1.0,
+              "$1,480.00": 0.0,
+              "$85.00": 0.0,
+              "$500.00": 0.0,
+              "$2,000,000": 0.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          },
+          "zone_a_rate__rev": {
+            "choice": "$1,250.00",
+            "probabilities": {
+              "$2,000,000": 0.0,
+              "$500.00": 0.0,
+              "$85.00": 0.0,
+              "$1,480.00": 0.0,
+              "$1,250.00": 1.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          },
+          "zone_b_rate": {
+            "choice": "$1,480.00",
+            "probabilities": {
+              "$1,250.00": 0.0,
+              "$1,480.00": 1.0,
+              "$85.00": 0.0,
+              "$500.00": 0.0,
+              "$2,000,000": 0.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          },
+          "zone_b_rate__rev": {
+            "choice": "$1,480.00",
+            "probabilities": {
+              "$2,000,000": 0.0,
+              "$500.00": 0.0,
+              "$85.00": 0.0,
+              "$1,480.00": 1.0,
+              "$1,250.00": 0.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          },
+          "detention_rate": {
+            "choice": "$85.00",
+            "probabilities": {
+              "$1,250.00": 0.0,
+              "$1,480.00": 0.0,
+              "$85.00": 1.0,
+              "$500.00": 0.0,
+              "$2,000,000": 0.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          },
+          "discount_threshold": {
+            "choice": "1,000",
+            "probabilities": {
+              "2026": 0.0,
+              "014": 0.0,
+              "1": 0.0,
+              "31": 0.0,
+              "90": 0.0,
+              "2": 0.0,
+              "250": 0.0,
+              "3": 0.0,
+              "4": 0.0,
+              "1,000": 1.0,
+              "5": 0.0,
+              "6": 0.0,
+              "30": 0.0,
+              "7": 0.0,
+              "8": 0.0,
+              "15": 0.0,
+              "9": 0.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          },
+          "discount_threshold__rev": {
+            "choice": "1,000",
+            "probabilities": {
+              "9": 0.0,
+              "15": 0.0,
+              "8": 0.0,
+              "7": 0.0,
+              "30": 0.0,
+              "6": 0.0,
+              "5": 0.0,
+              "1,000": 1.0,
+              "4": 0.0,
+              "3": 0.0,
+              "250": 0.0,
+              "2": 0.0,
+              "90": 0.0,
+              "31": 0.0,
+              "1": 0.0,
+              "014": 0.0,
+              "2026": 0.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          },
+          "discount_pct": {
+            "choice": "5%",
+            "probabilities": {
+              "5%": 1.0,
+              "18%": 0.0,
+              "1.5%": 0.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          },
+          "discount_pct__rev": {
+            "choice": "5%",
+            "probabilities": {
+              "1.5%": 0.0,
+              "18%": 0.0,
+              "5%": 1.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          },
+          "fuel_cap_pct": {
+            "choice": "18%",
+            "probabilities": {
+              "5%": 0.0,
+              "18%": 1.0,
+              "1.5%": 0.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          },
+          "fuel_cap_pct__rev": {
+            "choice": "18%",
+            "probabilities": {
+              "1.5%": 0.0,
+              "18%": 1.0,
+              "5%": 0.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          },
+          "late_fee_pct": {
+            "choice": "1.5%",
+            "probabilities": {
+              "5%": 0.0,
+              "18%": 0.0,
+              "1.5%": 1.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          },
+          "late_fee_grace_days": {
+            "choice": "31",
+            "probabilities": {
+              "2026": 0.0,
+              "014": 0.0,
+              "1": 0.04,
+              "31": 0.66,
+              "90": 0.0,
+              "2": 0.01,
+              "250": 0.0,
+              "3": 0.0,
+              "4": 0.0,
+              "1,000": 0.0,
+              "5": 0.0,
+              "6": 0.0,
+              "30": 0.28,
+              "7": 0.0,
+              "8": 0.0,
+              "15": 0.0,
+              "9": 0.0,
+              "none": 0.01
+            },
+            "confidence": 0.64
+          }
+        },
+        "scores": {},
+        "nouls": {},
+        "usage": {
+          "input_tokens": 2538,
+          "output_tokens": 1263
+        }
+      }
+    },
+    {
+      "request_hash": "de765bd209aaa0bf2c88c2100af98e1671dd0c4920eee21b8c7c41d0d3aa1a2a",
+      "provider": "typesafe",
+      "purpose": "s1.invoice.inv-2026-03",
+      "model": "jev-latest",
+      "latency_ms": 330,
+      "result": {
+        "model": "jev-1.13.0",
+        "latency_ms": 330,
+        "choices": {
+          "kind_L1": {
+            "choice": "line_haul_zone_a",
+            "probabilities": {
+              "line_haul_zone_a": 1.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 0.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L2": {
+            "choice": "line_haul_zone_b",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 1.0,
+              "fuel_surcharge": 0.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L3": {
+            "choice": "fuel_surcharge",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 1.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "invoice_date": {
+            "choice": "31 March 2026",
+            "probabilities": {
+              "31 March 2026": 1.0,
+              "30 April 2026": 0.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          }
+        },
+        "scores": {},
+        "nouls": {},
+        "usage": {
+          "input_tokens": 1152,
+          "output_tokens": 295
+        }
+      }
+    },
+    {
+      "request_hash": "7647c761e7669c8bf1e426a76b0ded6682682e9c2910d936acb5b54066544606",
+      "provider": "typesafe",
+      "purpose": "s1.invoice.inv-2026-01",
+      "model": "jev-latest",
+      "latency_ms": 377,
+      "result": {
+        "model": "jev-1.13.0",
+        "latency_ms": 377,
+        "choices": {
+          "kind_L1": {
+            "choice": "line_haul_zone_a",
+            "probabilities": {
+              "line_haul_zone_a": 1.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 0.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L2": {
+            "choice": "line_haul_zone_b",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 1.0,
+              "fuel_surcharge": 0.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L3": {
+            "choice": "fuel_surcharge",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 1.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "invoice_date": {
+            "choice": "31 January 2026",
+            "probabilities": {
+              "31 January 2026": 1.0,
+              "2 March 2026": 0.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          }
+        },
+        "scores": {},
+        "nouls": {},
+        "usage": {
+          "input_tokens": 1150,
+          "output_tokens": 294
+        }
+      }
+    },
+    {
+      "request_hash": "9b7d8914e42279822c58c760f78b62b9276957d8ec60ef8ac608dbd32a20a99e",
+      "provider": "typesafe",
+      "purpose": "s1.invoice.inv-2026-02",
+      "model": "jev-latest",
+      "latency_ms": 406,
+      "result": {
+        "model": "jev-1.13.0",
+        "latency_ms": 406,
+        "choices": {
+          "kind_L1": {
+            "choice": "line_haul_zone_a",
+            "probabilities": {
+              "line_haul_zone_a": 1.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 0.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L2": {
+            "choice": "line_haul_zone_b",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 1.0,
+              "fuel_surcharge": 0.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L3": {
+            "choice": "fuel_surcharge",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 1.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L4": {
+            "choice": "detention",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 0.0,
+              "detention": 1.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "invoice_date": {
+            "choice": "28 February 2026",
+            "probabilities": {
+              "28 February 2026": 1.0,
+              "30 March 2026": 0.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          }
+        },
+        "scores": {},
+        "nouls": {},
+        "usage": {
+          "input_tokens": 1364,
+          "output_tokens": 371
+        }
+      }
+    },
+    {
+      "request_hash": "11f850a57a5ec9f917b03e5b92ea088dea7696bebb709972b7502bcccac7abfc",
+      "provider": "typesafe",
+      "purpose": "s1.invoice.inv-2026-06",
+      "model": "jev-latest",
+      "latency_ms": 287,
+      "result": {
+        "model": "jev-1.13.0",
+        "latency_ms": 287,
+        "choices": {
+          "kind_L1": {
+            "choice": "line_haul_zone_a",
+            "probabilities": {
+              "line_haul_zone_a": 1.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 0.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L2": {
+            "choice": "line_haul_zone_b",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 1.0,
+              "fuel_surcharge": 0.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L3": {
+            "choice": "fuel_surcharge",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 1.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "invoice_date": {
+            "choice": "30 June 2026",
+            "probabilities": {
+              "30 June 2026": 1.0,
+              "30 July 2026": 0.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          }
+        },
+        "scores": {},
+        "nouls": {},
+        "usage": {
+          "input_tokens": 1152,
+          "output_tokens": 295
+        }
+      }
+    },
+    {
+      "request_hash": "ce8865860701921c19490b47c035793b08fa34aeaafa8b53213b08335bb17ca0",
+      "provider": "typesafe",
+      "purpose": "s1.invoice.inv-2026-07",
+      "model": "jev-latest",
+      "latency_ms": 305,
+      "result": {
+        "model": "jev-1.13.0",
+        "latency_ms": 305,
+        "choices": {
+          "kind_L1": {
+            "choice": "line_haul_zone_a",
+            "probabilities": {
+              "line_haul_zone_a": 1.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 0.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L2": {
+            "choice": "line_haul_zone_b",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 1.0,
+              "fuel_surcharge": 0.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L3": {
+            "choice": "fuel_surcharge",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 1.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "invoice_date": {
+            "choice": "31 July 2026",
+            "probabilities": {
+              "31 July 2026": 1.0,
+              "30 August 2026": 0.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          }
+        },
+        "scores": {},
+        "nouls": {},
+        "usage": {
+          "input_tokens": 1152,
+          "output_tokens": 295
+        }
+      }
+    },
+    {
+      "request_hash": "721e48d9e600884524523dca9fbc72ac40e99159f52f93f3e0b7e07b9dd6a597",
+      "provider": "typesafe",
+      "purpose": "s1.invoice.inv-2026-05",
+      "model": "jev-latest",
+      "latency_ms": 405,
+      "result": {
+        "model": "jev-1.13.0",
+        "latency_ms": 405,
+        "choices": {
+          "kind_L1": {
+            "choice": "line_haul_zone_a",
+            "probabilities": {
+              "line_haul_zone_a": 1.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 0.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L2": {
+            "choice": "line_haul_zone_b",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 1.0,
+              "fuel_surcharge": 0.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L3": {
+            "choice": "fuel_surcharge",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 1.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L4": {
+            "choice": "detention",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 0.0,
+              "detention": 1.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L5": {
+            "choice": "late_fee",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 0.0,
+              "detention": 0.0,
+              "late_fee": 1.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "paid_L5": {
+            "choice": "11 May 2026",
+            "probabilities": {
+              "31 March 2026": 0.0,
+              "11 May 2026": 1.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          },
+          "refinv_L5": {
+            "choice": "INV-2026-03",
+            "probabilities": {
+              "INV-2026-03": 1.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          },
+          "base_L5": {
+            "choice": "$271,672.00",
+            "probabilities": {
+              "$271,672.00": 1.0,
+              "$4,075.08": 0.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          },
+          "invoice_date": {
+            "choice": "31 May 2026",
+            "probabilities": {
+              "31 May 2026": 1.0,
+              "30 June 2026": 0.0,
+              "31 March 2026": 0.0,
+              "11 May 2026": 0.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          }
+        },
+        "scores": {},
+        "nouls": {},
+        "usage": {
+          "input_tokens": 1878,
+          "output_tokens": 645
+        }
+      }
+    },
+    {
+      "request_hash": "07b6ea2b99cec4a4c281d7766666a12d4eb158404b3b809a3b863b7a043f92d1",
+      "provider": "typesafe",
+      "purpose": "s1.invoice.inv-2026-04",
+      "model": "jev-latest",
+      "latency_ms": 608,
+      "result": {
+        "model": "jev-1.13.0",
+        "latency_ms": 608,
+        "choices": {
+          "kind_L1": {
+            "choice": "line_haul_zone_a",
+            "probabilities": {
+              "line_haul_zone_a": 1.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 0.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L2": {
+            "choice": "line_haul_zone_b",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 1.0,
+              "fuel_surcharge": 0.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L3": {
+            "choice": "fuel_surcharge",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 1.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "invoice_date": {
+            "choice": "30 April 2026",
+            "probabilities": {
+              "30 April 2026": 1.0,
+              "30 May 2026": 0.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          }
+        },
+        "scores": {},
+        "nouls": {},
+        "usage": {
+          "input_tokens": 1152,
+          "output_tokens": 295
+        }
+      }
+    },
+    {
+      "request_hash": "d4f9621e1742ac40e0254ec62062eb32fd097bd2fd5d4ed56fcb49449b7d7cc8",
+      "provider": "typesafe",
+      "purpose": "s1.invoice.inv-2026-08",
+      "model": "jev-latest",
+      "latency_ms": 302,
+      "result": {
+        "model": "jev-1.13.0",
+        "latency_ms": 302,
+        "choices": {
+          "kind_L1": {
+            "choice": "line_haul_zone_a",
+            "probabilities": {
+              "line_haul_zone_a": 1.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 0.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L2": {
+            "choice": "line_haul_zone_b",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 1.0,
+              "fuel_surcharge": 0.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L3": {
+            "choice": "fuel_surcharge",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 1.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "invoice_date": {
+            "choice": "31 August 2026",
+            "probabilities": {
+              "31 August 2026": 1.0,
+              "30 September 2026": 0.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          }
+        },
+        "scores": {},
+        "nouls": {},
+        "usage": {
+          "input_tokens": 1152,
+          "output_tokens": 295
+        }
+      }
+    },
+    {
+      "request_hash": "8895349d41c18be469cee548f4608c2da282b55daa3901a3096d7fe8a839ed65",
+      "provider": "typesafe",
+      "purpose": "s1.invoice.inv-2026-09",
+      "model": "jev-latest",
+      "latency_ms": 293,
+      "result": {
+        "model": "jev-1.13.0",
+        "latency_ms": 293,
+        "choices": {
+          "kind_L1": {
+            "choice": "line_haul_zone_a",
+            "probabilities": {
+              "line_haul_zone_a": 1.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 0.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L2": {
+            "choice": "line_haul_zone_b",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 1.0,
+              "fuel_surcharge": 0.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L3": {
+            "choice": "fuel_surcharge",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 1.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "invoice_date": {
+            "choice": "30 September 2026",
+            "probabilities": {
+              "30 September 2026": 1.0,
+              "30 October 2026": 0.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          }
+        },
+        "scores": {},
+        "nouls": {},
+        "usage": {
+          "input_tokens": 1152,
+          "output_tokens": 295
+        }
+      }
+    },
+    {
+      "request_hash": "95761478c9c194447653b8124457b16138a146bd447ec29f8c563b9ece432afd",
+      "provider": "typesafe",
+      "purpose": "s1.invoice.inv-2026-10",
+      "model": "jev-latest",
+      "latency_ms": 272,
+      "result": {
+        "model": "jev-1.13.0",
+        "latency_ms": 272,
+        "choices": {
+          "kind_L1": {
+            "choice": "line_haul_zone_a",
+            "probabilities": {
+              "line_haul_zone_a": 1.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 0.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L2": {
+            "choice": "line_haul_zone_b",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 1.0,
+              "fuel_surcharge": 0.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L3": {
+            "choice": "fuel_surcharge",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 1.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L4": {
+            "choice": "detention",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 0.0,
+              "detention": 1.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L5": {
+            "choice": "detention",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 0.0,
+              "detention": 1.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "invoice_date": {
+            "choice": "31 October 2026",
+            "probabilities": {
+              "31 October 2026": 1.0,
+              "30 November 2026": 0.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          }
+        },
+        "scores": {},
+        "nouls": {
+          "dup_L4_L5": {
+            "noul": 0.9
+          }
+        },
+        "usage": {
+          "input_tokens": 1606,
+          "output_tokens": 468
+        }
+      }
+    },
+    {
+      "request_hash": "29e75c53d2bbf9ee0accba67b29e32ccf55aa3ca6c14841b72abc97a026bbc89",
+      "provider": "typesafe",
+      "purpose": "s1.invoice.inv-2026-11",
+      "model": "jev-latest",
+      "latency_ms": 264,
+      "result": {
+        "model": "jev-1.13.0",
+        "latency_ms": 264,
+        "choices": {
+          "kind_L1": {
+            "choice": "line_haul_zone_a",
+            "probabilities": {
+              "line_haul_zone_a": 1.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 0.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L2": {
+            "choice": "line_haul_zone_b",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 1.0,
+              "fuel_surcharge": 0.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L3": {
+            "choice": "fuel_surcharge",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 1.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "invoice_date": {
+            "choice": "30 November 2026",
+            "probabilities": {
+              "30 November 2026": 1.0,
+              "30 December 2026": 0.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          }
+        },
+        "scores": {},
+        "nouls": {},
+        "usage": {
+          "input_tokens": 1152,
+          "output_tokens": 295
+        }
+      }
+    },
+    {
+      "request_hash": "d6b991a08dce3650499f1a0673311a86f7f3137bd8bfcd6c6ab92810204a4658",
+      "provider": "typesafe",
+      "purpose": "s1.invoice.inv-2026-12",
+      "model": "jev-latest",
+      "latency_ms": 284,
+      "result": {
+        "model": "jev-1.13.0",
+        "latency_ms": 284,
+        "choices": {
+          "kind_L1": {
+            "choice": "line_haul_zone_a",
+            "probabilities": {
+              "line_haul_zone_a": 1.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 0.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L2": {
+            "choice": "line_haul_zone_b",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 1.0,
+              "fuel_surcharge": 0.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L3": {
+            "choice": "fuel_surcharge",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 1.0,
+              "detention": 0.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "kind_L4": {
+            "choice": "detention",
+            "probabilities": {
+              "line_haul_zone_a": 0.0,
+              "line_haul_zone_b": 0.0,
+              "fuel_surcharge": 0.0,
+              "detention": 1.0,
+              "late_fee": 0.0,
+              "other": 0.0
+            },
+            "confidence": 1.0
+          },
+          "invoice_date": {
+            "choice": "31 December 2026",
+            "probabilities": {
+              "31 December 2026": 1.0,
+              "30 January 2027": 0.0,
+              "none": 0.0
+            },
+            "confidence": 1.0
+          }
+        },
+        "scores": {},
+        "nouls": {},
+        "usage": {
+          "input_tokens": 1366,
+          "output_tokens": 371
+        }
+      }
+    },
+    {
+      "request_hash": "3a75b062e5ce42d35e2a5e01c52875585e364ba4ce24bb48932a88d2ea2a29d6",
+      "provider": "openai",
+      "purpose": "s1.llm",
+      "model": "gpt-6-luna",
+      "latency_ms": 35605,
+      "result": {
+        "model": "gpt-6-luna",
+        "latency_ms": 35605,
+        "usage": {
+          "input_tokens": 4300,
+          "output_tokens": 4231,
+          "reasoning_tokens": 1677
+        },
+        "parsed": {
+          "findings": [
+            {
+              "kind": "rate_mismatch",
+              "invoice_id": "INV-2026-02",
+              "line_ref": "L4",
+              "billed": "340.00",
+              "expected": "170.00",
+              "variance": "170.00",
+              "quote": "Detention. Waiting time beyond two free hours at a Customer site is billed at $85.00 per hour, per occurrence, as a single line.",
+              "explanation": "Of the 4 hours shown, 2 are free; only 2 hours are billable."
+            },
+            {
+              "kind": "surcharge_over_cap",
+              "invoice_id": "INV-2026-04",
+              "line_ref": "L3",
+              "billed": "57530.00",
+              "expected": "47070.00",
+              "variance": "10460.00",
+              "quote": "The surcharge percentage follows the published diesel index for the invoice month but may not exceed 18% of line-haul charges.",
+              "explanation": "The billed 22.0% surcharge exceeds the 18% cap; the capped surcharge on $261,500.00 of line-haul is $47,070.00."
+            },
+            {
+              "kind": "rate_mismatch",
+              "invoice_id": "INV-2026-05",
+              "line_ref": "L4",
+              "billed": "255.00",
+              "expected": "85.00",
+              "variance": "170.00",
+              "quote": "Detention. Waiting time beyond two free hours at a Customer site is billed at $85.00 per hour, per occurrence, as a single line.",
+              "explanation": "Of the 3 hours shown, 2 are free; only 1 hour is billable."
+            },
+            {
+              "kind": "discount_not_applied",
+              "invoice_id": "INV-2026-07",
+              "line_ref": "L1+L2",
+              "billed": "247850.00",
+              "expected": "235457.50",
+              "variance": "12392.50",
+              "quote": "When cumulative Loads in the Contract Year exceed 1,000, Customer receives a discount of 5% off all line-haul charges. The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000, and to all later invoices in the Contract Year.",
+              "explanation": "Cumulative loads exceeded 1,000 in June, so the 5% discount applies to this July invoice."
+            },
+            {
+              "kind": "surcharge_on_undiscounted_base",
+              "invoice_id": "INV-2026-07",
+              "line_ref": "L3",
+              "billed": "43373.75",
+              "expected": "41205.06",
+              "variance": "2168.69",
+              "quote": "Carrier may add a fuel surcharge calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount).",
+              "explanation": "The 17.5% surcharge was calculated on the undiscounted line-haul subtotal instead of the discounted subtotal."
+            },
+            {
+              "kind": "discount_not_applied",
+              "invoice_id": "INV-2026-08",
+              "line_ref": "L1+L2",
+              "billed": "246700.00",
+              "expected": "234365.00",
+              "variance": "12335.00",
+              "quote": "When cumulative Loads in the Contract Year exceed 1,000, Customer receives a discount of 5% off all line-haul charges. The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000, and to all later invoices in the Contract Year.",
+              "explanation": "The 5% volume discount applies to this August invoice."
+            },
+            {
+              "kind": "surcharge_on_undiscounted_base",
+              "invoice_id": "INV-2026-08",
+              "line_ref": "L3",
+              "billed": "41939.00",
+              "expected": "39842.05",
+              "variance": "2096.95",
+              "quote": "Carrier may add a fuel surcharge calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount).",
+              "explanation": "The 17.0% surcharge was calculated on the undiscounted line-haul subtotal instead of the discounted subtotal."
+            },
+            {
+              "kind": "discount_not_applied",
+              "invoice_id": "INV-2026-09",
+              "line_ref": "L1+L2",
+              "billed": "236500.00",
+              "expected": "224675.00",
+              "variance": "11825.00",
+              "quote": "When cumulative Loads in the Contract Year exceed 1,000, Customer receives a discount of 5% off all line-haul charges. The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000, and to all later invoices in the Contract Year.",
+              "explanation": "The 5% volume discount applies to this September invoice."
+            },
+            {
+              "kind": "surcharge_on_undiscounted_base",
+              "invoice_id": "INV-2026-09",
+              "line_ref": "L3",
+              "billed": "39022.50",
+              "expected": "37071.38",
+              "variance": "1951.12",
+              "quote": "Carrier may add a fuel surcharge calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount).",
+              "explanation": "The 16.5% surcharge was calculated on the undiscounted line-haul subtotal instead of the discounted subtotal."
+            },
+            {
+              "kind": "discount_not_applied",
+              "invoice_id": "INV-2026-10",
+              "line_ref": "L1+L2",
+              "billed": "260350.00",
+              "expected": "247332.50",
+              "variance": "13017.50",
+              "quote": "When cumulative Loads in the Contract Year exceed 1,000, Customer receives a discount of 5% off all line-haul charges. The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000, and to all later invoices in the Contract Year.",
+              "explanation": "The 5% volume discount applies to this October invoice."
+            },
+            {
+              "kind": "surcharge_on_undiscounted_base",
+              "invoice_id": "INV-2026-10",
+              "line_ref": "L3",
+              "billed": "41656.00",
+              "expected": "39573.20",
+              "variance": "2082.80",
+              "quote": "Carrier may add a fuel surcharge calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount).",
+              "explanation": "The 16.0% surcharge was calculated on the undiscounted line-haul subtotal instead of the discounted subtotal."
+            },
+            {
+              "kind": "rate_mismatch",
+              "invoice_id": "INV-2026-10",
+              "line_ref": "L4",
+              "billed": "510.00",
+              "expected": "340.00",
+              "variance": "170.00",
+              "quote": "Detention. Waiting time beyond two free hours at a Customer site is billed at $85.00 per hour, per occurrence, as a single line.",
+              "explanation": "Of the 6 hours shown, 2 are free; the 4 billable hours total $340.00."
+            },
+            {
+              "kind": "duplicate_line",
+              "invoice_id": "INV-2026-10",
+              "line_ref": "L5",
+              "billed": "510.00",
+              "expected": "0.00",
+              "variance": "510.00",
+              "quote": "Detention. Waiting time beyond two free hours at a Customer site is billed at $85.00 per hour, per occurrence, as a single line.",
+              "explanation": "This repeats the DC-South 6-hour detention charge on L4."
+            },
+            {
+              "kind": "discount_not_applied",
+              "invoice_id": "INV-2026-11",
+              "line_ref": "L1+L2",
+              "billed": "234200.00",
+              "expected": "222490.00",
+              "variance": "11710.00",
+              "quote": "When cumulative Loads in the Contract Year exceed 1,000, Customer receives a discount of 5% off all line-haul charges. The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000, and to all later invoices in the Contract Year.",
+              "explanation": "The 5% volume discount applies to this November invoice."
+            },
+            {
+              "kind": "surcharge_on_undiscounted_base",
+              "invoice_id": "INV-2026-11",
+              "line_ref": "L3",
+              "billed": "38643.00",
+              "expected": "36710.85",
+              "variance": "1932.15",
+              "quote": "Carrier may add a fuel surcharge calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount).",
+              "explanation": "The 16.5% surcharge was calculated on the undiscounted line-haul subtotal instead of the discounted subtotal."
+            },
+            {
+              "kind": "discount_not_applied",
+              "invoice_id": "INV-2026-12",
+              "line_ref": "L1+L2",
+              "billed": "274000.00",
+              "expected": "260300.00",
+              "variance": "13700.00",
+              "quote": "When cumulative Loads in the Contract Year exceed 1,000, Customer receives a discount of 5% off all line-haul charges. The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000, and to all later invoices in the Contract Year.",
+              "explanation": "The 5% volume discount applies to this December invoice."
+            },
+            {
+              "kind": "surcharge_on_undiscounted_base",
+              "invoice_id": "INV-2026-12",
+              "line_ref": "L3",
+              "billed": "46580.00",
+              "expected": "44251.00",
+              "variance": "2329.00",
+              "quote": "Carrier may add a fuel surcharge calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount).",
+              "explanation": "The 17.0% surcharge was calculated on the undiscounted line-haul subtotal instead of the discounted subtotal."
+            },
+            {
+              "kind": "rate_mismatch",
+              "invoice_id": "INV-2026-12",
+              "line_ref": "L4",
+              "billed": "170.00",
+              "expected": "0.00",
+              "variance": "170.00",
+              "quote": "Detention. Waiting time beyond two free hours at a Customer site is billed at $85.00 per hour, per occurrence, as a single line.",
+              "explanation": "The 2 hours shown are within the two free hours, so no detention charge is due."
+            }
+          ],
+          "total_variance": "99190.71"
+        },
+        "refusal": null,
+        "error": null
+      }
+    }
+  ]
+}

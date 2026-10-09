@@ -15,7 +15,9 @@ from jev.scenarios.s1_reconciliation.llm_schema import LlmFinding, S1LlmReport
 from jev.scoring.metrics import CallUsage
 
 LLM_PURPOSE = "s1.llm"
-MAX_OUTPUT_TOKENS = 4_000
+# luna reasons for ~1.9-2.2k tokens before a ~1.7k-token answer; 4k truncated 2 of 3 runs.
+# 16k leaves >2x headroom (tests/golden checks recordings) for about +$0.006 worst case.
+MAX_OUTPUT_TOKENS = 16_000
 
 INSTRUCTIONS = """You are a meticulous freight-billing auditor.
 You receive a Master Services Agreement (document id "msa") and twelve monthly invoices
