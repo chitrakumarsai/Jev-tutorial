@@ -95,4 +95,27 @@ describe('useResource', () => {
     expect(signals[0]?.aborted).toBe(true);
     expect(result.current).toEqual({ status: 'loading' });
   });
+
+  it('loads the same key again for a new revision', async () => {
+    const load = vi
+      .fn<(key: string, signal: AbortSignal) => Promise<string>>()
+      .mockRejectedValueOnce(new ApiRequestError(0, 'NETWORK', 'Could not reach the API.'))
+      .mockResolvedValueOnce('second try');
+    const { result, rerender } = renderHook(({ revision }) => useResource('s1', load, revision), {
+      initialProps: { revision: 0 },
+    });
+    await act(async () => {
+      await Promise.resolve();
+    });
+    expect(result.current.status).toBe('error');
+
+    rerender({ revision: 1 });
+    expect(result.current).toEqual({ status: 'loading' });
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    expect(result.current).toEqual({ status: 'ready', data: 'second try' });
+    expect(load).toHaveBeenCalledTimes(2);
+  });
 });

@@ -1,8 +1,16 @@
-import { act, render, screen, within } from '@testing-library/react';
+import { act, cleanup, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ApiRequestError, getDocuments, getScenario, getScenarios, startRun } from '../api/client';
+import {
+  ApiRequestError,
+  getBudget,
+  getDocuments,
+  getRecordings,
+  getScenario,
+  getScenarios,
+  startRun,
+} from '../api/client';
 import { FakeEventSource } from '../test/fakeEventSource';
 import { replayDocuments, replayFrames } from '../test/fixtures/replay';
 import { App } from './App';
@@ -12,6 +20,8 @@ vi.mock('../api/client', async (importOriginal) => ({
   getScenarios: vi.fn(),
   getScenario: vi.fn(),
   getDocuments: vi.fn(),
+  getRecordings: vi.fn(),
+  getBudget: vi.fn(),
   startRun: vi.fn(),
 }));
 
@@ -32,10 +42,22 @@ beforeEach(() => {
     live_enabled: false,
   });
   vi.mocked(getDocuments).mockResolvedValue(replayDocuments);
+  vi.mocked(getRecordings).mockResolvedValue([
+    {
+      id: 'rec1',
+      scenario_id: SCENARIO.id,
+      recorded_at: '2026-10-09T18:30:56.830087+00:00',
+      jev_model: 'jev-1.13.0',
+      llm_model: 'gpt-6-luna',
+    },
+  ]);
+  vi.mocked(getBudget).mockResolvedValue({ ledger_initialised: false, providers: [] });
   vi.mocked(startRun).mockResolvedValue({ run_id: 'r1' });
 });
 
 afterEach(() => {
+  // Unmount before resetting mocks: a load still in flight must not call a reset mock.
+  cleanup();
   vi.unstubAllGlobals();
   vi.resetAllMocks();
 });
@@ -90,6 +112,7 @@ describe('App', () => {
     render(<App />);
 
     await screen.findByRole('heading', { level: 2, name: SCENARIO.title });
+    await within(screen.getByRole('banner')).findByText('Recorded');
     await user.click(screen.getByRole('button', { name: 'Replay recorded run' }));
     expect(FakeEventSource.instances[0]?.url).toBe('/api/runs/r1/events');
     act(() => {
@@ -108,6 +131,7 @@ describe('App', () => {
     const user = userEvent.setup();
     render(<App />);
     await screen.findByRole('heading', { level: 2, name: SCENARIO.title });
+    await within(screen.getByRole('banner')).findByText('Recorded');
     await user.click(screen.getByRole('button', { name: 'Replay recorded run' }));
     act(() => {
       for (const frame of replayFrames) FakeEventSource.instances[0]?.send(frame.type, frame.data);
@@ -139,6 +163,7 @@ describe('App', () => {
     const user = userEvent.setup();
     render(<App />);
     await screen.findByRole('heading', { level: 2, name: SCENARIO.title });
+    await within(screen.getByRole('banner')).findByText('Recorded');
     await user.click(screen.getByRole('button', { name: 'Replay recorded run' }));
     act(() => {
       for (const frame of replayFrames) FakeEventSource.instances[0]?.send(frame.type, frame.data);
@@ -172,6 +197,7 @@ describe('App', () => {
     vi.mocked(getScenarios).mockResolvedValue([SCENARIO, OTHER]);
     render(<App />);
     await screen.findByRole('heading', { level: 2, name: SCENARIO.title });
+    await within(screen.getByRole('banner')).findByText('Recorded');
     await user.click(screen.getByRole('button', { name: 'Replay recorded run' }));
     expect(FakeEventSource.instances).toHaveLength(1);
 
@@ -209,5 +235,79 @@ describe('App', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'Could not reach the API. Is the server running?',
     );
+  });
+
+  it('tries again after a failed load, keeping nothing stale', async () => {
+    const user = userEvent.setup();
+    vi.mocked(getScenarios)
+      .mockRejectedValueOnce(
+        new ApiRequestError(0, 'NETWORK', 'Could not reach the API. Is the server running?'),
+      )
+      .mockResolvedValueOnce([SCENARIO]);
+    render(<App />);
+
+    await user.click(await screen.findByRole('button', { name: 'Try again' }));
+
+    expect(
+      await screen.findByRole('heading', { level: 2, name: SCENARIO.title }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole('alert')).toBeNull();
+  });
+
+  it('says why a run stopped, keeping what arrived before it', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await screen.findByRole('heading', { level: 2, name: SCENARIO.title });
+    await within(screen.getByRole('banner')).findByText('Recorded');
+    await user.click(screen.getByRole('button', { name: 'Replay recorded run' }));
+    const started = replayFrames.find((frame) => frame.type === 'run_started');
+    act(() => {
+      if (started) FakeEventSource.instances[0]?.send(started.type, started.data);
+      FakeEventSource.instances[0]?.send(
+        'run_failed',
+        JSON.stringify({
+          seq: 999,
+          t_ms: 1,
+          type: 'run_failed',
+          side: null,
+          data: { code: 'RUN_FAILED', message: 'The run failed (TimeoutError).' },
+        }),
+      );
+    });
+
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'The run stopped. The run failed (TimeoutError).',
+    );
+    expect(within(screen.getByRole('banner')).getByRole('status')).toHaveTextContent('Run stopped');
+    expect(screen.queryByRole('region', { name: 'Results' })).toBeNull();
+  });
+
+  it('labels a replay with the recording it shows', async () => {
+    render(<App />);
+
+    expect(await within(screen.getByRole('banner')).findByText('Recorded')).toBeInTheDocument();
+    expect(within(screen.getByRole('banner')).getByText('Oct 9, 2026')).toBeInTheDocument();
+  });
+
+  it('retries only the load that failed, and keeps focus in the workspace', async () => {
+    const user = userEvent.setup();
+    vi.mocked(getScenario)
+      .mockRejectedValueOnce(new ApiRequestError(500, 'INTERNAL_ERROR', 'Something went wrong.'))
+      .mockResolvedValueOnce({
+        ...SCENARIO,
+        llm_prompt: 'You are auditing freight invoices…',
+        models: { jev: 'jev-latest', llm: 'gpt-6-luna' },
+        live_enabled: false,
+      });
+    render(<App />);
+
+    await user.click(await screen.findByRole('button', { name: 'Try again' }));
+
+    expect(screen.getByRole('main')).toHaveFocus();
+    expect(
+      await screen.findByRole('heading', { level: 2, name: SCENARIO.title }),
+    ).toBeInTheDocument();
+    expect(getScenarios).toHaveBeenCalledTimes(1);
+    expect(getScenario).toHaveBeenCalledTimes(2);
   });
 });

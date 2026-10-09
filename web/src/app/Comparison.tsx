@@ -64,6 +64,14 @@ export function Comparison({ scenario, runView }: Props) {
         <h2 className="workspace__title">{detail.title}</h2>
         <p className="workspace__description">{detail.description}</p>
       </div>
+      {runView?.phase === 'failed' && (
+        <div role="alert" className="workspace__problem">
+          <p>
+            The run stopped. {runView.error?.message ?? 'No reason was given.'} What arrived before
+            it stopped is shown below; the results need a complete run.
+          </p>
+        </div>
+      )}
       <LayoutGroup>
         <div className="workspace__grid">
           <DocumentViewer
