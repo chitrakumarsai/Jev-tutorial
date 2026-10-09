@@ -1,0 +1,78 @@
+/*
+ * Design tokens: "editorial ledger".
+ * Each colour is written once as light-dark(paper ivory, ink navy). The page follows the OS
+ * theme; [data-theme] pins it. tokens.test.ts checks every text colour against both
+ * backgrounds (4.5:1) and the focus ring (3:1).
+ */
+:root {
+  color-scheme: light dark;
+
+  /* Surfaces */
+  --color-paper: light-dark(#f7f3ea, #101827);
+  --color-surface: light-dark(#fffdf8, #172136);
+  --color-rule: light-dark(#d9d2c3, #2a3550);
+
+  /* Text */
+  --color-ink: light-dark(#1b2333, #ede7da);
+  --color-muted: light-dark(#5a6170, #a3afc0);
+
+  /* Semantic status: always paired with a glyph (✓ ? ✕), never colour alone */
+  --color-verified: light-dark(#1f7a4d, #5cc08a);
+  --color-review: light-dark(#8a5a00, #e3a93b);
+  --color-discrepancy: light-dark(#b8321a, #f07155);
+
+  /* The two contenders */
+  --color-jev: light-dark(#3d3fb0, #9a9dff);
+  --color-llm: light-dark(#4f5b6b, #9fb4cc);
+
+  /* Interaction */
+  --color-focus: light-dark(#2b59c3, #7fa6ff);
+
+  /* Typography */
+  --font-display: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
+  --font-text: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: clamp(1rem, 0.94rem + 0.25vw, 1.125rem);
+  --text-lg: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --text-xl: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem);
+  --text-figure: clamp(2.5rem, 1.6rem + 3.6vw, 4.5rem);
+
+  --leading-tight: 1.15;
+  --leading-body: 1.55;
+  --tracking-caps: 0.08em;
+
+  /* Spacing: a ledger line is the base rhythm */
+  --line: 1.75rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-section: clamp(2rem, 1.5rem + 2.5vw, 4rem);
+  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+
+  /* Edges: paper is square; only chips and toggles round off */
+  --radius-none: 0;
+  --radius-chip: 999px;
+  --rule-hairline: 1px solid var(--color-rule);
+  --rule-strong: 2px solid var(--color-ink);
+
+  /* Depth: a sheet lifted off the desk */
+  --shadow-sheet: 0 1px 0 var(--color-rule), 0 12px 32px -18px rgb(16 24 39 / 0.35);
+
+  /* CSS-side motion; JS motion uses web/src/lib/motion.ts */
+  --duration-fast: 180ms;
+  --duration-normal: 350ms;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
