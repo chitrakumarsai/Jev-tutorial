@@ -96,10 +96,74 @@ describe('App', () => {
       for (const frame of replayFrames) FakeEventSource.instances[0]?.send(frame.type, frame.data);
     });
 
-    expect(screen.getByRole('status')).toHaveTextContent('Replay complete');
+    expect(within(screen.getByRole('banner')).getByRole('status')).toHaveTextContent(
+      'Replay complete',
+    );
     expect(screen.getByRole('region', { name: 'Jev + code' })).toHaveTextContent('14 findings');
     expect(screen.getByRole('region', { name: 'Plain LLM' })).toHaveTextContent('18 findings');
     expect(screen.getByRole('tabpanel').querySelectorAll('mark').length).toBeGreaterThan(0);
+  });
+
+  it('ends a replay with both ledgers, the review lane and the results', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await screen.findByRole('heading', { level: 2, name: SCENARIO.title });
+    await user.click(screen.getByRole('button', { name: 'Replay recorded run' }));
+    act(() => {
+      for (const frame of replayFrames) FakeEventSource.instances[0]?.send(frame.type, frame.data);
+    });
+
+    const llm = screen.getByRole('region', { name: 'Plain LLM' });
+    const jev = screen.getByRole('region', { name: 'Jev + code' });
+    expect(within(llm).getAllByText('Not in the answer key')).toHaveLength(4);
+    expect(within(jev).getAllByText(/^Matches K\d\d$/)).toHaveLength(14);
+    expect(within(jev).getByRole('region', { name: 'Review lane' })).toHaveTextContent(
+      'Nothing needed review',
+    );
+    const results = screen.getByRole('region', { name: 'Results' });
+    const scorecard = within(results).getByRole('table', {
+      name: 'Scorecard against the answer key',
+    });
+    const falsePositives = within(scorecard).getByRole('row', { name: /False positives/ });
+    expect(
+      within(falsePositives)
+        .getAllByRole('cell')
+        .map((c) => c.textContent),
+    ).toEqual(['✕4', '✓0']);
+    expect(within(results).getByRole('table', { name: 'Cost and latency' })).toHaveTextContent(
+      'jev-1.13.0, recorded Oct 9, 2026',
+    );
+  });
+
+  it('traces a ledger figure back to its passage', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await screen.findByRole('heading', { level: 2, name: SCENARIO.title });
+    await user.click(screen.getByRole('button', { name: 'Replay recorded run' }));
+    act(() => {
+      for (const frame of replayFrames) FakeEventSource.instances[0]?.send(frame.type, frame.data);
+    });
+
+    const jev = screen.getByRole('region', { name: 'Jev + code' });
+    await user.click(
+      within(jev).getByRole('button', { name: '$57,530.00, show in Invoice INV-2026-04' }),
+    );
+
+    expect(screen.getByRole('tab', { name: /Invoice INV-2026-04/ })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
+    const focused = screen.getByRole('tabpanel').querySelector('mark.quote--focused');
+    expect(focused).toHaveTextContent('Fuel surcharge (22.0% of line-haul)');
+    expect(within(screen.getByRole('main')).getAllByRole('status').at(-1)).toHaveTextContent(
+      'Showing the passage in Invoice INV-2026-04: “| L3 | Fuel surcharge',
+    );
+
+    // Picking a tab by hand ends the trace: no outline, no stale announcement.
+    await user.click(screen.getByRole('tab', { name: /Master services agreement/ }));
+    await user.click(screen.getByRole('tab', { name: /Invoice INV-2026-04/ }));
+    expect(screen.getByRole('tabpanel').querySelector('mark.quote--focused')).toBeNull();
+    expect(within(screen.getByRole('main')).getAllByRole('status').at(-1)).toBeEmptyDOMElement();
   });
 
   it('forgets a run when another scenario is picked, even on coming back', async () => {

@@ -1,6 +1,8 @@
-import { useId, useMemo, useRef, type KeyboardEvent } from 'react';
+import { useEffect, useEffectEvent, useId, useMemo, useRef, type KeyboardEvent } from 'react';
 
 import type { DocumentText } from '../../api/types';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
+import { findMark } from '../trace/findMark';
 import { segmentText, type Highlight, type Segment } from '../../lib/segments';
 import { documentLabel } from './documentLabel';
 import './documents.css';
@@ -11,6 +13,8 @@ type Props = {
   highlights: ReadonlyMap<string, readonly Highlight[]>;
   selected: string;
   onSelect: (docId: string) => void;
+  /** A passage to bring into view and outline; `seq` changes on every request, even a repeat. */
+  focus?: { readonly highlightId: string; readonly seq: number } | null;
 };
 
 const NO_HIGHLIGHTS: readonly Highlight[] = [];
@@ -20,9 +24,11 @@ function distinctPassages(list: readonly Highlight[]): number {
   return new Set(list.map((h) => `${String(h.start)}:${String(h.end)}`)).size;
 }
 
-function quoteClass(segment: Segment): string {
+function quoteClass(segment: Segment, focusId: string | undefined): string {
   const tones = new Set(segment.highlights.map((h) => h.tone));
-  return `quote quote--${tones.size > 1 ? 'both' : (segment.highlights[0]?.tone ?? 'jev')}`;
+  const tone = tones.size > 1 ? 'both' : (segment.highlights[0]?.tone ?? 'jev');
+  const isFocused = focusId !== undefined && segment.highlights.some((h) => h.id === focusId);
+  return `quote quote--${tone}${isFocused ? ' quote--focused' : ''}`;
 }
 
 /** Says whose quote it is in words, since style alone doesn't reach a screen reader. */
@@ -33,9 +39,11 @@ function quotedBy(segment: Segment): string {
 }
 
 /** Tabs per WAI-ARIA APG (automatic activation): arrows, Home and End move and select. */
-export function DocumentViewer({ documents, highlights, selected, onSelect }: Props) {
+export function DocumentViewer({ documents, highlights, selected, onSelect, focus = null }: Props) {
   const baseId = useId();
   const tabRefs = useRef(new Map<string, HTMLButtonElement>());
+  const textRef = useRef<HTMLPreElement>(null);
+  const isReduced = useReducedMotion();
   const current = documents.find((d) => d.doc_id === selected) ?? documents[0];
   const currentText = current?.text ?? '';
   const currentHighlights = current
@@ -45,6 +53,19 @@ export function DocumentViewer({ documents, highlights, selected, onSelect }: Pr
     () => segmentText(currentText, currentHighlights),
     [currentText, currentHighlights],
   );
+
+  const scrollToPassage = useEffectEvent((highlightId: string) => {
+    const mark = textRef.current ? findMark(textRef.current, highlightId) : null;
+    // jsdom has no scrollIntoView; browsers do.
+    if (typeof mark?.scrollIntoView === 'function') {
+      mark.scrollIntoView({ block: 'nearest', behavior: isReduced ? 'auto' : 'smooth' });
+    }
+  });
+
+  // Only a new trace request (a new `seq`) scrolls; switching tabs later must not.
+  useEffect(() => {
+    if (focus) scrollToPassage(focus.highlightId);
+  }, [focus]);
 
   const tabId = (docId: string) => `${baseId}-tab-${docId}`;
   const panelId = `${baseId}-panel`;
@@ -125,13 +146,17 @@ export function DocumentViewer({ documents, highlights, selected, onSelect }: Pr
               : `${String(rejected.length)} quoted passages could not be found in this document, so they are not marked.`}
           </p>
         )}
-        <pre className="source__text">
+        <pre ref={textRef} className="source__text">
           {segments.map((segment, i) =>
             segment.highlights.length === 0 ? (
               segment.text
             ) : (
               // Segments are positional and never reorder, so the index is a stable key.
-              <mark key={i} className={quoteClass(segment)}>
+              <mark
+                key={i}
+                className={quoteClass(segment, focus?.highlightId)}
+                data-highlights={segment.highlights.map((h) => h.id).join(' ')}
+              >
                 <span className="visually-hidden">{`${quotedBy(segment)}: `}</span>
                 {segment.text}
               </mark>

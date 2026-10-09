@@ -1,0 +1,49 @@
+/* A traceable figure: it reads as a number, with a dotted rule that says "follow me". */
+.trace-button {
+  padding: 0;
+  border: 0;
+  border-block-end: 1px dotted currentcolor;
+  background: none;
+  color: var(--color-ink);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-out-expo);
+}
+
+.trace-button:hover {
+  color: var(--color-focus);
+  border-block-end-style: solid;
+}
+
+/* The line from a figure to its passage: drawn over everything, never in the way. */
+.trace-line {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  inline-size: 100%;
+  block-size: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.trace-line__path {
+  fill: none;
+  stroke: var(--color-focus);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.trace-line__end {
+  fill: var(--color-focus);
+}
+
+@media (forced-colors: active) {
+  .trace-line__path {
+    stroke: Highlight;
+  }
+
+  .trace-line__end {
+    fill: Highlight;
+  }
+}
