@@ -1,0 +1,55 @@
+.theme-toggle {
+  display: inline-flex;
+  border: var(--rule-hairline);
+  border-radius: var(--radius-chip);
+  padding: 2px;
+  background: var(--color-surface);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+
+.theme-toggle__option {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  min-block-size: 28px; /* WCAG 2.5.8: at least 24px targets */
+  padding-inline: var(--space-3);
+  border-radius: var(--radius-chip);
+  color: var(--color-muted);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-out-expo),
+    color var(--duration-fast) var(--ease-out-expo);
+}
+
+.theme-toggle__option input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.theme-toggle__option:hover {
+  color: var(--color-ink);
+}
+
+.theme-toggle__option:has(input:checked) {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+/* Forced colours drop backgrounds, so mark the choice with system colours instead. */
+@media (forced-colors: active) {
+  .theme-toggle__option:has(input:checked) {
+    background: Highlight;
+    color: HighlightText;
+    forced-color-adjust: none;
+  }
+}
+
+.theme-toggle__option:has(input:focus-visible) {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
