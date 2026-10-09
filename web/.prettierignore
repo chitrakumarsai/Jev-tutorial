@@ -2,3 +2,6 @@ dist
 coverage
 node_modules
 package-lock.json
+# Written by the backend (jev.cli openapi / tests/api/test_event_fixture.py); Python tests guard them
+openapi.json
+src/test/fixtures/s1-replay-events.json
