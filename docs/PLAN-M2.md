@@ -50,7 +50,7 @@ Patterns to mirror (keep, don't reinvent):
 
 ## 2. Architecture changes
 
-1. **Scenario registry** `src/jev/scenarios/registry.py`: a frozen `ScenarioSpec` per scenario with `id`, `title`, `description`, `load_documents()`, `load_answer_key()`, `build_pipelines(docs, settings, run_id) -> (JevPipeline, LlmPipeline)`, `llm_schema`, `llm_instructions`, `scorer`, `validate_data()`. `RunService`, routes and CLI look the scenario up by id (unknown → 404 `SCENARIO_NOT_FOUND`). S1 moves behind it with **no behaviour change** (its golden replays must still pass byte-for-byte).
+1. **Scenario registry** `src/jev/scenarios/registry.py`: a frozen `ScenarioSpec` per scenario with `id`, `title`, `description`, `load_documents()`, `load_answer_key()`, `build_pipelines(docs, settings, run_id) -> (JevPipeline, LlmPipeline)`, `llm_schema`, `llm_instructions`, `scorer`, `validate_data()`. `RunService`, routes and CLI look the scenario up by id (unknown → 404 `UNKNOWN_SCENARIO`, the existing code). S1 moves behind it with **no behaviour change** (its golden replays must still pass byte-for-byte).
 2. **Scoring per scenario.** A `Scorer` protocol returns a generic `Scorecard {items[{key_id, status, label}], false_positives, summary: list[SummaryRow]}`. Statuses become a superset: `correct | correct_in_review | wrong_value | missed`, and S1 maps `wrong_amount` → `wrong_value` (UI label stays "Wrong amounts" for S1 via the summary rows). Scenario-specific totals (S1 total variance) move into `summary` rows the UI renders as given, so `Results.tsx` stops knowing about money.
 3. **Finding gains optional, typed detail** (still one model, still frozen): `kind` widens per scenario; new optional fields `verdict` (`present | absent | partial` for S2; `verified | unsupported | contradicted | fabricated` for S3), `risk` (S2 rubric level), `claim` (S3). Money fields stay optional. The TS mirror and the shared JSON fixture are regenerated (`npm run gen:api`).
 4. **Answer keys**: a discriminated union `S1Key | S2Key | S3Key` on `scenario_id`, each validated on load (S2: every checklist item has exactly one status and, if present, a quote that exists in the agreement; S3: every citation id in the memo has exactly one expected verdict, and every `fabricated` quote is provably absent from the sources).
@@ -104,7 +104,7 @@ Legend: ∥ = can run in parallel with siblings · ⏸ = needs presenter approva
 
 | ID | Task | Gate | Size | Deps |
 |---|---|---|---|---|
-| R1 | ADR 0004; `ScenarioSpec` + registry; S1 registered; `RunService`, routes, CLI look up by id; unknown id → 404 `SCENARIO_NOT_FOUND` (tests first) | S1 golden replays + all existing tests unchanged | M | – |
+| R1 | ADR 0004; `ScenarioSpec` + registry; S1 registered; `RunService`, routes, CLI look up by id; unknown id → 404 `UNKNOWN_SCENARIO` (tests first) | S1 golden replays + all existing tests unchanged | M | – |
 | R2 | Generic `Scorecard` (`wrong_value`, `summary` rows) + `Scorer` protocol; S1 scorer ported; OpenAPI + `schema.gen.ts` regenerated | S1 scorecard JSON equivalent; web unit tests green | M | R1 |
 | R3 | `Finding` optional `verdict` / `risk` / `claim`; answer-key discriminated union; shared JSON fixture updated | pytest + vitest fixture checks | S | R1 |
 | R4 | UI: Results renders API `summary` rows; ledger row switches on finding shape; scenario picker shows 3 entries | S1 E2E + screenshots unchanged | M | R2, R3 |
