@@ -17,6 +17,14 @@ from jev.scenarios.s1_reconciliation.llm_pipeline import INSTRUCTIONS as S1_INST
 from jev.scenarios.s1_reconciliation.llm_pipeline import LlmS1Pipeline
 from jev.scenarios.s1_reconciliation.llm_schema import S1LlmReport
 from jev.scenarios.s1_reconciliation.scorer import load_s1_scorer
+from jev.scenarios.s2_clause_review import documents as s2_documents
+from jev.scenarios.s2_clause_review.checklist import load_checklist
+from jev.scenarios.s2_clause_review.jev_pipeline import JevS2Pipeline
+from jev.scenarios.s2_clause_review.llm_pipeline import INSTRUCTIONS as S2_INSTRUCTIONS
+from jev.scenarios.s2_clause_review.llm_pipeline import LlmS2Pipeline
+from jev.scenarios.s2_clause_review.llm_schema import S2LlmReport
+from jev.scenarios.s2_clause_review.scorer import load_s2_scorer
+from jev.scenarios.s2_clause_review.validation import validate_s2_data
 from jev.scoring.scorecard import Scorer
 
 # (documents, settings, run id) -> the two sides of one run
@@ -35,7 +43,7 @@ class ScenarioSpec:
     llm_schema: type[BaseModel]
     load_documents: Callable[[Path], DocumentSet]  # data_dir -> documents
     load_scorer: Callable[[Path], Scorer]  # data_dir -> scorer bound to the hand-written key
-    build_pipelines: PipelineFactory
+    load_pipelines: Callable[[Path], PipelineFactory]  # data_dir -> factory, data bound
     validate_data: Callable[[Path], list[str]]  # data_dir -> problems ([] when consistent)
 
     def __post_init__(self) -> None:
@@ -62,11 +70,44 @@ S1 = ScenarioSpec(
     llm_schema=S1LlmReport,
     load_documents=s1_documents.load_s1_documents,
     load_scorer=load_s1_scorer,
-    build_pipelines=_s1_pipelines,
+    load_pipelines=lambda _data_dir: _s1_pipelines,
     validate_data=s1_documents.validate_s1_data,
 )
 
-SCENARIOS: tuple[ScenarioSpec, ...] = (S1,)
+
+def _load_s2_pipelines(data_dir: Path) -> PipelineFactory:
+    checklist = load_checklist(data_dir)
+
+    def build(
+        docs: DocumentSet, settings: Settings, run_id: str
+    ) -> tuple[JevSidePipeline, LlmSidePipeline]:
+        return (
+            JevS2Pipeline(
+                docs, checklist, review_threshold=settings.review_threshold, run_id=run_id
+            ),
+            LlmS2Pipeline(docs, checklist, run_id=run_id),
+        )
+
+    return build
+
+
+S2 = ScenarioSpec(
+    id=s2_documents.SCENARIO_ID,
+    alias="s2",
+    title="Clause risk review",
+    description=(
+        "Check a data-processing addendum against a 10-clause audit checklist, "
+        "including one clause that is missing."
+    ),
+    llm_instructions=S2_INSTRUCTIONS,
+    llm_schema=S2LlmReport,
+    load_documents=s2_documents.load_s2_documents,
+    load_scorer=load_s2_scorer,
+    load_pipelines=_load_s2_pipelines,
+    validate_data=validate_s2_data,
+)
+
+SCENARIOS: tuple[ScenarioSpec, ...] = (S1, S2)
 
 
 def get_scenario(name: str) -> ScenarioSpec | None:

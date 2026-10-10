@@ -22,6 +22,7 @@ class S2KeyItem(_Frozen):
     quote: str | None = Field(default=None, min_length=1)  # verbatim, one line, in range
     risk: Risk | None = None
     rationale: str = Field(min_length=1)
+    trap: bool = False  # planted to catch a confident wrong answer
 
     @model_validator(mode="after")
     def _fits_status(self) -> Self:
