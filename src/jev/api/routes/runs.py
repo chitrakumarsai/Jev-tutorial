@@ -2,14 +2,14 @@
 
 import asyncio
 import json
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Mapping
 from typing import Annotated, Literal
 
 from fastapi import APIRouter, Depends, Header
 from fastapi.responses import Response, StreamingResponse
 from pydantic import BaseModel, ConfigDict, Field
 
-from jev.api.deps import get_runs, get_service, get_settings
+from jev.api.deps import get_runs, get_services, get_settings, service_for
 from jev.api.errors import ApiError
 from jev.api.models import RunStarted, RunStatus, error_responses
 from jev.api.schemas import ApiError as ErrorBody
@@ -19,7 +19,6 @@ from jev.replay.models import ID_PATTERN
 from jev.runs.events import RunEvent
 from jev.runs.service import NoRecordingError, RunService
 from jev.runs.store import RunState, RunStore
-from jev.scenarios.s1_reconciliation.documents import SCENARIO_ID
 
 router = APIRouter(prefix="/api/runs", tags=["runs"])
 KEEPALIVE_S = 15.0  # comment lines keep idle streams open through proxies
@@ -50,11 +49,10 @@ def _state(runs: RunStore, run_id: str) -> RunState:
 async def start_run(
     body: RunRequest,
     settings: Annotated[Settings, Depends(get_settings)],
-    service: Annotated[RunService, Depends(get_service)],
+    services: Annotated[Mapping[str, RunService], Depends(get_services)],
     runs: Annotated[RunStore, Depends(get_runs)],
 ) -> Envelope[RunStarted]:
-    if body.scenario_id != SCENARIO_ID:
-        raise ApiError(404, "UNKNOWN_SCENARIO", f"Unknown scenario {body.scenario_id!r}")
+    service = service_for(services, body.scenario_id)
     run_id = runs.new_id()
     if body.mode == "live":
         if not settings.live_enabled:
@@ -89,7 +87,7 @@ def _recording_to_replay(service: RunService, requested: str | None) -> str:
             raise NoRecordingError("No recordings yet; record a live run first.")
         return ids[0]
     if requested not in ids:
-        raise NoRecordingError(f"No recording {requested!r} for {SCENARIO_ID}.")
+        raise NoRecordingError(f"No recording {requested!r} for {service.scenario.id}.")
     return requested
 
 

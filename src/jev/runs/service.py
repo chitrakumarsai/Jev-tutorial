@@ -1,4 +1,4 @@
-"""Run S1 both ways at once, score each side, emit events, and record live runs for replay."""
+"""Run a scenario both ways at once, score each side, emit events, and record live runs."""
 
 import asyncio
 from collections.abc import Awaitable, Callable
@@ -29,12 +29,9 @@ from jev.replay.models import Recording, RecordingMeta
 from jev.replay.store import FileReplayStore
 from jev.runs.events import OnEvent, RunEvent
 from jev.runs.models import Mode, Provenance, RunResult, SideResult
-from jev.scenarios.base import Side, SideOutput
-from jev.scenarios.s1_reconciliation.documents import SCENARIO_ID, load_s1_documents, scenario_dir
-from jev.scenarios.s1_reconciliation.jev_pipeline import JevS1Pipeline
-from jev.scenarios.s1_reconciliation.llm_pipeline import LlmS1Pipeline
-from jev.scenarios.s1_reconciliation.llm_schema import S1LlmReport
-from jev.scoring.answer_key import AnswerKey, load_answer_key
+from jev.scenarios.base import JevSidePipeline, LlmSidePipeline, Side, SideOutput
+from jev.scenarios.registry import S1, ScenarioSpec
+from jev.scoring.answer_key import AnswerKey
 from jev.scoring.metrics import metrics_for
 from jev.scoring.scorecard import score
 
@@ -88,8 +85,8 @@ ProvenanceFor = Callable[[Side, SideOutput], Provenance]
 class PreparedLive:
     run_id: str
     clients: LiveClientsLike
-    jev_pipe: JevS1Pipeline
-    llm_pipe: LlmS1Pipeline
+    jev_pipe: JevSidePipeline
+    llm_pipe: LlmSidePipeline
     estimates: dict[Provider, Decimal]  # worst-case reservation per provider for this run
 
 
@@ -98,31 +95,33 @@ class RunService:
         self,
         settings: Settings,
         *,
+        scenario: ScenarioSpec = S1,  # a convenience for S1-only callers and tests
         data_dir: Path = DEFAULT_DATA_DIR,
         store: FileReplayStore | None = None,
         live_factory: LiveFactory = build_live_clients,
         guard_factory: Callable[[Settings], BudgetGuard] = build_guard,
     ) -> None:
         self._settings = settings
-        self._docs: DocumentSet = load_s1_documents(data_dir)
-        self._key: AnswerKey = load_answer_key(scenario_dir(data_dir) / "answer_key.json")
+        self._scenario = scenario
+        self._docs: DocumentSet = scenario.load_documents(data_dir)
+        self._key: AnswerKey = scenario.load_answer_key(data_dir)
         self._store = store or FileReplayStore(data_dir / "replays")
         self._live_factory = live_factory
         self._guard_factory = guard_factory
+
+    @property
+    def scenario(self) -> ScenarioSpec:
+        return self._scenario
 
     @property
     def documents(self) -> DocumentSet:
         return self._docs
 
     def recordings(self) -> list[RecordingMeta]:
-        return self._store.list_recordings(SCENARIO_ID)
+        return self._store.list_recordings(self._scenario.id)
 
-    def _pipelines(self, run_id: str) -> tuple[JevS1Pipeline, LlmS1Pipeline]:
-        threshold = self._settings.review_threshold
-        return (
-            JevS1Pipeline(self._docs, review_threshold=threshold, run_id=run_id),
-            LlmS1Pipeline(self._docs, run_id=run_id),
-        )
+    def _pipelines(self, run_id: str) -> tuple[JevSidePipeline, LlmSidePipeline]:
+        return self._scenario.build_pipelines(self._docs, self._settings, run_id)
 
     async def replay(
         self, run_id: str, *, recording_id: str | None, on_event: OnEvent, pace: bool = True
@@ -131,10 +130,10 @@ class RunService:
             metas = self.recordings()
             if not metas:
                 raise NoRecordingError(
-                    f"No recordings for {SCENARIO_ID} yet; record a live run first."
+                    f"No recordings for {self._scenario.id} yet; record a live run first."
                 )
             recording_id = metas[0].id
-        rec = await asyncio.to_thread(self._store.load, SCENARIO_ID, recording_id)
+        rec = await asyncio.to_thread(self._store.load, self._scenario.id, recording_id)
 
         def provenance(side: Side, output: SideOutput) -> Provenance:
             return Provenance(
@@ -167,7 +166,7 @@ class RunService:
         jev_pipe, llm_pipe = self._pipelines(run_id)
         try:
             jev_total = sum((clients.jev.estimate(r) for r in jev_pipe.requests()), Decimal("0"))
-            llm_total = clients.llm.estimate(llm_pipe.request(), S1LlmReport)
+            llm_total = clients.llm.estimate(llm_pipe.request(), self._scenario.llm_schema)
             estimates: dict[tuple[Provider, str], Decimal] = {
                 ("typesafe", clients.jev.key_fp): jev_total,
                 ("openai", clients.llm.key_fp): llm_total,
@@ -200,7 +199,7 @@ class RunService:
             recording_id = None
             if record:
                 recording = Recording.create(
-                    SCENARIO_ID,
+                    self._scenario.id,
                     jev_model=s.jev_model,
                     llm_model=s.openai_model,
                     calls=[*jev_rec.calls, *llm_rec.calls],
@@ -226,7 +225,11 @@ class RunService:
         llm_work: Awaitable[SideOutput],
         llm_model: str,
     ) -> dict[str, SideResult]:
-        emit("run_started", None, {"run_id": run_id, "scenario_id": SCENARIO_ID, "mode": mode})
+        emit(
+            "run_started",
+            None,
+            {"run_id": run_id, "scenario_id": self._scenario.id, "mode": mode},
+        )
 
         async def side(name: Side, model: str, work: Awaitable[SideOutput]) -> SideResult:
             started = perf_counter()
@@ -257,8 +260,8 @@ class RunService:
             raise
         return {name: task.result() for name, task in tasks.items()}
 
-    @staticmethod
     def _complete(
+        self,
         emit: _Emitter,
         run_id: str,
         mode: Mode,
@@ -267,7 +270,7 @@ class RunService:
     ) -> RunResult:
         result = RunResult(
             run_id=run_id,
-            scenario_id=SCENARIO_ID,
+            scenario_id=self._scenario.id,
             mode=mode,
             sides=sides,
             recording_id=recording_id,

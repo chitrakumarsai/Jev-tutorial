@@ -1,6 +1,7 @@
 """Command-line tools.
 
-uv run python -m jev.cli data validate
+uv run python -m jev.cli data validate [--scenario ID]
+uv run python -m jev.cli record s1 --runs 3   # LIVE: spends money, asks for confirmation
 uv run python -m jev.cli budget init
 uv run python -m jev.cli openapi   # refresh web/openapi.json for the web client
 """
@@ -23,26 +24,44 @@ from jev.config import Settings
 from jev.providers.errors import ProviderError
 from jev.providers.factory import LiveDisabledError, MissingKeyError
 from jev.runs.service import PreparedLive, RunService
-from jev.scenarios.s1_reconciliation.documents import DocumentTooLargeError, validate_s1_data
+from jev.scenarios.registry import SCENARIOS, ScenarioSpec, get_scenario
+from jev.scenarios.s1_reconciliation.documents import DocumentTooLargeError
 
 DEFAULT_DATA_DIR = Path("data")
 DEFAULT_OPENAPI_OUT = Path("web/openapi.json")
 
 
-def _validate(data_dir: Path) -> int:
+def scenario_arg(name: str) -> ScenarioSpec:
+    """A scenario by full id ("s1_reconciliation") or short alias ("s1")."""
+    spec = get_scenario(name)
+    if spec is None:
+        known = ", ".join(s.id for s in SCENARIOS)
+        raise argparse.ArgumentTypeError(f"unknown scenario {name!r} (known: {known})")
+    return spec
+
+
+def _validate_one(spec: ScenarioSpec, data_dir: Path) -> int:
     try:
-        problems = validate_s1_data(data_dir)
+        problems = spec.validate_data(data_dir)
     except ValidationError as exc:
-        print(f"Answer key is invalid: {exc.error_count()} error(s)\n{exc}", file=sys.stderr)
+        print(
+            f"{spec.id}: Answer key is invalid: {exc.error_count()} error(s)\n{exc}",
+            file=sys.stderr,
+        )
         return 1
     except (DocumentTooLargeError, FileNotFoundError) as exc:
-        print(f"Documents are invalid: {exc}", file=sys.stderr)
+        print(f"{spec.id}: Documents are invalid: {exc}", file=sys.stderr)
         return 1
     if problems:
-        print("\n".join(problems), file=sys.stderr)
+        print("\n".join(f"{spec.id}: {p}" for p in problems), file=sys.stderr)
         return 1
-    print("OK: S1 documents and answer key are consistent.")
+    print(f"OK: {spec.id} documents and answer key are consistent.")
     return 0
+
+
+def _validate(data_dir: Path, only: ScenarioSpec | None) -> int:
+    specs = (only,) if only else SCENARIOS
+    return max(_validate_one(spec, data_dir) for spec in specs)
 
 
 def _budget_init(ledger_path: Path | None) -> int:
@@ -144,6 +163,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     data_cmds = data.add_subparsers(dest="command", required=True)
     validate = data_cmds.add_parser("validate", help="check documents against the answer key")
     validate.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
+    validate.add_argument("--scenario", type=scenario_arg, default=None, help="default: all")
 
     budget = groups.add_parser("budget", help="API spend ledger")
     budget_cmds = budget.add_subparsers(dest="command", required=True)
@@ -151,7 +171,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     init.add_argument("--ledger-path", type=Path, default=None)
 
     rec = groups.add_parser("record", help="LIVE: record real runs for replay (spends money)")
-    rec.add_argument("scenario", choices=["s1"])
+    rec.add_argument("scenario", type=scenario_arg, help="id or short alias, e.g. s1")
     rec.add_argument("--runs", type=_runs_arg, default=1)
 
     spec = groups.add_parser("openapi", help="export the API spec for the web client")
@@ -159,12 +179,12 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     args = parser.parse_args(argv)
     if args.group == "record":  # pragma: no cover - interactive, exercised via record()
-        return record(RunService(Settings()), runs=args.runs)
+        return record(RunService(Settings(), scenario=args.scenario), runs=args.runs)
     if args.group == "budget":
         return _budget_init(args.ledger_path)
     if args.group == "openapi":
         return _openapi(args.out)
-    return _validate(args.data_dir)
+    return _validate(args.data_dir, args.scenario)
 
 
 if __name__ == "__main__":  # pragma: no cover
