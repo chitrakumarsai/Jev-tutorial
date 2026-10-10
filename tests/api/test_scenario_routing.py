@@ -109,3 +109,16 @@ def test_starting_a_run_for_an_unknown_scenario_is_a_404(client: TestClient) -> 
 
     assert response.status_code == 404
     assert response.json()["error"]["code"] == "UNKNOWN_SCENARIO"
+
+
+def test_a_live_s2_run_is_refused_while_live_mode_is_off(tmp_path: Path) -> None:
+    settings = Settings(_env_file=None, allowed_hosts=["testserver"], live_enabled=False)  # type: ignore[call-arg]
+    s2 = get_scenario("s2")
+    assert s2 is not None
+    service = RunService(settings, scenario=s2, data_dir=DATA)
+
+    with TestClient(create_app(settings=settings, service=service)) as client:
+        response = client.post("/api/runs", json={"scenario_id": s2.id, "mode": "live"})
+
+    assert response.status_code == 403
+    assert response.json()["error"]["code"] == "LIVE_DISABLED"

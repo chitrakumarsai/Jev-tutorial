@@ -70,7 +70,7 @@ S1 = ScenarioSpec(
     llm_schema=S1LlmReport,
     load_documents=s1_documents.load_s1_documents,
     load_scorer=load_s1_scorer,
-    load_pipelines=lambda _data_dir: _s1_pipelines,
+    load_pipelines=lambda _data_dir: _s1_pipelines,  # S1 binds no extra data, by design
     validate_data=s1_documents.validate_s1_data,
 )
 

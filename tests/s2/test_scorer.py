@@ -17,20 +17,30 @@ from tests.s2.fake_jev import FakeS2Jev
 DATA = Path(__file__).resolve().parents[2] / "data"
 KEY = load_s2_key(DATA)
 SCORE = load_s2_scorer(DATA)
-SPAN = SpanRef(doc_id="addendum", start=0, end=1, text="#")
+TEXT = load_s2_documents(DATA).get("addendum").text
+LINES = TEXT.split("\n")
+
+
+def span(first: int, last: int) -> SpanRef:
+    """Evidence covering 1-based lines first..last of the addendum."""
+    start = sum(len(line) + 1 for line in LINES[: first - 1])
+    end = sum(len(line) + 1 for line in LINES[:last]) - 1
+    return SpanRef(doc_id="addendum", start=start, end=end, text=TEXT[start:end])
 
 
 def finding(item: S2KeyItem, **changes: Any) -> Finding:
     """A finding that matches the key item exactly, unless changed."""
-    located = item.status != "absent"
+    located = item.status != "absent" and item.first_line is not None
     fields: dict[str, Any] = {
         "id": f"f-{item.clause_id}",
         "kind": item.clause_id,
         "doc_id": "addendum",
         "verdict": item.status,
         "risk": item.risk,
-        "line_ref": f"L{item.first_line:03d}" if located and item.first_line else None,
-        "evidence": (SPAN,) if located else (),
+        "line_ref": f"L{item.first_line:03d}" if located else None,
+        "evidence": (span(item.first_line, item.first_line),)
+        if located and item.first_line
+        else (),
     }
     return Finding(**{**fields, **changes})
 
@@ -72,7 +82,7 @@ def test_a_correct_answer_in_the_review_lane_is_counted_separately() -> None:
     [
         ("indemnity", {"verdict": "partial"}),
         ("indemnity", {"risk": "critical"}),
-        ("indemnity", {"line_ref": "L090"}),
+        ("indemnity", {"line_ref": "L090", "evidence": (span(90, 90),)}),
         ("indemnity", {"traceable": False, "evidence": ()}),
     ],
 )
@@ -128,3 +138,50 @@ async def test_the_jev_pipeline_with_a_good_reader_scores_full_marks() -> None:
 
     assert (card.correct + card.correct_in_review, card.of) == (10, 10)
     assert card.correct_in_review == 2  # the two partial clauses go to review
+
+
+def test_a_quote_that_starts_on_a_lead_in_line_but_overlaps_the_clause_is_located() -> None:
+    # Section heading "## 9. ..." is line 65; the key's liability range is 68-69.
+    across = {"line_ref": "L067", "evidence": (span(67, 68),)}
+    before = {"line_ref": "L065", "evidence": (span(65, 65),)}
+
+    assert status(SCORE(perfect(limitation_of_liability=across)), "limitation_of_liability") == (
+        "correct"
+    )
+    assert status(SCORE(perfect(limitation_of_liability=before)), "limitation_of_liability") == (
+        "wrong_value"
+    )
+
+
+def test_a_missing_risk_on_an_answered_clause_counts_as_a_wrong_risk() -> None:
+    card = SCORE(perfect(indemnity={"risk": None}))
+
+    assert status(card, "indemnity") == "wrong_value"
+    assert row(card, "Wrong risk levels") == ("1", False)
+
+
+def test_only_a_confident_wrong_verdict_on_a_trap_is_a_trap_hit() -> None:
+    wrong_risk_only = perfect(audit_rights={"risk": "low"})
+    caught_in_review = perfect(audit_rights={"verdict": "present", "lane": "review"})
+    confident = perfect(audit_rights={"verdict": "present"})
+
+    assert SCORE(wrong_risk_only).trap_hits == ()
+    assert SCORE(caught_in_review).trap_hits == ()
+    assert SCORE(confident).trap_hits == ("f-audit_rights",)
+
+
+def test_a_second_finding_for_the_same_clause_is_a_false_positive() -> None:
+    findings = perfect()
+    duplicate = findings[0].model_copy(update={"id": "dup"})
+
+    card = SCORE([*findings, duplicate])
+
+    assert card.false_positives == ("dup",)
+    assert card.correct == 10
+
+
+@pytest.mark.parametrize("ref", ["L²", "L", "68", "Lx1", None])
+def test_an_odd_line_ref_without_evidence_is_not_located(ref: str | None) -> None:
+    card = SCORE(perfect(indemnity={"line_ref": ref, "evidence": ()}))
+
+    assert status(card, "indemnity") == "wrong_value"
