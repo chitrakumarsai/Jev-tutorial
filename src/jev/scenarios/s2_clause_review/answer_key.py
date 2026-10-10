@@ -25,14 +25,16 @@ class S2KeyItem(_Frozen):
 
     @model_validator(mode="after")
     def _fits_status(self) -> Self:
-        located = (self.first_line, self.last_line, self.quote, self.risk)
+        if self.risk is None:
+            raise ValueError(f"{self.id}: every clause is rated, an absent one included")
+        located = (self.first_line, self.last_line, self.quote)
         if self.status == "absent":
             if any(value is not None for value in located):
-                raise ValueError(f"{self.id}: an absent clause has no lines, quote or risk")
+                raise ValueError(f"{self.id}: an absent clause has no lines or quote")
             return self
         first, last = self.first_line, self.last_line
-        if first is None or last is None or self.quote is None or self.risk is None:
-            raise ValueError(f"{self.id}: a {self.status} clause needs lines, a quote and a risk")
+        if first is None or last is None or self.quote is None:
+            raise ValueError(f"{self.id}: a {self.status} clause needs lines and a quote")
         if first > last:
             raise ValueError(f"{self.id}: first_line is after last_line")
         return self

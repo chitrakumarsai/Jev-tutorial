@@ -55,7 +55,10 @@ def test_the_bundled_key_records_the_presenters_review() -> None:
 def test_the_key_plants_the_traps_from_the_plan() -> None:
     key = {item.clause_id: item for item in load_s2_key(DATA).items}
 
-    assert key["breach_notification"].status == "absent"
+    assert (key["breach_notification"].status, key["breach_notification"].risk) == (
+        "absent",
+        "critical",
+    )
     assert key["audit_rights"].status == "partial"
     assert key["insurance"].status == "partial"
     assert (key["limitation_of_liability"].status, key["limitation_of_liability"].risk) == (
@@ -67,7 +70,7 @@ def test_the_key_plants_the_traps_from_the_plan() -> None:
 @pytest.mark.parametrize(
     "fields",
     [
-        {"status": "absent", "risk": "high"},
+        {"status": "absent", "first_line": None, "last_line": None, "quote": None, "risk": None},
         {"status": "absent", "quote": "x", "first_line": 1, "last_line": 1},
         {"status": "present", "quote": None},
         {"status": "present", "risk": None},
@@ -89,6 +92,12 @@ def test_a_key_item_must_be_internally_consistent(fields: dict[str, Any]) -> Non
 
     with pytest.raises(ValidationError):
         S2KeyItem.model_validate({**present, **fields})
+
+
+def test_an_absent_clause_is_rated_but_not_located() -> None:
+    item = S2KeyItem(id="K6", clause_id="c", status="absent", risk="critical", rationale="r")
+
+    assert (item.first_line, item.quote, item.risk) == (None, None, "critical")
 
 
 def test_a_quote_outside_its_line_range_is_reported(tmp_path: Path) -> None:

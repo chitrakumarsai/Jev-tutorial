@@ -59,12 +59,19 @@ def test_a_score_item_may_carry_a_display_label() -> None:
         {"verdict": "verified", "risk": "high"},
         {"verdict": "fabricated", "risk": "low"},
         {"verdict": "present", "claim": "A claim."},
-        {"verdict": "absent", "risk": "high"},
     ],
 )
 def test_fields_that_do_not_fit_the_verdict_are_refused(fields: dict[str, str]) -> None:
     with pytest.raises(ValidationError, match="does not fit"):
         Finding.model_validate({"id": "F1", "kind": "x", "doc_id": "d", **fields})
+
+
+def test_an_absent_clause_finding_may_carry_its_risk() -> None:
+    finding = Finding(
+        id="F6", kind="breach_notification", doc_id="addendum", verdict="absent", risk="critical"
+    )
+
+    assert finding.risk == "critical"
 
 
 def test_all_new_fields_round_trip_and_are_frozen() -> None:

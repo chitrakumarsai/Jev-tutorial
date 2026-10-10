@@ -62,8 +62,8 @@
       "first_line": null,
       "last_line": null,
       "quote": null,
-      "risk": null,
-      "rationale": "Trap: nothing obliges Carrier to report unauthorised access to or loss of Customer Data. 10.4's 'material breach' is about contract breach, not data."
+      "risk": "critical",
+      "rationale": "Trap: nothing obliges Carrier to report unauthorised access to or loss of Customer Data, so the clause is rated at its rubric's 'No notice obligation' level (critical). 10.4's 'material breach' is about contract breach, not data."
     },
     {
       "id": "K07",
