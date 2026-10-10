@@ -110,7 +110,7 @@
   color: var(--color-verified);
 }
 
-.ledger-row__verdict--wrong_amount,
+.ledger-row__verdict--wrong_value,
 .ledger-row__verdict--false_positive,
 .ledger-row__flag {
   color: var(--color-discrepancy);
@@ -121,7 +121,7 @@
 }
 
 .ledger-row--false_positive,
-.ledger-row--wrong_amount {
+.ledger-row--wrong_value {
   background: color-mix(in oklab, var(--color-discrepancy) 7%, transparent);
 }
 

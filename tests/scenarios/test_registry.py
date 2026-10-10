@@ -68,6 +68,16 @@ def test_s1_spec_builds_the_same_requests_as_the_s1_pipelines() -> None:
     assert llm.request() == LlmS1Pipeline(direct_docs, run_id="run-1").request()
 
 
+def test_s1_spec_loads_a_scorer_bound_to_its_answer_key() -> None:
+    spec = get_scenario(SCENARIO_ID)
+    assert spec is not None
+
+    card = spec.load_scorer(DATA)([])
+
+    assert (card.correct, card.of) == (0, 14)
+    assert card.variance is not None
+
+
 def test_s1_spec_validates_its_data() -> None:
     spec = get_scenario(SCENARIO_ID)
     assert spec is not None

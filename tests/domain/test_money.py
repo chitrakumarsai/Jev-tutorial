@@ -2,7 +2,7 @@ from decimal import Decimal
 
 import pytest
 
-from jev.domain.money import cents, format_money, parse_money
+from jev.domain.money import cents, decimal_str, format_money, parse_money
 
 
 @pytest.mark.parametrize(
@@ -44,3 +44,11 @@ def test_parse_money_accepts_ascii_digits_only(raw: str) -> None:
         return
     with pytest.raises(ValueError):
         parse_money(raw)
+
+
+@pytest.mark.parametrize(
+    ("amount", "expected"),
+    [("1E+2", "100"), ("98510.71", "98510.71"), ("-12.50", "-12.50"), ("0.00", "0.00")],
+)
+def test_decimal_str_never_uses_exponent_form(amount: str, expected: str) -> None:
+    assert decimal_str(Decimal(amount)) == expected

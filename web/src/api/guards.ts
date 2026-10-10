@@ -48,18 +48,38 @@ export const ScorecardSchema = z.object({
   items: z.array(
     z.object({
       key_id: z.string(),
-      status: z.enum(['correct', 'correct_in_review', 'wrong_amount', 'missed']),
+      status: z.enum(['correct', 'correct_in_review', 'wrong_value', 'missed']),
       finding_id: z.string().nullable(),
     }),
   ),
   false_positives: z.array(z.string()),
   trap_hits: z.array(z.string()),
-  total_variance_expected: MoneySchema,
-  total_variance_reported: MoneySchema.nullable(),
+  summary: z.array(
+    z
+      .object({
+        label: z.string(),
+        kind: z.enum(['count', 'money', 'text']),
+        value: z.string().nullable(),
+        note: z.string().nullable().exactOptional(),
+        ok: z.boolean().nullable().exactOptional(),
+      })
+      // The UI formats counts and money from these strings, so they must be numbers.
+      .refine(
+        (row) =>
+          row.value === null ||
+          (row.kind === 'count' && /^\d+$/.test(row.value)) ||
+          (row.kind === 'money' && MoneySchema.safeParse(row.value).success) ||
+          row.kind === 'text',
+        { message: 'summary value does not suit its kind' },
+      ),
+  ),
+  variance: z
+    .object({ expected: MoneySchema, reported: MoneySchema.nullable(), exact: z.boolean() })
+    .nullable()
+    .exactOptional(),
   of: Count,
   correct: Count,
   correct_in_review: Count,
-  total_variance_exact: z.boolean(),
 });
 
 export const ProvenanceSchema = z.object({

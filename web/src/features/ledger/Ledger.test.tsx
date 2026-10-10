@@ -42,7 +42,7 @@ describe('verdicts', () => {
         items: [
           { key_id: 'K1', status: 'correct', finding_id: 'a' },
           { key_id: 'K2', status: 'correct_in_review', finding_id: 'b' },
-          { key_id: 'K3', status: 'wrong_amount', finding_id: 'c' },
+          { key_id: 'K3', status: 'wrong_value', finding_id: 'c' },
           { key_id: 'K4', status: 'missed', finding_id: null },
         ],
         false_positives: ['d', 'e'],
@@ -52,7 +52,7 @@ describe('verdicts', () => {
 
     expect(verdictOf('a')).toEqual({ kind: 'matched', keyId: 'K1', inReview: false });
     expect(verdictOf('b')).toEqual({ kind: 'matched', keyId: 'K2', inReview: true });
-    expect(verdictOf('c')).toEqual({ kind: 'wrong_amount', keyId: 'K3' });
+    expect(verdictOf('c')).toEqual({ kind: 'wrong_value', keyId: 'K3' });
     expect(verdictOf('d')).toEqual({ kind: 'false_positive', isTrap: false });
     expect(verdictOf('e')).toEqual({ kind: 'false_positive', isTrap: true });
     expect(verdictOf('unknown')).toEqual({ kind: 'pending' });
@@ -105,11 +105,10 @@ describe('Ledger', () => {
 
   it('shows a wrong amount, a trap and a missing total', () => {
     const result = withScorecard(jevResult, {
-      items: [{ key_id: 'K9', status: 'wrong_amount', finding_id: 'f1' }],
+      items: [{ key_id: 'K9', status: 'wrong_value', finding_id: 'f1' }],
       false_positives: ['f2'],
       trap_hits: ['f2'],
-      total_variance_reported: null,
-      total_variance_exact: false,
+      variance: { expected: '98510.71', reported: null, exact: false },
     });
 
     render(
@@ -140,5 +139,13 @@ describe('Ledger', () => {
     expect(lane).toHaveTextContent('Order twins disagree');
     expect(lane).toHaveTextContent('Late fee term unreadable');
     expect(within(lane).getByText(/60%/)).toBeInTheDocument();
+  });
+
+  it('shows no total for a scenario without a variance', () => {
+    const result = withScorecard(jevResult, { variance: null });
+
+    render(<Ledger side="jev" findings={[finding({})]} result={result} />);
+
+    expect(screen.queryByText('Total variance')).not.toBeInTheDocument();
   });
 });

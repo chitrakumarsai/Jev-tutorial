@@ -96,7 +96,7 @@ class ScenarioPipeline(Protocol):           # makes S1/S2/S3 pluggable
 
 Ledger line: `{ts, provider, key_fp: sha256(key)[:12], kind: reserve|commit|release|adjust, usd: "0.0123", run_id}`. The key itself is never stored.
 
-UI-facing types (Python and TS mirror each other, checked by a shared JSON fixture in pytest + vitest): `SpanRef {docId,start,end,text}` (backend asserts `doc[start:end] == text`) · `Judgment {primitive, answer, probabilities?, confidence, orderCheck?}` · `Finding {kind, billed?, expected?, variance? (Decimal strings), evidence: SpanRef[], traceable, confidence, lane: auto|review, reviewReason?}` · `Metrics {latencyMs, requests, inputTokens, outputTokens, costUsd}` · `Provenance {kind: live|recorded, model, recordedAt?}` · `Scorecard {items[{keyId, status: correct|correct_in_review|wrong_amount|missed}], falsePositives, totals}` · `RunEvent` (step / finding / side_completed / run_completed / error).
+UI-facing types (Python and TS mirror each other, checked by a shared JSON fixture in pytest + vitest): `SpanRef {docId,start,end,text}` (backend asserts `doc[start:end] == text`) · `Judgment {primitive, answer, probabilities?, confidence, orderCheck?}` · `Finding {kind, billed?, expected?, variance? (Decimal strings), evidence: SpanRef[], traceable, confidence, lane: auto|review, reviewReason?}` · `Metrics {latencyMs, requests, inputTokens, outputTokens, costUsd}` · `Provenance {kind: live|recorded, model, recordedAt?}` · `Scorecard {items[{keyId, status: correct|correct_in_review|wrong_value|missed}], falsePositives, totals}` · `RunEvent` (step / finding / side_completed / run_completed / error).
 
 ### API (JSON envelope `{success, data, error}`)
 

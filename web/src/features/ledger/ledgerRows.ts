@@ -6,7 +6,7 @@ import type { TraceTarget } from '../trace/traceContext';
 export type Verdict =
   | { readonly kind: 'pending' }
   | { readonly kind: 'matched'; readonly keyId: string; readonly inReview: boolean }
-  | { readonly kind: 'wrong_amount'; readonly keyId: string }
+  | { readonly kind: 'wrong_value'; readonly keyId: string }
   | { readonly kind: 'false_positive'; readonly isTrap: boolean };
 
 const PENDING: Verdict = { kind: 'pending' };
@@ -17,8 +17,8 @@ export function verdicts(result: SideResult | null): (findingId: string) => Verd
   const byFinding = new Map<string, Verdict>();
   for (const item of scorecard.items) {
     if (item.finding_id === null) continue;
-    if (item.status === 'wrong_amount') {
-      byFinding.set(item.finding_id, { kind: 'wrong_amount', keyId: item.key_id });
+    if (item.status === 'wrong_value') {
+      byFinding.set(item.finding_id, { kind: 'wrong_value', keyId: item.key_id });
     } else if (item.status !== 'missed') {
       byFinding.set(item.finding_id, {
         kind: 'matched',
@@ -35,7 +35,7 @@ export function verdicts(result: SideResult | null): (findingId: string) => Verd
 }
 
 export function isDiscrepancy(verdict: Verdict): boolean {
-  return verdict.kind === 'wrong_amount' || verdict.kind === 'false_positive';
+  return verdict.kind === 'wrong_value' || verdict.kind === 'false_positive';
 }
 
 /** Where each quoted span of a finding lives, primary (its own document) first. */

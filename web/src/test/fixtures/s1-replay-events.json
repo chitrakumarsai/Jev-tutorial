@@ -241,7 +241,7 @@
   },
   {
     "seq": 11,
-    "t_ms": 3,
+    "t_ms": 4,
     "type": "finding",
     "side": "llm",
     "data": {
@@ -270,7 +270,7 @@
   },
   {
     "seq": 12,
-    "t_ms": 3,
+    "t_ms": 4,
     "type": "finding",
     "side": "llm",
     "data": {
@@ -299,7 +299,7 @@
   },
   {
     "seq": 13,
-    "t_ms": 3,
+    "t_ms": 4,
     "type": "finding",
     "side": "llm",
     "data": {
@@ -328,7 +328,7 @@
   },
   {
     "seq": 14,
-    "t_ms": 3,
+    "t_ms": 4,
     "type": "finding",
     "side": "llm",
     "data": {
@@ -357,7 +357,7 @@
   },
   {
     "seq": 15,
-    "t_ms": 3,
+    "t_ms": 4,
     "type": "finding",
     "side": "llm",
     "data": {
@@ -386,7 +386,7 @@
   },
   {
     "seq": 16,
-    "t_ms": 3,
+    "t_ms": 4,
     "type": "finding",
     "side": "llm",
     "data": {
@@ -415,7 +415,7 @@
   },
   {
     "seq": 17,
-    "t_ms": 3,
+    "t_ms": 4,
     "type": "finding",
     "side": "llm",
     "data": {
@@ -444,7 +444,7 @@
   },
   {
     "seq": 18,
-    "t_ms": 3,
+    "t_ms": 4,
     "type": "finding",
     "side": "llm",
     "data": {
@@ -473,7 +473,7 @@
   },
   {
     "seq": 19,
-    "t_ms": 3,
+    "t_ms": 4,
     "type": "finding",
     "side": "llm",
     "data": {
@@ -1029,18 +1029,43 @@
               "finding_id": "llm:17"
             }
           ],
-          "false_positives": ["llm:01", "llm:03", "llm:12", "llm:18"],
+          "false_positives": [
+            "llm:01",
+            "llm:03",
+            "llm:12",
+            "llm:18"
+          ],
           "trap_hits": [],
-          "total_variance_expected": "98510.71",
-          "total_variance_reported": "99190.71",
+          "summary": [
+            {
+              "label": "Wrong amounts",
+              "kind": "count",
+              "value": "0",
+              "note": null,
+              "ok": true
+            },
+            {
+              "label": "Total variance",
+              "kind": "money",
+              "value": "99190.71",
+              "note": null,
+              "ok": false
+            }
+          ],
+          "variance": {
+            "expected": "98510.71",
+            "reported": "99190.71",
+            "exact": false
+          },
           "of": 14,
           "correct": 14,
-          "correct_in_review": 0,
-          "total_variance_exact": false
+          "correct_in_review": 0
         },
         "provenance": {
           "kind": "recorded",
-          "models": ["gpt-6-luna"],
+          "models": [
+            "gpt-6-luna"
+          ],
           "recording_id": "20261009T183056Z-32906774",
           "recorded_at": "2026-10-09T18:30:56.830087+00:00"
         },
@@ -1069,19 +1094,58 @@
       "purpose": "s1.contract",
       "latency_ms": 323,
       "choices": {
-        "zone_a_rate": ["$1,250.00", 1.0],
-        "zone_a_rate__rev": ["$1,250.00", 1.0],
-        "zone_b_rate": ["$1,480.00", 1.0],
-        "zone_b_rate__rev": ["$1,480.00", 1.0],
-        "detention_rate": ["$85.00", 1.0],
-        "discount_threshold": ["1,000", 1.0],
-        "discount_threshold__rev": ["1,000", 1.0],
-        "discount_pct": ["5%", 1.0],
-        "discount_pct__rev": ["5%", 1.0],
-        "fuel_cap_pct": ["18%", 1.0],
-        "fuel_cap_pct__rev": ["18%", 1.0],
-        "late_fee_pct": ["1.5%", 1.0],
-        "late_fee_grace_days": ["31", 0.7]
+        "zone_a_rate": [
+          "$1,250.00",
+          1.0
+        ],
+        "zone_a_rate__rev": [
+          "$1,250.00",
+          1.0
+        ],
+        "zone_b_rate": [
+          "$1,480.00",
+          1.0
+        ],
+        "zone_b_rate__rev": [
+          "$1,480.00",
+          1.0
+        ],
+        "detention_rate": [
+          "$85.00",
+          1.0
+        ],
+        "discount_threshold": [
+          "1,000",
+          1.0
+        ],
+        "discount_threshold__rev": [
+          "1,000",
+          1.0
+        ],
+        "discount_pct": [
+          "5%",
+          1.0
+        ],
+        "discount_pct__rev": [
+          "5%",
+          1.0
+        ],
+        "fuel_cap_pct": [
+          "18%",
+          1.0
+        ],
+        "fuel_cap_pct__rev": [
+          "18%",
+          1.0
+        ],
+        "late_fee_pct": [
+          "1.5%",
+          1.0
+        ],
+        "late_fee_grace_days": [
+          "31",
+          0.7
+        ]
       },
       "nouls": {}
     }
@@ -1107,10 +1171,22 @@
       "purpose": "s1.invoice.inv-2026-01",
       "latency_ms": 322,
       "choices": {
-        "kind_L1": ["line_haul_zone_a", 1.0],
-        "kind_L2": ["line_haul_zone_b", 1.0],
-        "kind_L3": ["fuel_surcharge", 1.0],
-        "invoice_date": ["31 January 2026", 1.0]
+        "kind_L1": [
+          "line_haul_zone_a",
+          1.0
+        ],
+        "kind_L2": [
+          "line_haul_zone_b",
+          1.0
+        ],
+        "kind_L3": [
+          "fuel_surcharge",
+          1.0
+        ],
+        "invoice_date": [
+          "31 January 2026",
+          1.0
+        ]
       },
       "nouls": {}
     }
@@ -1136,11 +1212,26 @@
       "purpose": "s1.invoice.inv-2026-02",
       "latency_ms": 336,
       "choices": {
-        "kind_L1": ["line_haul_zone_a", 1.0],
-        "kind_L2": ["line_haul_zone_b", 1.0],
-        "kind_L3": ["fuel_surcharge", 1.0],
-        "kind_L4": ["detention", 1.0],
-        "invoice_date": ["28 February 2026", 1.0]
+        "kind_L1": [
+          "line_haul_zone_a",
+          1.0
+        ],
+        "kind_L2": [
+          "line_haul_zone_b",
+          1.0
+        ],
+        "kind_L3": [
+          "fuel_surcharge",
+          1.0
+        ],
+        "kind_L4": [
+          "detention",
+          1.0
+        ],
+        "invoice_date": [
+          "28 February 2026",
+          1.0
+        ]
       },
       "nouls": {}
     }
@@ -1166,10 +1257,22 @@
       "purpose": "s1.invoice.inv-2026-03",
       "latency_ms": 325,
       "choices": {
-        "kind_L1": ["line_haul_zone_a", 1.0],
-        "kind_L2": ["line_haul_zone_b", 1.0],
-        "kind_L3": ["fuel_surcharge", 1.0],
-        "invoice_date": ["31 March 2026", 1.0]
+        "kind_L1": [
+          "line_haul_zone_a",
+          1.0
+        ],
+        "kind_L2": [
+          "line_haul_zone_b",
+          1.0
+        ],
+        "kind_L3": [
+          "fuel_surcharge",
+          1.0
+        ],
+        "invoice_date": [
+          "31 March 2026",
+          1.0
+        ]
       },
       "nouls": {}
     }
@@ -1195,10 +1298,22 @@
       "purpose": "s1.invoice.inv-2026-04",
       "latency_ms": 310,
       "choices": {
-        "kind_L1": ["line_haul_zone_a", 1.0],
-        "kind_L2": ["line_haul_zone_b", 1.0],
-        "kind_L3": ["fuel_surcharge", 1.0],
-        "invoice_date": ["30 April 2026", 1.0]
+        "kind_L1": [
+          "line_haul_zone_a",
+          1.0
+        ],
+        "kind_L2": [
+          "line_haul_zone_b",
+          1.0
+        ],
+        "kind_L3": [
+          "fuel_surcharge",
+          1.0
+        ],
+        "invoice_date": [
+          "30 April 2026",
+          1.0
+        ]
       },
       "nouls": {}
     }
@@ -1224,15 +1339,42 @@
       "purpose": "s1.invoice.inv-2026-05",
       "latency_ms": 279,
       "choices": {
-        "kind_L1": ["line_haul_zone_a", 1.0],
-        "kind_L2": ["line_haul_zone_b", 1.0],
-        "kind_L3": ["fuel_surcharge", 1.0],
-        "kind_L4": ["detention", 1.0],
-        "kind_L5": ["late_fee", 1.0],
-        "paid_L5": ["11 May 2026", 1.0],
-        "refinv_L5": ["INV-2026-03", 1.0],
-        "base_L5": ["$271,672.00", 1.0],
-        "invoice_date": ["31 May 2026", 1.0]
+        "kind_L1": [
+          "line_haul_zone_a",
+          1.0
+        ],
+        "kind_L2": [
+          "line_haul_zone_b",
+          1.0
+        ],
+        "kind_L3": [
+          "fuel_surcharge",
+          1.0
+        ],
+        "kind_L4": [
+          "detention",
+          1.0
+        ],
+        "kind_L5": [
+          "late_fee",
+          1.0
+        ],
+        "paid_L5": [
+          "11 May 2026",
+          1.0
+        ],
+        "refinv_L5": [
+          "INV-2026-03",
+          1.0
+        ],
+        "base_L5": [
+          "$271,672.00",
+          1.0
+        ],
+        "invoice_date": [
+          "31 May 2026",
+          1.0
+        ]
       },
       "nouls": {}
     }
@@ -1258,10 +1400,22 @@
       "purpose": "s1.invoice.inv-2026-06",
       "latency_ms": 278,
       "choices": {
-        "kind_L1": ["line_haul_zone_a", 1.0],
-        "kind_L2": ["line_haul_zone_b", 1.0],
-        "kind_L3": ["fuel_surcharge", 1.0],
-        "invoice_date": ["30 June 2026", 1.0]
+        "kind_L1": [
+          "line_haul_zone_a",
+          1.0
+        ],
+        "kind_L2": [
+          "line_haul_zone_b",
+          1.0
+        ],
+        "kind_L3": [
+          "fuel_surcharge",
+          1.0
+        ],
+        "invoice_date": [
+          "30 June 2026",
+          1.0
+        ]
       },
       "nouls": {}
     }
@@ -1287,10 +1441,22 @@
       "purpose": "s1.invoice.inv-2026-07",
       "latency_ms": 339,
       "choices": {
-        "kind_L1": ["line_haul_zone_a", 1.0],
-        "kind_L2": ["line_haul_zone_b", 1.0],
-        "kind_L3": ["fuel_surcharge", 1.0],
-        "invoice_date": ["31 July 2026", 1.0]
+        "kind_L1": [
+          "line_haul_zone_a",
+          1.0
+        ],
+        "kind_L2": [
+          "line_haul_zone_b",
+          1.0
+        ],
+        "kind_L3": [
+          "fuel_surcharge",
+          1.0
+        ],
+        "invoice_date": [
+          "31 July 2026",
+          1.0
+        ]
       },
       "nouls": {}
     }
@@ -1316,10 +1482,22 @@
       "purpose": "s1.invoice.inv-2026-08",
       "latency_ms": 285,
       "choices": {
-        "kind_L1": ["line_haul_zone_a", 1.0],
-        "kind_L2": ["line_haul_zone_b", 1.0],
-        "kind_L3": ["fuel_surcharge", 1.0],
-        "invoice_date": ["31 August 2026", 1.0]
+        "kind_L1": [
+          "line_haul_zone_a",
+          1.0
+        ],
+        "kind_L2": [
+          "line_haul_zone_b",
+          1.0
+        ],
+        "kind_L3": [
+          "fuel_surcharge",
+          1.0
+        ],
+        "invoice_date": [
+          "31 August 2026",
+          1.0
+        ]
       },
       "nouls": {}
     }
@@ -1345,10 +1523,22 @@
       "purpose": "s1.invoice.inv-2026-09",
       "latency_ms": 320,
       "choices": {
-        "kind_L1": ["line_haul_zone_a", 1.0],
-        "kind_L2": ["line_haul_zone_b", 1.0],
-        "kind_L3": ["fuel_surcharge", 1.0],
-        "invoice_date": ["30 September 2026", 1.0]
+        "kind_L1": [
+          "line_haul_zone_a",
+          1.0
+        ],
+        "kind_L2": [
+          "line_haul_zone_b",
+          1.0
+        ],
+        "kind_L3": [
+          "fuel_surcharge",
+          1.0
+        ],
+        "invoice_date": [
+          "30 September 2026",
+          1.0
+        ]
       },
       "nouls": {}
     }
@@ -1374,12 +1564,30 @@
       "purpose": "s1.invoice.inv-2026-10",
       "latency_ms": 324,
       "choices": {
-        "kind_L1": ["line_haul_zone_a", 1.0],
-        "kind_L2": ["line_haul_zone_b", 1.0],
-        "kind_L3": ["fuel_surcharge", 1.0],
-        "kind_L4": ["detention", 1.0],
-        "kind_L5": ["detention", 1.0],
-        "invoice_date": ["31 October 2026", 1.0]
+        "kind_L1": [
+          "line_haul_zone_a",
+          1.0
+        ],
+        "kind_L2": [
+          "line_haul_zone_b",
+          1.0
+        ],
+        "kind_L3": [
+          "fuel_surcharge",
+          1.0
+        ],
+        "kind_L4": [
+          "detention",
+          1.0
+        ],
+        "kind_L5": [
+          "detention",
+          1.0
+        ],
+        "invoice_date": [
+          "31 October 2026",
+          1.0
+        ]
       },
       "nouls": {
         "dup_L4_L5": 0.9
@@ -1407,10 +1615,22 @@
       "purpose": "s1.invoice.inv-2026-11",
       "latency_ms": 306,
       "choices": {
-        "kind_L1": ["line_haul_zone_a", 1.0],
-        "kind_L2": ["line_haul_zone_b", 1.0],
-        "kind_L3": ["fuel_surcharge", 1.0],
-        "invoice_date": ["30 November 2026", 1.0]
+        "kind_L1": [
+          "line_haul_zone_a",
+          1.0
+        ],
+        "kind_L2": [
+          "line_haul_zone_b",
+          1.0
+        ],
+        "kind_L3": [
+          "fuel_surcharge",
+          1.0
+        ],
+        "invoice_date": [
+          "30 November 2026",
+          1.0
+        ]
       },
       "nouls": {}
     }
@@ -1436,11 +1656,26 @@
       "purpose": "s1.invoice.inv-2026-12",
       "latency_ms": 282,
       "choices": {
-        "kind_L1": ["line_haul_zone_a", 1.0],
-        "kind_L2": ["line_haul_zone_b", 1.0],
-        "kind_L3": ["fuel_surcharge", 1.0],
-        "kind_L4": ["detention", 1.0],
-        "invoice_date": ["31 December 2026", 1.0]
+        "kind_L1": [
+          "line_haul_zone_a",
+          1.0
+        ],
+        "kind_L2": [
+          "line_haul_zone_b",
+          1.0
+        ],
+        "kind_L3": [
+          "fuel_surcharge",
+          1.0
+        ],
+        "kind_L4": [
+          "detention",
+          1.0
+        ],
+        "invoice_date": [
+          "31 December 2026",
+          1.0
+        ]
       },
       "nouls": {}
     }
@@ -2548,7 +2783,7 @@
           }
         ],
         "metrics": {
-          "latency_ms": 4,
+          "latency_ms": 5,
           "requests": 13,
           "input_tokens": 17966,
           "output_tokens": 5477,
@@ -2629,16 +2864,36 @@
           ],
           "false_positives": [],
           "trap_hits": [],
-          "total_variance_expected": "98510.71",
-          "total_variance_reported": "98510.71",
+          "summary": [
+            {
+              "label": "Wrong amounts",
+              "kind": "count",
+              "value": "0",
+              "note": null,
+              "ok": true
+            },
+            {
+              "label": "Total variance",
+              "kind": "money",
+              "value": "98510.71",
+              "note": "exact",
+              "ok": true
+            }
+          ],
+          "variance": {
+            "expected": "98510.71",
+            "reported": "98510.71",
+            "exact": true
+          },
           "of": 14,
           "correct": 14,
-          "correct_in_review": 0,
-          "total_variance_exact": true
+          "correct_in_review": 0
         },
         "provenance": {
           "kind": "recorded",
-          "models": ["jev-1.13.0"],
+          "models": [
+            "jev-1.13.0"
+          ],
           "recording_id": "20261009T183056Z-32906774",
           "recorded_at": "2026-10-09T18:30:56.830087+00:00"
         },
@@ -3142,7 +3397,7 @@
               }
             ],
             "metrics": {
-              "latency_ms": 4,
+              "latency_ms": 5,
               "requests": 13,
               "input_tokens": 17966,
               "output_tokens": 5477,
@@ -3223,16 +3478,36 @@
               ],
               "false_positives": [],
               "trap_hits": [],
-              "total_variance_expected": "98510.71",
-              "total_variance_reported": "98510.71",
+              "summary": [
+                {
+                  "label": "Wrong amounts",
+                  "kind": "count",
+                  "value": "0",
+                  "note": null,
+                  "ok": true
+                },
+                {
+                  "label": "Total variance",
+                  "kind": "money",
+                  "value": "98510.71",
+                  "note": "exact",
+                  "ok": true
+                }
+              ],
+              "variance": {
+                "expected": "98510.71",
+                "reported": "98510.71",
+                "exact": true
+              },
               "of": 14,
               "correct": 14,
-              "correct_in_review": 0,
-              "total_variance_exact": true
+              "correct_in_review": 0
             },
             "provenance": {
               "kind": "recorded",
-              "models": ["jev-1.13.0"],
+              "models": [
+                "jev-1.13.0"
+              ],
               "recording_id": "20261009T183056Z-32906774",
               "recorded_at": "2026-10-09T18:30:56.830087+00:00"
             },
@@ -3693,18 +3968,43 @@
                   "finding_id": "llm:17"
                 }
               ],
-              "false_positives": ["llm:01", "llm:03", "llm:12", "llm:18"],
+              "false_positives": [
+                "llm:01",
+                "llm:03",
+                "llm:12",
+                "llm:18"
+              ],
               "trap_hits": [],
-              "total_variance_expected": "98510.71",
-              "total_variance_reported": "99190.71",
+              "summary": [
+                {
+                  "label": "Wrong amounts",
+                  "kind": "count",
+                  "value": "0",
+                  "note": null,
+                  "ok": true
+                },
+                {
+                  "label": "Total variance",
+                  "kind": "money",
+                  "value": "99190.71",
+                  "note": null,
+                  "ok": false
+                }
+              ],
+              "variance": {
+                "expected": "98510.71",
+                "reported": "99190.71",
+                "exact": false
+              },
               "of": 14,
               "correct": 14,
-              "correct_in_review": 0,
-              "total_variance_exact": false
+              "correct_in_review": 0
             },
             "provenance": {
               "kind": "recorded",
-              "models": ["gpt-6-luna"],
+              "models": [
+                "gpt-6-luna"
+              ],
               "recording_id": "20261009T183056Z-32906774",
               "recorded_at": "2026-10-09T18:30:56.830087+00:00"
             },

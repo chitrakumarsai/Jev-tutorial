@@ -53,7 +53,10 @@ describe('Results', () => {
         correct_in_review: 2,
         false_positives: ['x'],
         trap_hits: ['x'],
-        total_variance_reported: null,
+        summary: [
+          ...jev.scorecard.summary.slice(0, 1),
+          { label: 'Total variance', kind: 'money', value: null, note: 'Not reported', ok: false },
+        ],
       },
     };
     const onlyJev: RunResult = { ...result, sides: { jev: live } };
@@ -63,10 +66,29 @@ describe('Results', () => {
     const scorecard = screen.getByRole('table', { name: 'Scorecard against the answer key' });
     expect(cells(scorecard, /items found/)).toEqual(['✓14 of 14 (2 after review)']);
     expect(cells(scorecard, /False positives/)).toEqual(['✕1 (1 planted traps)']);
-    expect(cells(scorecard, /Total variance/)).toEqual(['✓Not reported']);
+    expect(cells(scorecard, /Total variance/)).toEqual(['✕Not reported']);
     const cost = screen.getByRole('table', { name: 'Cost and latency' });
     expect(cells(cost, /Cost/)).toEqual(['Not priced']);
     expect(cells(cost, /Answers from/)).toEqual(['jev-1.13.0, live']);
+  });
+
+  it('shows only the shared rows for a scenario without summary rows', () => {
+    const plain: SideResult = {
+      ...jev,
+      scorecard: { ...jev.scorecard, summary: [], variance: null },
+    };
+
+    render(<Results result={{ ...result, sides: { jev: plain } }} />);
+
+    const scorecard = screen.getByRole('table', { name: 'Scorecard against the answer key' });
+    const labels = within(scorecard)
+      .getAllByRole('rowheader')
+      .map((th) => th.textContent);
+    expect(labels).toEqual([
+      'Answer-key items found',
+      'False positives',
+      'Findings traceable to a quote',
+    ]);
   });
 
   it('renders nothing for a result without sides', () => {
