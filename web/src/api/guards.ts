@@ -34,6 +34,13 @@ export const FindingSchema = z.object({
   review_reason: z.string().nullable().exactOptional(),
   evidence: z.array(SpanRefSchema),
   traceable: z.boolean(),
+  // S2: is the checklist clause in the agreement? S3: does the citation hold up?
+  verdict: z
+    .enum(['present', 'absent', 'partial', 'verified', 'unsupported', 'contradicted', 'fabricated'])
+    .nullable()
+    .exactOptional(),
+  risk: z.enum(['low', 'medium', 'high', 'critical']).nullable().exactOptional(),
+  claim: z.string().nullable().exactOptional(),
 });
 
 export const MetricsSchema = z.object({
@@ -50,6 +57,7 @@ export const ScorecardSchema = z.object({
       key_id: z.string(),
       status: z.enum(['correct', 'correct_in_review', 'wrong_value', 'missed']),
       finding_id: z.string().nullable(),
+      label: z.string().nullable().exactOptional(),
     }),
   ),
   false_positives: z.array(z.string()),

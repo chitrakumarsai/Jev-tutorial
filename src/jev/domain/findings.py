@@ -6,6 +6,11 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 Lane = Literal["auto", "review"]
+# S2: is the checklist clause in the agreement? S3: does the citation hold up?
+Verdict = Literal[
+    "present", "absent", "partial", "verified", "unsupported", "contradicted", "fabricated"
+]
+Risk = Literal["low", "medium", "high", "critical"]  # S2 clause risk rubric
 
 
 class SpanRef(BaseModel):
@@ -34,3 +39,6 @@ class Finding(BaseModel):
     review_reason: str | None = None
     evidence: tuple[SpanRef, ...] = ()
     traceable: bool = True  # False when a quoted source can't be found verbatim
+    verdict: Verdict | None = None  # S2 and S3 only
+    risk: Risk | None = None  # S2 only, and only for a clause that is present
+    claim: str | None = None  # S3: the memo's claim the citation is meant to support
