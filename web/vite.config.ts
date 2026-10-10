@@ -1,7 +1,8 @@
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vitest/config';
+import { configDefaults, defineConfig } from 'vitest/config';
 
-const API_TARGET = 'http://127.0.0.1:8000';
+// E2E points the proxy at its own replay-only API, so it never reuses a dev server.
+const API_TARGET = process.env.JEV_API_TARGET ?? 'http://127.0.0.1:8000';
 
 export default defineConfig({
   plugins: [react()],
@@ -13,6 +14,8 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
+    // Playwright owns e2e/; Vitest would otherwise collect its *.spec.ts files.
+    exclude: [...configDefaults.exclude, 'e2e/**'],
     css: true,
     coverage: {
       provider: 'v8',

@@ -29,6 +29,8 @@ npm --prefix web run lint        # type-aware ESLint
 npm --prefix web run typecheck
 npm --prefix web run format:check
 npm --prefix web run build
+npm --prefix web run e2e         # Playwright: replay journey, axe, reduced motion, screenshots
+npm --prefix web run e2e:update  # re-record screenshot baselines (macOS only)
 ```
 
 Use `uv run` for Python tooling, not a global `python`/`pip`.
@@ -40,6 +42,7 @@ Use `uv run` for Python tooling, not a global `python`/`pip`.
 - **Pinned versions:** TypeScript stays on **6.0.x** (typescript-eslint 8.71 supports TS < 6.1) and jsdom on **29** (jsdom 30 needs Node ≥ 22.22). Python 3.11 means no PEP 695 generics (`class X[T]`); use `Generic[T]`.
 - **ruff** also formats Markdown code blocks, so `*.md` is excluded in `pyproject.toml`.
 - **Mocking:** `typesafe-sdk` and `openai` use `httpx2`, which `respx` can't intercept. Fake our own client Protocols instead.
+- **Playwright:** `reducedMotion` is not a test option in 1.61 (`test.use({ reducedMotion })` is silently ignored at runtime); use `test.use({ contextOptions: { reducedMotion: 'reduce' } })`. Firefox can't launch inside the Claude Code sandbox (`sandbox_init` not permitted), so run it in CI or outside the sandbox. Screenshot baselines are per OS (`e2e/__screenshots__/darwin/`); Linux CI runs with `--ignore-snapshots`.
 - **Guard hook:** `scripts/hooks/pre_tool_guard.sh` denies any Bash command whose text mentions a dotenv file, even in a heredoc. Write such files with the Write/Edit tools instead, and never work around the guard (no string-splitting tricks).
 
 ## Trust boundaries and safety

@@ -16,6 +16,8 @@
     "format:check": "prettier --check .",
     "test": "vitest",
     "coverage": "vitest run --coverage",
+    "e2e": "playwright test",
+    "e2e:update": "playwright test --project=chromium --update-snapshots=all",
     "gen:api": "npm exec --yes --package=openapi-typescript@7.13.0 -- openapi-typescript openapi.json -o src/api/schema.gen.ts && prettier --write src/api/schema.gen.ts"
   },
   "dependencies": {
@@ -27,7 +29,9 @@
     "zod": "4.6.5"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
     "@eslint/js": "10.0.1",
+    "@playwright/test": "1.61.1",
     "@testing-library/jest-dom": "7.0.1",
     "@testing-library/react": "16.3.3",
     "@testing-library/user-event": "14.6.7",
@@ -41,6 +45,7 @@
     "eslint-plugin-react-refresh": "0.5.7",
     "globals": "17.13.0",
     "jsdom": "29.1.1",
+    "playwright-core": "1.61.1",
     "prettier": "3.9.9",
     "typescript": "6.0.3",
     "typescript-eslint": "8.71.1",

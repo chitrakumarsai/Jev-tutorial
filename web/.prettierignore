@@ -1,5 +1,7 @@
 dist
 coverage
+playwright-report
+test-results
 node_modules
 package-lock.json
 # Written by the backend (jev.cli openapi / tests/api/test_event_fixture.py); Python tests guard them
