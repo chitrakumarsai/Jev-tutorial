@@ -103,6 +103,7 @@ class RunService:
         self._scenario = scenario
         self._docs: DocumentSet = scenario.load_documents(data_dir)
         self._score = scenario.load_scorer(data_dir)
+        self._build_pipelines = scenario.load_pipelines(data_dir)
         self._store = store or FileReplayStore(data_dir / "replays")
         self._live_factory = live_factory
         self._guard_factory = guard_factory
@@ -119,7 +120,7 @@ class RunService:
         return self._store.list_recordings(self._scenario.id)
 
     def _pipelines(self, run_id: str) -> tuple[JevSidePipeline, LlmSidePipeline]:
-        return self._scenario.build_pipelines(self._docs, self._settings, run_id)
+        return self._build_pipelines(self._docs, self._settings, run_id)
 
     async def replay(
         self, run_id: str, *, recording_id: str | None, on_event: OnEvent, pace: bool = True
