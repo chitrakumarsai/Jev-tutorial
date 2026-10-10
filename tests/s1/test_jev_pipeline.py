@@ -3,7 +3,7 @@
 from typing import Any
 
 from jev.scenarios.s1_reconciliation.jev_pipeline import JevS1Pipeline
-from jev.scoring.scorecard import score
+from jev.scenarios.s1_reconciliation.scorer import score
 from tests.s1.facts import DOCS
 from tests.s1.fake_jev import FakeJev
 from tests.s1.test_reconcile import KEY
@@ -56,7 +56,7 @@ async def test_perfect_judgments_reproduce_the_answer_key() -> None:
 
     card = score(output.findings, KEY)
     assert (card.correct, card.of, card.false_positives) == (14, 14, ())
-    assert card.total_variance_exact
+    assert card.variance is not None and card.variance.exact
     assert all(f.lane == "auto" for f in output.findings)
     assert len(output.usages) == 13
 

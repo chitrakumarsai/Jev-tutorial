@@ -455,7 +455,7 @@ export interface components {
        * Status
        * @enum {string}
        */
-      status: 'correct' | 'correct_in_review' | 'wrong_amount' | 'missed';
+      status: 'correct' | 'correct_in_review' | 'wrong_value' | 'missed';
     };
     /** Scorecard */
     Scorecard: {
@@ -469,14 +469,11 @@ export interface components {
       items: components['schemas']['ScoreItem'][];
       /** Of */
       readonly of: number;
-      /** Total Variance Exact */
-      readonly total_variance_exact: boolean;
-      /** Total Variance Expected */
-      total_variance_expected: string;
-      /** Total Variance Reported */
-      total_variance_reported: string | null;
+      /** Summary */
+      summary: components['schemas']['SummaryRow'][];
       /** Trap Hits */
       trap_hits: string[];
+      variance?: components['schemas']['VarianceTotal'] | null;
     };
     /** SideResult */
     SideResult: {
@@ -509,6 +506,39 @@ export interface components {
       start: number;
       /** Text */
       text: string;
+    };
+    /**
+     * SummaryRow
+     * @description A scenario-specific results row. The UI formats `value` by `kind` and shows `note`
+     *     after it; it never computes anything from it. Both sides of a run must use the same
+     *     labels: the UI lines their rows up by label, in the first side's order.
+     */
+    SummaryRow: {
+      /**
+       * Kind
+       * @enum {string}
+       */
+      kind: 'count' | 'money' | 'text';
+      /** Label */
+      label: string;
+      /** Note */
+      note?: string | null;
+      /** Ok */
+      ok?: boolean | null;
+      /** Value */
+      value: string | null;
+    };
+    /**
+     * VarianceTotal
+     * @description S1's total variance against the answer key's.
+     */
+    VarianceTotal: {
+      /** Exact */
+      readonly exact: boolean;
+      /** Expected */
+      expected: string;
+      /** Reported */
+      reported: string | null;
     };
   };
   responses: never;

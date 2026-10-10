@@ -31,9 +31,7 @@ from jev.runs.events import OnEvent, RunEvent
 from jev.runs.models import Mode, Provenance, RunResult, SideResult
 from jev.scenarios.base import JevSidePipeline, LlmSidePipeline, Side, SideOutput
 from jev.scenarios.registry import S1, ScenarioSpec
-from jev.scoring.answer_key import AnswerKey
 from jev.scoring.metrics import metrics_for
-from jev.scoring.scorecard import score
 
 DEFAULT_DATA_DIR = PROJECT_ROOT / "data"
 
@@ -104,7 +102,7 @@ class RunService:
         self._settings = settings
         self._scenario = scenario
         self._docs: DocumentSet = scenario.load_documents(data_dir)
-        self._key: AnswerKey = scenario.load_answer_key(data_dir)
+        self._score = scenario.load_scorer(data_dir)
         self._store = store or FileReplayStore(data_dir / "replays")
         self._live_factory = live_factory
         self._guard_factory = guard_factory
@@ -239,7 +237,7 @@ class RunService:
                 side=name,
                 findings=output.findings,
                 metrics=metrics_for(model, output.usages, wall_ms=wall_ms),
-                scorecard=score(output.findings, self._key),
+                scorecard=self._score(output.findings),
                 provenance=provenance(name, output),
                 notes=output.notes,
             )

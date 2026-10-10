@@ -18,9 +18,10 @@ type Props = {
   isReviewSeparate?: boolean;
 };
 
-function Total({ result }: { result: SideResult }) {
-  const { total_variance_reported: reported, total_variance_expected: expected } = result.scorecard;
-  const isExact = result.scorecard.total_variance_exact;
+type VarianceTotal = NonNullable<SideResult['scorecard']['variance']>;
+
+function Total({ variance }: { variance: VarianceTotal }) {
+  const { reported, expected, exact: isExact } = variance;
   return (
     <motion.p
       className={`ledger-total ledger-total--${isExact ? 'exact' : 'off'}`}
@@ -65,7 +66,7 @@ export function Ledger({ side, findings, result, isReviewSeparate = false }: Pro
           ))}
         </ol>
       )}
-      {result && <Total result={result} />}
+      {result?.scorecard.variance && <Total variance={result.scorecard.variance} />}
     </section>
   );
 }

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { lastReplayEvent } from '../test/fixtures/replay';
 import {
+  ScorecardSchema,
   BudgetReportSchema,
   FindingSchema,
   HealthSchema,
@@ -102,5 +103,37 @@ describe('envelopeOf', () => {
     ['data of the wrong shape', { success: true, data: { status: 'down' }, error: null }],
   ])('rejects %s', (_label, body) => {
     expect(HealthEnvelope.safeParse(body).success).toBe(false);
+  });
+});
+
+describe('ScorecardSchema summary rows', () => {
+  const card = {
+    items: [],
+    false_positives: [],
+    trap_hits: [],
+    of: 0,
+    correct: 0,
+    correct_in_review: 0,
+  };
+  const row = (kind: string, value: string | null) => ({
+    ...card,
+    summary: [{ label: 'x', kind, value }],
+  });
+
+  it.each([
+    ['count', '12'],
+    ['money', '-98510.71'],
+    ['text', 'anything'],
+    ['money', null],
+  ])('accepts a %s value %s', (kind, value) => {
+    expect(ScorecardSchema.safeParse(row(kind, value)).success).toBe(true);
+  });
+
+  it.each([
+    ['count', '1.5'],
+    ['count', 'NaN'],
+    ['money', '$1,250.00'],
+  ])('rejects a %s value %s the UI could not format', (kind, value) => {
+    expect(ScorecardSchema.safeParse(row(kind, value)).success).toBe(false);
   });
 });

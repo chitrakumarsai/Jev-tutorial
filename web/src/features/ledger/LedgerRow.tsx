@@ -24,7 +24,7 @@ function verdictText(verdict: Verdict): string {
       return verdict.inReview
         ? `Matches ${verdict.keyId}, after review`
         : `Matches ${verdict.keyId}`;
-    case 'wrong_amount':
+    case 'wrong_value':
       return `Wrong amount for ${verdict.keyId}`;
     case 'false_positive':
       return verdict.isTrap ? 'Fell for a planted trap' : 'Not in the answer key';

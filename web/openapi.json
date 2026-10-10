@@ -926,7 +926,7 @@
             "enum": [
               "correct",
               "correct_in_review",
-              "wrong_amount",
+              "wrong_value",
               "missed"
             ],
             "title": "Status",
@@ -972,25 +972,12 @@
             "title": "Of",
             "type": "integer"
           },
-          "total_variance_exact": {
-            "readOnly": true,
-            "title": "Total Variance Exact",
-            "type": "boolean"
-          },
-          "total_variance_expected": {
-            "title": "Total Variance Expected",
-            "type": "string"
-          },
-          "total_variance_reported": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Total Variance Reported"
+          "summary": {
+            "items": {
+              "$ref": "#/components/schemas/SummaryRow"
+            },
+            "title": "Summary",
+            "type": "array"
           },
           "trap_hits": {
             "items": {
@@ -998,18 +985,26 @@
             },
             "title": "Trap Hits",
             "type": "array"
+          },
+          "variance": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/VarianceTotal"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
           "items",
           "false_positives",
           "trap_hits",
-          "total_variance_expected",
-          "total_variance_reported",
+          "summary",
           "of",
           "correct",
-          "correct_in_review",
-          "total_variance_exact"
+          "correct_in_review"
         ],
         "title": "Scorecard",
         "type": "object"
@@ -1089,6 +1084,96 @@
           "text"
         ],
         "title": "SpanRef",
+        "type": "object"
+      },
+      "SummaryRow": {
+        "description": "A scenario-specific results row. The UI formats `value` by `kind` and shows `note`\nafter it; it never computes anything from it. Both sides of a run must use the same\nlabels: the UI lines their rows up by label, in the first side's order.",
+        "properties": {
+          "kind": {
+            "enum": [
+              "count",
+              "money",
+              "text"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "ok": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ok"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "required": [
+          "label",
+          "kind",
+          "value"
+        ],
+        "title": "SummaryRow",
+        "type": "object"
+      },
+      "VarianceTotal": {
+        "description": "S1's total variance against the answer key's.",
+        "properties": {
+          "exact": {
+            "readOnly": true,
+            "title": "Exact",
+            "type": "boolean"
+          },
+          "expected": {
+            "title": "Expected",
+            "type": "string"
+          },
+          "reported": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reported"
+          }
+        },
+        "required": [
+          "expected",
+          "reported",
+          "exact"
+        ],
+        "title": "VarianceTotal",
         "type": "object"
       }
     }

@@ -16,7 +16,8 @@ from jev.scenarios.s1_reconciliation.jev_pipeline import JevS1Pipeline
 from jev.scenarios.s1_reconciliation.llm_pipeline import INSTRUCTIONS as S1_INSTRUCTIONS
 from jev.scenarios.s1_reconciliation.llm_pipeline import LlmS1Pipeline
 from jev.scenarios.s1_reconciliation.llm_schema import S1LlmReport
-from jev.scoring.answer_key import AnswerKey, load_answer_key
+from jev.scenarios.s1_reconciliation.scorer import load_s1_scorer
+from jev.scoring.scorecard import Scorer
 
 # (documents, settings, run id) -> the two sides of one run
 PipelineFactory = Callable[[DocumentSet, Settings, str], tuple[JevSidePipeline, LlmSidePipeline]]
@@ -33,7 +34,7 @@ class ScenarioSpec:
     llm_instructions: str  # shown in the UI word for word, for fairness
     llm_schema: type[BaseModel]
     load_documents: Callable[[Path], DocumentSet]  # data_dir -> documents
-    load_answer_key: Callable[[Path], AnswerKey]  # data_dir -> hand-written key
+    load_scorer: Callable[[Path], Scorer]  # data_dir -> scorer bound to the hand-written key
     build_pipelines: PipelineFactory
     validate_data: Callable[[Path], list[str]]  # data_dir -> problems ([] when consistent)
 
@@ -60,9 +61,7 @@ S1 = ScenarioSpec(
     llm_instructions=S1_INSTRUCTIONS,
     llm_schema=S1LlmReport,
     load_documents=s1_documents.load_s1_documents,
-    load_answer_key=lambda data_dir: load_answer_key(
-        s1_documents.scenario_dir(data_dir) / "answer_key.json"
-    ),
+    load_scorer=load_s1_scorer,
     build_pipelines=_s1_pipelines,
     validate_data=s1_documents.validate_s1_data,
 )

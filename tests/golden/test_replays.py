@@ -24,5 +24,6 @@ async def test_committed_recording_replays_and_jev_is_exact(path: Path) -> None:
     )
 
     jev = result.sides["jev"].scorecard
-    assert (jev.correct, jev.of, jev.total_variance_exact) == (14, 14, True)
+    assert jev.variance is not None
+    assert (jev.correct, jev.of, jev.variance.exact) == (14, 14, True)
     assert result.sides["llm"].scorecard.of == 14

@@ -1,34 +1,76 @@
-"""Score one side's findings against the answer key. Policy fixed before any run (PLAN §7):
-a correct finding in the review lane is reported separately, never as auto-correct."""
+"""The scorecard every scenario returns, so the API and UI need no per-scenario shapes.
 
-from collections.abc import Sequence
-from decimal import Decimal
-from typing import Literal
+Policy fixed before any run (PLAN §7): a correct finding in the review lane is reported
+separately, never as auto-correct. Each scenario's scorer decides what "correct" means."""
 
-from pydantic import BaseModel, ConfigDict, computed_field
+from collections.abc import Callable, Sequence
+from decimal import Decimal, InvalidOperation
+from typing import Literal, Self
+
+from pydantic import BaseModel, ConfigDict, computed_field, model_validator
 
 from jev.domain.findings import Finding
-from jev.scoring.answer_key import AnswerKey, KeyItem
 
-ItemStatus = Literal["correct", "correct_in_review", "wrong_amount", "missed"]
+# wrong_value: the right item, but a wrong amount (S1), risk level or verdict (S2, S3)
+ItemStatus = Literal["correct", "correct_in_review", "wrong_value", "missed"]
+SummaryKind = Literal["count", "money", "text"]
 
 
-class ScoreItem(BaseModel):
+class _Frozen(BaseModel):
     model_config = ConfigDict(frozen=True)
 
+
+class ScoreItem(_Frozen):
     key_id: str
     status: ItemStatus
     finding_id: str | None
 
 
-class Scorecard(BaseModel):
-    model_config = ConfigDict(frozen=True)
+class SummaryRow(_Frozen):
+    """A scenario-specific results row. The UI formats `value` by `kind` and shows `note`
+    after it; it never computes anything from it. Both sides of a run must use the same
+    labels: the UI lines their rows up by label, in the first side's order."""
 
+    label: str
+    kind: SummaryKind
+    value: str | None  # a count, a Decimal string, or text; None when not reported
+    note: str | None = None
+    ok: bool | None = None  # None: neither good nor bad
+
+    @model_validator(mode="after")
+    def _value_suits_kind(self) -> Self:
+        if self.value is None or self.kind == "text":
+            return self
+        if self.kind == "count" and not (self.value.isascii() and self.value.isdigit()):
+            raise ValueError(f"A count summary value must be digits, got {self.value!r}")
+        if self.kind == "money":
+            try:
+                Decimal(self.value)
+            except InvalidOperation:
+                raise ValueError(
+                    f"A money summary value must be a Decimal string, got {self.value!r}"
+                ) from None
+        return self
+
+
+class VarianceTotal(_Frozen):
+    """S1's total variance against the answer key's."""
+
+    expected: Decimal
+    reported: Decimal | None  # None when any finding left its variance out
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def exact(self) -> bool:
+        return self.reported == self.expected
+
+
+class Scorecard(_Frozen):
     items: tuple[ScoreItem, ...]
     false_positives: tuple[str, ...]
-    trap_hits: tuple[str, ...]
-    total_variance_expected: Decimal
-    total_variance_reported: Decimal | None
+    trap_hits: tuple[str, ...]  # false positives on something planted to look wrong
+    summary: tuple[SummaryRow, ...]  # required: every scorer says what its own rows are
+    variance: VarianceTotal | None = None
 
     @computed_field  # type: ignore[prop-decorator]
     @property
@@ -45,60 +87,6 @@ class Scorecard(BaseModel):
     def correct_in_review(self) -> int:
         return sum(item.status == "correct_in_review" for item in self.items)
 
-    @computed_field  # type: ignore[prop-decorator]
-    @property
-    def total_variance_exact(self) -> bool:
-        return self.total_variance_reported == self.total_variance_expected
 
-
-def _status(item: KeyItem, finding: Finding | None) -> ItemStatus:
-    if finding is None:
-        return "missed"
-    if finding.variance != item.variance:
-        return "wrong_amount"
-    return "correct_in_review" if finding.lane == "review" else "correct"
-
-
-def _best_match(item: KeyItem, candidates: Sequence[Finding]) -> Finding | None:
-    """Order-independent: prefer the same line and amount, then the same line, then the amount."""
-    same = [f for f in candidates if (f.doc_id, f.kind) == (item.doc_id, item.kind)]
-    preferences = (
-        lambda f: f.line_ref == item.line_ref and f.variance == item.variance,
-        lambda f: f.line_ref == item.line_ref,
-        lambda f: f.variance == item.variance,
-        lambda f: True,
-    )
-    for prefers in preferences:
-        match = next((f for f in same if prefers(f)), None)
-        if match is not None:
-            return match
-    return None
-
-
-def score(findings: Sequence[Finding], key: AnswerKey) -> Scorecard:
-    unused = list(findings)
-    items: list[ScoreItem] = []
-    for item in key.items:
-        match = _best_match(item, unused)
-        if match is not None:
-            unused.remove(match)
-        items.append(
-            ScoreItem(
-                key_id=item.id, status=_status(item, match), finding_id=match.id if match else None
-            )
-        )
-
-    traps = {(n.doc_id, n.line_ref) for n in key.non_issues}
-    variances = [f.variance for f in findings]
-    reported = (
-        None
-        if any(v is None for v in variances)
-        else sum((v for v in variances if v is not None), Decimal("0"))
-    )
-    return Scorecard(
-        items=tuple(items),
-        false_positives=tuple(f.id for f in unused),
-        trap_hits=tuple(f.id for f in unused if (f.doc_id, f.line_ref) in traps),
-        total_variance_expected=key.total_variance,
-        total_variance_reported=reported,
-    )
+# One side's findings -> its scorecard, with the scenario's answer key already bound.
+Scorer = Callable[[Sequence[Finding]], Scorecard]

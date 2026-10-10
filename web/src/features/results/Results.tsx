@@ -23,26 +23,44 @@ const SIDES: readonly { id: SideName; title: string }[] = [
 ];
 const ROW_STAGGER_S = 0.06;
 
-const count = (side: SideResult, status: string) =>
-  side.scorecard.items.filter((item) => item.status === status).length;
+type SummaryRow = SideResult['scorecard']['summary'][number];
 
-const SCORE_ROWS: readonly Row[] = [
-  {
-    label: 'Answer-key items found',
-    cell: ({ scorecard: s }) => ({
-      text: `${formatCount(s.correct + s.correct_in_review)} of ${formatCount(s.of)}${
-        s.correct_in_review > 0 ? ` (${formatCount(s.correct_in_review)} after review)` : ''
-      }`,
-      ok: s.correct + s.correct_in_review === s.of,
-    }),
-  },
-  {
-    label: 'Wrong amounts',
-    cell: (side) => ({
-      text: formatCount(count(side, 'wrong_amount')),
-      ok: count(side, 'wrong_amount') === 0,
-    }),
-  },
+function summaryText(row: SummaryRow): string {
+  if (row.value === null) return row.note ?? 'Not reported';
+  const value =
+    row.kind === 'count'
+      ? formatCount(Number(row.value))
+      : row.kind === 'money'
+        ? formatMoney(row.value)
+        : row.value;
+  return row.note ? `${value}, ${row.note}` : value;
+}
+
+/** Scenario-specific rows, as the backend's scorer supplied them, in its order. */
+function summaryRows(sides: readonly SideResult[]): Row[] {
+  const labels = [...new Set(sides.flatMap((s) => s.scorecard.summary.map((r) => r.label)))];
+  return labels.map((label) => ({
+    label,
+    cell: (side) => {
+      const row = side.scorecard.summary.find((r) => r.label === label);
+      if (!row) return { text: '—' };
+      const text = summaryText(row);
+      return row.ok === null || row.ok === undefined ? { text } : { text, ok: row.ok };
+    },
+  }));
+}
+
+const FOUND_ROW: Row = {
+  label: 'Answer-key items found',
+  cell: ({ scorecard: s }) => ({
+    text: `${formatCount(s.correct + s.correct_in_review)} of ${formatCount(s.of)}${
+      s.correct_in_review > 0 ? ` (${formatCount(s.correct_in_review)} after review)` : ''
+    }`,
+    ok: s.correct + s.correct_in_review === s.of,
+  }),
+};
+
+const SHARED_ROWS: readonly Row[] = [
   {
     label: 'False positives',
     cell: ({ scorecard: s }) => ({
@@ -50,16 +68,6 @@ const SCORE_ROWS: readonly Row[] = [
         s.trap_hits.length > 0 ? ` (${formatCount(s.trap_hits.length)} planted traps)` : ''
       }`,
       ok: s.false_positives.length === 0,
-    }),
-  },
-  {
-    label: 'Total variance',
-    cell: ({ scorecard: s }) => ({
-      text:
-        s.total_variance_reported === null
-          ? 'Not reported'
-          : `${formatMoney(s.total_variance_reported)}${s.total_variance_exact ? ', exact' : ''}`,
-      ok: s.total_variance_exact,
     }),
   },
   {
@@ -183,7 +191,11 @@ export function Results({ result }: Props) {
         Results
       </h2>
       <div className="results__tables">
-        <Table caption="Scorecard against the answer key" rows={SCORE_ROWS} sides={sides} />
+        <Table
+          caption="Scorecard against the answer key"
+          rows={[FOUND_ROW, ...summaryRows(sides), ...SHARED_ROWS]}
+          sides={sides}
+        />
         <Table caption="Cost and latency" rows={COST_ROWS} sides={sides} />
       </div>
     </section>

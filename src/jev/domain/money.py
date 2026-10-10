@@ -28,3 +28,8 @@ def format_money(amount: Decimal) -> str:
     rounded = cents(amount)
     sign = "-" if rounded < 0 else ""
     return f"{sign}${abs(rounded):,.2f}"
+
+
+def decimal_str(amount: Decimal) -> str:
+    """A plain decimal string for JSON ("100", never "1E+2"), with its exponent kept."""
+    return format(amount, "f")

@@ -6,9 +6,10 @@ from pathlib import Path
 import pytest
 
 from jev.domain.findings import Finding
+from jev.scenarios.s1_reconciliation.scorer import score
 from jev.scoring.answer_key import AnswerKey, load_answer_key
 from jev.scoring.metrics import CallUsage, metrics_for
-from jev.scoring.scorecard import score
+from jev.scoring.scorecard import Scorecard, SummaryRow, VarianceTotal
 
 KEY = load_answer_key(
     Path(__file__).resolve().parents[2]
@@ -17,6 +18,11 @@ KEY = load_answer_key(
     / "s1_reconciliation"
     / "answer_key.json"
 )
+
+
+def _v(card: Scorecard) -> VarianceTotal:
+    assert card.variance is not None  # S1 always reports a total variance
+    return card.variance
 
 
 def perfect_findings(key: AnswerKey) -> list[Finding]:
@@ -31,8 +37,38 @@ def test_perfect_auto_findings_score_full_marks() -> None:
 
     assert (card.correct, card.correct_in_review, card.of) == (14, 0, 14)
     assert card.false_positives == ()
-    assert card.total_variance_reported == card.total_variance_expected == Decimal("98510.71")
-    assert card.total_variance_exact is True
+    assert _v(card).reported == _v(card).expected == Decimal("98510.71")
+    assert _v(card).exact is True
+
+
+def _row(card: Scorecard, label: str) -> SummaryRow:
+    return next(row for row in card.summary if row.label == label)
+
+
+def test_s1_summary_rows_carry_wrong_amounts_and_the_total_variance() -> None:
+    findings = perfect_findings(KEY)
+    first_variance = findings[0].variance
+    assert first_variance is not None
+    findings[0] = findings[0].model_copy(update={"variance": first_variance + Decimal("1.00")})
+
+    card = score(findings, KEY)
+
+    assert [row.label for row in card.summary] == ["Wrong amounts", "Total variance"]
+    assert _row(card, "Wrong amounts") == SummaryRow(
+        label="Wrong amounts", kind="count", value="1", ok=False
+    )
+    total = _row(card, "Total variance")
+    assert (total.kind, total.value, total.note, total.ok) == ("money", "98511.71", None, False)
+
+
+def test_s1_summary_says_when_the_total_is_exact_or_not_reported() -> None:
+    unreported = perfect_findings(KEY)[0].model_copy(update={"variance": None})
+
+    exact = _row(score(perfect_findings(KEY), KEY), "Total variance")
+    missing = _row(score([unreported], KEY), "Total variance")
+
+    assert (exact.value, exact.note, exact.ok) == ("98510.71", "exact", True)
+    assert (missing.value, missing.note, missing.ok) == (None, "Not reported", False)
 
 
 def test_correct_finding_in_review_lane_is_reported_separately() -> None:
@@ -56,10 +92,10 @@ def test_wrong_amount_and_missed_items() -> None:
     card = score(findings, KEY)
 
     statuses = {item.key_id: item.status for item in card.items}
-    assert statuses["K01"] == "wrong_amount"
+    assert statuses["K01"] == "wrong_value"
     assert statuses["K02"] == "missed"
     assert card.correct == 12
-    assert card.total_variance_exact is False
+    assert _v(card).exact is False
 
 
 def test_unmatched_and_duplicate_findings_are_false_positives() -> None:
@@ -96,9 +132,9 @@ def test_missing_variance_counts_as_wrong_amount_and_hides_the_total() -> None:
 
     card = score(findings, KEY)
 
-    assert card.items[0].status == "wrong_amount"
-    assert card.total_variance_reported is None
-    assert card.total_variance_exact is False
+    assert card.items[0].status == "wrong_value"
+    assert _v(card).reported is None
+    assert _v(card).exact is False
 
 
 def test_empty_answer_misses_everything() -> None:
@@ -106,7 +142,7 @@ def test_empty_answer_misses_everything() -> None:
 
     assert card.correct == 0
     assert all(item.status == "missed" for item in card.items)
-    assert card.total_variance_reported == Decimal("0")
+    assert _v(card).reported == Decimal("0")
 
 
 def test_metrics_sum_tokens_and_price_them() -> None:
@@ -188,3 +224,18 @@ def test_matching_by_amount_when_the_line_is_not_reported() -> None:
     card = score([*others, small, big], key)
 
     assert card.correct == 15
+
+
+@pytest.mark.parametrize(
+    ("kind", "value"), [("count", "1.5"), ("count", "-1"), ("money", "1,250.00"), ("money", "abc")]
+)
+def test_a_summary_value_must_suit_its_kind(kind: str, value: str) -> None:
+    with pytest.raises(ValueError, match="summary value"):
+        SummaryRow(label="x", kind=kind, value=value)  # type: ignore[arg-type]
+
+
+@pytest.mark.parametrize(
+    ("kind", "value"), [("count", "12"), ("money", "-12.50"), ("text", "anything"), ("money", None)]
+)
+def test_a_summary_value_that_suits_its_kind_is_kept(kind: str, value: str | None) -> None:
+    assert SummaryRow(label="x", kind=kind, value=value).value == value  # type: ignore[arg-type]

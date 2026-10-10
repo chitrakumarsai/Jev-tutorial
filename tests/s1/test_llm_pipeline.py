@@ -5,7 +5,7 @@ from typing import Any
 from jev.providers.openai.types import LlmRequest, LlmResult, LlmUsage
 from jev.scenarios.s1_reconciliation.llm_pipeline import LlmS1Pipeline
 from jev.scenarios.s1_reconciliation.llm_schema import LlmFinding, S1LlmReport
-from jev.scoring.scorecard import score
+from jev.scenarios.s1_reconciliation.scorer import score
 from tests.s1.facts import DOCS
 from tests.s1.test_reconcile import KEY
 
