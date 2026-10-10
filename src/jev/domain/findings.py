@@ -42,13 +42,13 @@ class Finding(BaseModel):
     evidence: tuple[SpanRef, ...] = ()
     traceable: bool = True  # False when a quoted source can't be found verbatim
     verdict: Verdict | None = None  # S2 and S3 only
-    risk: Risk | None = None  # S2 only: a present or partial clause; None when absent
+    risk: Risk | None = None  # S2 only; an absent clause is rated at its rubric's 'none' level
     claim: str | None = None  # S3 only: the memo's claim the citation is meant to support
 
     @model_validator(mode="after")
     def _fields_fit_the_verdict(self) -> Self:
         """Only the checks that need no scenario knowledge; pipelines own the rest."""
-        if self.risk is not None and self.verdict not in CLAUSE_VERDICTS - {"absent"}:
+        if self.risk is not None and self.verdict not in CLAUSE_VERDICTS:
             raise ValueError(f"A risk level does not fit verdict {self.verdict!r}")
         if self.claim is not None and self.verdict in CLAUSE_VERDICTS:
             raise ValueError(f"A claim does not fit verdict {self.verdict!r}")

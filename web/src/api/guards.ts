@@ -51,10 +51,14 @@ export const FindingSchema = z
     risk: z.enum(['low', 'medium', 'high', 'critical']).nullable().exactOptional(),
     claim: z.string().nullable().exactOptional(),
   })
-  // Mirrors Finding._fields_fit_the_verdict: risk only on a present or partial clause,
+  // Mirrors Finding._fields_fit_the_verdict: risk only on a clause verdict (absent included),
   // a claim never on a clause verdict.
   .refine(
-    (f) => f.risk == null || f.verdict === 'present' || f.verdict === 'partial',
+    (f) =>
+      f.risk == null ||
+      f.verdict === 'present' ||
+      f.verdict === 'partial' ||
+      f.verdict === 'absent',
     'a risk level does not fit this verdict',
   )
   .refine(

@@ -1,0 +1,109 @@
+{
+  "scenario_id": "s2_clause_review",
+  "version": 1,
+  "authored_at": "2026-10-10",
+  "reviewed_at": "2026-10-10",
+  "line_numbering": "1-based lines of documents/addendum.md",
+  "items": [
+    {
+      "id": "K01",
+      "clause_id": "limitation_of_liability",
+      "status": "present",
+      "first_line": 68,
+      "last_line": 69,
+      "quote": "total liability under this Addendum is limited to the Fees paid in the",
+      "risk": "high",
+      "rationale": "9.2 caps liability at one month's Fees, far below the usual 12 months."
+    },
+    {
+      "id": "K02",
+      "clause_id": "indemnity",
+      "status": "present",
+      "first_line": 60,
+      "last_line": 63,
+      "quote": "Each party will defend and indemnify the other against third-party claims that its",
+      "risk": "low",
+      "rationale": "8.1-8.2: mutual IP indemnity with the standard modification and misuse carve-out."
+    },
+    {
+      "id": "K03",
+      "clause_id": "termination_for_convenience",
+      "status": "present",
+      "first_line": 77,
+      "last_line": 78,
+      "quote": "Either party may terminate this Addendum for convenience on sixty (60) days'",
+      "risk": "low",
+      "rationale": "10.3: either party, 60 days' notice."
+    },
+    {
+      "id": "K04",
+      "clause_id": "auto_renewal",
+      "status": "present",
+      "first_line": 74,
+      "last_line": 76,
+      "quote": "It renews automatically for successive twelve (12) month terms unless either party",
+      "risk": "high",
+      "rationale": "10.2: non-renewal notice due at least 90 days ahead, within the 61-120 day band."
+    },
+    {
+      "id": "K05",
+      "clause_id": "governing_law",
+      "status": "present",
+      "first_line": 84,
+      "last_line": 85,
+      "quote": "This Addendum is governed by the laws of the State of Delaware.",
+      "risk": "low",
+      "rationale": "11.1-11.2: Delaware law and courts."
+    },
+    {
+      "id": "K06",
+      "clause_id": "breach_notification",
+      "status": "absent",
+      "first_line": null,
+      "last_line": null,
+      "quote": null,
+      "risk": "critical",
+      "rationale": "Trap: nothing obliges Carrier to report unauthorised access to or loss of Customer Data, so the clause is rated at its rubric's 'No notice obligation' level (critical). 10.4's 'material breach' is about contract breach, not data."
+    },
+    {
+      "id": "K07",
+      "clause_id": "audit_rights",
+      "status": "partial",
+      "first_line": 42,
+      "last_line": 45,
+      "quote": "If Customer disputes an invoice, Customer may ask Carrier for the delivery records",
+      "risk": "high",
+      "rationale": "Trap: the 'Audit' heading only covers delivery records for invoice disputes; there is no audit of data handling."
+    },
+    {
+      "id": "K08",
+      "clause_id": "insurance",
+      "status": "partial",
+      "first_line": 55,
+      "last_line": 56,
+      "quote": "Carrier will maintain the insurance required by Section 9 of the MSA throughout",
+      "risk": "high",
+      "rationale": "Trap: cover is required only by reference to MSA Section 9; no types or amounts here."
+    },
+    {
+      "id": "K09",
+      "clause_id": "subcontracting",
+      "status": "present",
+      "first_line": 34,
+      "last_line": 38,
+      "quote": "Carrier may engage subcontractors to perform line-haul or last-mile services",
+      "risk": "high",
+      "rationale": "4.1-4.3: no consent, notice within 30 days after engaging; Carrier stays liable."
+    },
+    {
+      "id": "K10",
+      "clause_id": "data_retention_and_deletion",
+      "status": "present",
+      "first_line": 49,
+      "last_line": 51,
+      "quote": "Within 30 days after the MSA ends, Carrier will delete all Customer Data and, on",
+      "risk": "low",
+      "rationale": "6.2: deletion within 30 days with certification on request."
+    }
+  ]
+}
