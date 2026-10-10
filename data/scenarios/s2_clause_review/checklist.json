@@ -1,0 +1,156 @@
+{
+  "scenario_id": "s2_clause_review",
+  "version": 1,
+  "clauses": [
+    {
+      "id": "limitation_of_liability",
+      "title": "Limitation of liability",
+      "look_for": "A cap on each party's total liability, and any exclusion of indirect losses.",
+      "absence_phrases": [
+        "limitation of liability",
+        "total liability"
+      ],
+      "risk_rubric": [
+        "Cap of at least 12 months' fees, with standard carve-outs.",
+        "Cap of 6 to 12 months' fees.",
+        "Cap of 1 to 6 months' fees.",
+        "No cap for Customer's losses, or a cap below 1 month's fees."
+      ]
+    },
+    {
+      "id": "indemnity",
+      "title": "Indemnity",
+      "look_for": "Who defends and compensates whom for third-party claims.",
+      "absence_phrases": [
+        "indemnify",
+        "indemnity"
+      ],
+      "risk_rubric": [
+        "Mutual indemnity for third-party IP claims with standard carve-outs.",
+        "Mutual indemnity with broad carve-outs.",
+        "One-sided indemnity in Carrier's favour.",
+        "Customer indemnifies Carrier for Carrier's own acts."
+      ]
+    },
+    {
+      "id": "termination_for_convenience",
+      "title": "Termination for convenience",
+      "look_for": "Whether a party can end the agreement without cause, and on what notice.",
+      "absence_phrases": [
+        "for convenience"
+      ],
+      "risk_rubric": [
+        "Either party, 30 to 90 days' notice.",
+        "Either party, more than 90 days' notice.",
+        "Only Carrier may terminate for convenience.",
+        "No right to terminate for convenience."
+      ]
+    },
+    {
+      "id": "auto_renewal",
+      "title": "Automatic renewal",
+      "look_for": "Whether the term renews automatically and how far ahead non-renewal must be given.",
+      "absence_phrases": [
+        "renews automatically",
+        "automatic renewal"
+      ],
+      "risk_rubric": [
+        "No automatic renewal, or opt-out notice of 30 days or less.",
+        "Opt-out notice of 31 to 60 days.",
+        "Opt-out notice of 61 to 120 days.",
+        "Renews automatically with no way to opt out."
+      ]
+    },
+    {
+      "id": "governing_law",
+      "title": "Governing law and jurisdiction",
+      "look_for": "Which law governs the agreement and which courts hear disputes.",
+      "absence_phrases": [
+        "governed by the laws"
+      ],
+      "risk_rubric": [
+        "A named law and courts in a US state.",
+        "A named law but no forum.",
+        "Foreign law or forum.",
+        "No governing law."
+      ]
+    },
+    {
+      "id": "breach_notification",
+      "title": "Security breach notification",
+      "look_for": "A duty on Carrier to tell Customer, within a stated time, about unauthorised access to or loss of Customer Data.",
+      "absence_phrases": [
+        "security incident",
+        "personal data breach",
+        "data breach",
+        "unauthorised access to customer data",
+        "hours of becoming aware",
+        "notify customer of"
+      ],
+      "risk_rubric": [
+        "Notice within 48 hours with details and cooperation.",
+        "Notice within 72 hours.",
+        "Notice 'without undue delay' with no time limit.",
+        "No notice obligation."
+      ]
+    },
+    {
+      "id": "audit_rights",
+      "title": "Audit rights",
+      "look_for": "Customer's right to audit or inspect how Carrier handles Customer Data.",
+      "absence_phrases": [
+        "right to audit",
+        "audit the"
+      ],
+      "risk_rubric": [
+        "Customer may audit data handling on reasonable notice.",
+        "Audit limited to third-party reports.",
+        "Only records for invoice disputes, no audit of data handling.",
+        "No audit or records rights."
+      ]
+    },
+    {
+      "id": "insurance",
+      "title": "Insurance",
+      "look_for": "Insurance Carrier must hold, with cover types and amounts.",
+      "absence_phrases": [
+        "insurance"
+      ],
+      "risk_rubric": [
+        "Cover types and amounts stated in the agreement.",
+        "Amounts stated elsewhere and confirmed by certificate.",
+        "Cover required only by reference to another document.",
+        "No insurance requirement."
+      ]
+    },
+    {
+      "id": "subcontracting",
+      "title": "Subcontracting",
+      "look_for": "Whether Carrier may use subcontractors and stays responsible for them.",
+      "absence_phrases": [
+        "subcontractor"
+      ],
+      "risk_rubric": [
+        "Customer's prior consent required; Carrier stays liable.",
+        "Prior notice with a right to object; Carrier stays liable.",
+        "No consent, notice after the fact; Carrier stays liable.",
+        "No consent and Carrier is not liable for subcontractors."
+      ]
+    },
+    {
+      "id": "data_retention_and_deletion",
+      "title": "Data retention and deletion",
+      "look_for": "How long Carrier keeps Customer Data and whether it is deleted at the end.",
+      "absence_phrases": [
+        "delete all customer data",
+        "retain customer data"
+      ],
+      "risk_rubric": [
+        "Deletion within 30 days with certification.",
+        "Deletion within 90 days.",
+        "Deletion on request only.",
+        "No deletion obligation."
+      ]
+    }
+  ]
+}
