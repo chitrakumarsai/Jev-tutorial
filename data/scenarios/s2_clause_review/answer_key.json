@@ -2,6 +2,7 @@
   "scenario_id": "s2_clause_review",
   "version": 1,
   "authored_at": "2026-10-10",
+  "reviewed_at": "2026-10-10",
   "line_numbering": "1-based lines of documents/addendum.md",
   "items": [
     {

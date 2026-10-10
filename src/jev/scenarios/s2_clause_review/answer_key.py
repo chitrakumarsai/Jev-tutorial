@@ -19,7 +19,7 @@ class S2KeyItem(_Frozen):
     status: ClauseVerdict
     first_line: int | None = Field(default=None, ge=1)  # 1-based lines of the addendum
     last_line: int | None = Field(default=None, ge=1)
-    quote: str | None = None  # verbatim, on one line, inside first_line..last_line
+    quote: str | None = Field(default=None, min_length=1)  # verbatim, one line, in range
     risk: Risk | None = None
     rationale: str = Field(min_length=1)
 
@@ -30,9 +30,10 @@ class S2KeyItem(_Frozen):
             if any(value is not None for value in located):
                 raise ValueError(f"{self.id}: an absent clause has no lines, quote or risk")
             return self
-        if any(value is None for value in located):
+        first, last = self.first_line, self.last_line
+        if first is None or last is None or self.quote is None or self.risk is None:
             raise ValueError(f"{self.id}: a {self.status} clause needs lines, a quote and a risk")
-        if self.first_line > self.last_line:  # type: ignore[operator]
+        if first > last:
             raise ValueError(f"{self.id}: first_line is after last_line")
         return self
 
@@ -41,6 +42,7 @@ class S2Key(_Frozen):
     scenario_id: str
     version: int
     authored_at: str
+    reviewed_at: str | None = None  # set when the presenter has approved the key
     line_numbering: str
     items: tuple[S2KeyItem, ...] = Field(min_length=1)
 

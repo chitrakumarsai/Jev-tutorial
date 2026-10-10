@@ -4,10 +4,7 @@ from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from jev.providers.jev.types import MAX_CHOICE_OPTIONS
 from jev.scenarios.s2_clause_review.documents import scenario_dir
-
-RISK_LEVELS = 4  # low, medium, high, critical: the rubric's levels, in that order
 
 
 class _Frozen(BaseModel):
@@ -26,7 +23,7 @@ class ChecklistClause(_Frozen):
 class Checklist(_Frozen):
     scenario_id: str
     version: int
-    clauses: tuple[ChecklistClause, ...] = Field(min_length=1, max_length=MAX_CHOICE_OPTIONS)
+    clauses: tuple[ChecklistClause, ...] = Field(min_length=1)
 
 
 def load_checklist(data_dir: Path) -> Checklist:

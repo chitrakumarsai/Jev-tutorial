@@ -11,7 +11,8 @@ def validate_s2_data(data_dir: Path) -> list[str]:
     """The key covers the checklist exactly, quotes sit on their lines, and an absent clause's
     wording appears nowhere. Returns a list of problems."""
     lines = load_s2_documents(data_dir).get(ADDENDUM_ID).text.splitlines()
-    text = "\n".join(lines).lower()
+    # Whitespace-normalised, so a phrase wrapped across lines still matches.
+    text = " ".join(" ".join(lines).split()).lower()
     clauses = {clause.id: clause for clause in load_checklist(data_dir).clauses}
     key = load_s2_key(data_dir)
     problems = [
@@ -26,7 +27,9 @@ def validate_s2_data(data_dir: Path) -> list[str]:
             found = [p for p in clause.absence_phrases if p.lower() in text]
             if found:
                 problems.append(f"{item.id}: {item.clause_id} is keyed absent but has {found}")
-        elif item.first_line and item.last_line and item.quote:
+        elif item.last_line is not None and item.last_line > len(lines):
+            problems.append(f"{item.id}: line {item.last_line} is past the end of the addendum")
+        elif item.first_line is not None and item.last_line is not None and item.quote:
             span = lines[item.first_line - 1 : item.last_line]
             if not any(item.quote in line for line in span):
                 problems.append(

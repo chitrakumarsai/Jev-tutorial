@@ -11,10 +11,10 @@
         "total liability"
       ],
       "risk_rubric": [
-        "Cap of at least 12 months' fees, with standard carve-outs.",
-        "Cap of 6 to 12 months' fees.",
-        "Cap of 1 to 6 months' fees.",
-        "No cap for Customer's losses, or a cap below 1 month's fees."
+        "Cap of 12 months' Fees or more.",
+        "Cap of 6 to under 12 months' Fees.",
+        "Cap of 1 to under 6 months' Fees.",
+        "Cap under 1 month's Fees, or no cap on Carrier's liability."
       ]
     },
     {
@@ -40,8 +40,8 @@
         "for convenience"
       ],
       "risk_rubric": [
-        "Either party, 30 to 90 days' notice.",
-        "Either party, more than 90 days' notice.",
+        "Either party may terminate on 30 to 90 days' notice.",
+        "Either party may terminate, on under 30 or over 90 days' notice.",
         "Only Carrier may terminate for convenience.",
         "No right to terminate for convenience."
       ]
@@ -58,7 +58,7 @@
         "No automatic renewal, or opt-out notice of 30 days or less.",
         "Opt-out notice of 31 to 60 days.",
         "Opt-out notice of 61 to 120 days.",
-        "Renews automatically with no way to opt out."
+        "Opt-out notice over 120 days, or no way to opt out."
       ]
     },
     {
@@ -81,16 +81,21 @@
       "look_for": "A duty on Carrier to tell Customer, within a stated time, about unauthorised access to or loss of Customer Data.",
       "absence_phrases": [
         "security incident",
-        "personal data breach",
         "data breach",
-        "unauthorised access to customer data",
-        "hours of becoming aware",
-        "notify customer of"
+        "security breach",
+        "breach of security",
+        "unauthori",
+        "compromis",
+        "loss of customer data",
+        "notify customer",
+        "inform customer",
+        "without undue delay",
+        "hours of"
       ],
       "risk_rubric": [
-        "Notice within 48 hours with details and cooperation.",
-        "Notice within 72 hours.",
-        "Notice 'without undue delay' with no time limit.",
+        "Notice within 48 hours.",
+        "Notice within 49 to 72 hours.",
+        "Notice 'without undue delay' or later than 72 hours.",
         "No notice obligation."
       ]
     },
@@ -103,9 +108,9 @@
         "audit the"
       ],
       "risk_rubric": [
-        "Customer may audit data handling on reasonable notice.",
-        "Audit limited to third-party reports.",
-        "Only records for invoice disputes, no audit of data handling.",
+        "Customer may audit Carrier's data handling directly.",
+        "Customer may review independent audit reports of Carrier's data handling.",
+        "Only records for invoice disputes; no audit of data handling.",
         "No audit or records rights."
       ]
     },
@@ -146,9 +151,9 @@
         "retain customer data"
       ],
       "risk_rubric": [
-        "Deletion within 30 days with certification.",
-        "Deletion within 90 days.",
-        "Deletion on request only.",
+        "Deletion within 30 days of the end.",
+        "Deletion within 31 to 90 days of the end.",
+        "Deletion only on Customer's request, or more than 90 days after the end.",
         "No deletion obligation."
       ]
     }

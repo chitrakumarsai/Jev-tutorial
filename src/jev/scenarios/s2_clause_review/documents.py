@@ -22,10 +22,9 @@ def scenario_dir(data_dir: Path) -> Path:
 
 def load_s2_documents(data_dir: Path) -> DocumentSet:
     text = (scenario_dir(data_dir) / "documents" / "addendum.md").read_text(encoding="utf-8")
-    if estimate_tokens(text) > MAX_ESTIMATED_TOKENS:
-        raise DocumentTooLargeError(
-            f"addendum is ~{estimate_tokens(text)} tokens (limit {MAX_ESTIMATED_TOKENS})"
-        )
+    tokens = estimate_tokens(text)
+    if tokens > MAX_ESTIMATED_TOKENS:
+        raise DocumentTooLargeError(f"addendum is ~{tokens} tokens (limit {MAX_ESTIMATED_TOKENS})")
     if len(text.splitlines()) > MAX_CHOICE_OPTIONS:
         raise DocumentTooLargeError(f"addendum has more than {MAX_CHOICE_OPTIONS} lines")
     return DocumentSet(documents=(Document(doc_id=ADDENDUM_ID, text=text),))
