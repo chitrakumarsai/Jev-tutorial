@@ -61,7 +61,10 @@
         "confidence": null,
         "review_reason": null,
         "evidence": [],
-        "traceable": false
+        "traceable": false,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
@@ -90,7 +93,10 @@
             "text": "5.2 The surcharge percentage follows the published diesel index for the invoice month but may not exceed 18% of line-haul charges."
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
@@ -119,7 +125,10 @@
             "text": "3.2 Detention. Waiting time beyond two free hours at a Customer site is billed at $85.00 per hour, per occurrence, as a single line."
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
@@ -148,7 +157,10 @@
             "text": "4.1 When cumulative Loads in the Contract Year exceed 1,000, Customer receives a discount of 5% off all line-haul charges.\n\n4.2 The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000, and to all later invoices in the Contract Year."
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
@@ -177,7 +189,10 @@
             "text": "5.1 Carrier may add a fuel surcharge calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount)."
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
@@ -206,7 +221,10 @@
             "text": "4.1 When cumulative Loads in the Contract Year exceed 1,000, Customer receives a discount of 5% off all line-haul charges.\n\n4.2 The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000, and to all later invoices in the Contract Year."
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
@@ -235,13 +253,16 @@
             "text": "5.1 Carrier may add a fuel surcharge calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount)."
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
   {
     "seq": 11,
-    "t_ms": 4,
+    "t_ms": 3,
     "type": "finding",
     "side": "llm",
     "data": {
@@ -264,13 +285,16 @@
             "text": "4.1 When cumulative Loads in the Contract Year exceed 1,000, Customer receives a discount of 5% off all line-haul charges.\n\n4.2 The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000, and to all later invoices in the Contract Year."
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
   {
     "seq": 12,
-    "t_ms": 4,
+    "t_ms": 3,
     "type": "finding",
     "side": "llm",
     "data": {
@@ -293,13 +317,16 @@
             "text": "5.1 Carrier may add a fuel surcharge calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount)."
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
   {
     "seq": 13,
-    "t_ms": 4,
+    "t_ms": 3,
     "type": "finding",
     "side": "llm",
     "data": {
@@ -322,13 +349,16 @@
             "text": "4.1 When cumulative Loads in the Contract Year exceed 1,000, Customer receives a discount of 5% off all line-haul charges.\n\n4.2 The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000, and to all later invoices in the Contract Year."
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
   {
     "seq": 14,
-    "t_ms": 4,
+    "t_ms": 3,
     "type": "finding",
     "side": "llm",
     "data": {
@@ -351,13 +381,16 @@
             "text": "5.1 Carrier may add a fuel surcharge calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount)."
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
   {
     "seq": 15,
-    "t_ms": 4,
+    "t_ms": 3,
     "type": "finding",
     "side": "llm",
     "data": {
@@ -380,13 +413,16 @@
             "text": "3.2 Detention. Waiting time beyond two free hours at a Customer site is billed at $85.00 per hour, per occurrence, as a single line."
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
   {
     "seq": 16,
-    "t_ms": 4,
+    "t_ms": 3,
     "type": "finding",
     "side": "llm",
     "data": {
@@ -409,13 +445,16 @@
             "text": "3.2 Detention. Waiting time beyond two free hours at a Customer site is billed at $85.00 per hour, per occurrence, as a single line."
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
   {
     "seq": 17,
-    "t_ms": 4,
+    "t_ms": 3,
     "type": "finding",
     "side": "llm",
     "data": {
@@ -438,13 +477,16 @@
             "text": "4.1 When cumulative Loads in the Contract Year exceed 1,000, Customer receives a discount of 5% off all line-haul charges.\n\n4.2 The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000, and to all later invoices in the Contract Year."
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
   {
     "seq": 18,
-    "t_ms": 4,
+    "t_ms": 3,
     "type": "finding",
     "side": "llm",
     "data": {
@@ -467,13 +509,16 @@
             "text": "5.1 Carrier may add a fuel surcharge calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount)."
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
   {
     "seq": 19,
-    "t_ms": 4,
+    "t_ms": 3,
     "type": "finding",
     "side": "llm",
     "data": {
@@ -496,13 +541,16 @@
             "text": "4.1 When cumulative Loads in the Contract Year exceed 1,000, Customer receives a discount of 5% off all line-haul charges.\n\n4.2 The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000, and to all later invoices in the Contract Year."
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
   {
     "seq": 20,
-    "t_ms": 4,
+    "t_ms": 3,
     "type": "finding",
     "side": "llm",
     "data": {
@@ -525,13 +573,16 @@
             "text": "5.1 Carrier may add a fuel surcharge calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount)."
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
   {
     "seq": 21,
-    "t_ms": 4,
+    "t_ms": 3,
     "type": "finding",
     "side": "llm",
     "data": {
@@ -554,13 +605,16 @@
             "text": "3.2 Detention. Waiting time beyond two free hours at a Customer site is billed at $85.00 per hour, per occurrence, as a single line."
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
   {
     "seq": 22,
-    "t_ms": 4,
+    "t_ms": 3,
     "type": "step",
     "side": "llm",
     "data": {
@@ -570,7 +624,7 @@
   },
   {
     "seq": 23,
-    "t_ms": 4,
+    "t_ms": 3,
     "type": "side_completed",
     "side": "llm",
     "data": {
@@ -589,7 +643,10 @@
             "confidence": null,
             "review_reason": null,
             "evidence": [],
-            "traceable": false
+            "traceable": false,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "llm:02",
@@ -610,7 +667,10 @@
                 "text": "5.2 The surcharge percentage follows the published diesel index for the invoice month but may not exceed 18% of line-haul charges."
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "llm:03",
@@ -631,7 +691,10 @@
                 "text": "3.2 Detention. Waiting time beyond two free hours at a Customer site is billed at $85.00 per hour, per occurrence, as a single line."
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "llm:04",
@@ -652,7 +715,10 @@
                 "text": "4.1 When cumulative Loads in the Contract Year exceed 1,000, Customer receives a discount of 5% off all line-haul charges.\n\n4.2 The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000, and to all later invoices in the Contract Year."
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "llm:05",
@@ -673,7 +739,10 @@
                 "text": "5.1 Carrier may add a fuel surcharge calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount)."
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "llm:06",
@@ -694,7 +763,10 @@
                 "text": "4.1 When cumulative Loads in the Contract Year exceed 1,000, Customer receives a discount of 5% off all line-haul charges.\n\n4.2 The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000, and to all later invoices in the Contract Year."
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "llm:07",
@@ -715,7 +787,10 @@
                 "text": "5.1 Carrier may add a fuel surcharge calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount)."
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "llm:08",
@@ -736,7 +811,10 @@
                 "text": "4.1 When cumulative Loads in the Contract Year exceed 1,000, Customer receives a discount of 5% off all line-haul charges.\n\n4.2 The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000, and to all later invoices in the Contract Year."
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "llm:09",
@@ -757,7 +835,10 @@
                 "text": "5.1 Carrier may add a fuel surcharge calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount)."
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "llm:10",
@@ -778,7 +859,10 @@
                 "text": "4.1 When cumulative Loads in the Contract Year exceed 1,000, Customer receives a discount of 5% off all line-haul charges.\n\n4.2 The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000, and to all later invoices in the Contract Year."
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "llm:11",
@@ -799,7 +883,10 @@
                 "text": "5.1 Carrier may add a fuel surcharge calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount)."
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "llm:12",
@@ -820,7 +907,10 @@
                 "text": "3.2 Detention. Waiting time beyond two free hours at a Customer site is billed at $85.00 per hour, per occurrence, as a single line."
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "llm:13",
@@ -841,7 +931,10 @@
                 "text": "3.2 Detention. Waiting time beyond two free hours at a Customer site is billed at $85.00 per hour, per occurrence, as a single line."
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "llm:14",
@@ -862,7 +955,10 @@
                 "text": "4.1 When cumulative Loads in the Contract Year exceed 1,000, Customer receives a discount of 5% off all line-haul charges.\n\n4.2 The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000, and to all later invoices in the Contract Year."
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "llm:15",
@@ -883,7 +979,10 @@
                 "text": "5.1 Carrier may add a fuel surcharge calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount)."
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "llm:16",
@@ -904,7 +1003,10 @@
                 "text": "4.1 When cumulative Loads in the Contract Year exceed 1,000, Customer receives a discount of 5% off all line-haul charges.\n\n4.2 The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000, and to all later invoices in the Contract Year."
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "llm:17",
@@ -925,7 +1027,10 @@
                 "text": "5.1 Carrier may add a fuel surcharge calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount)."
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "llm:18",
@@ -946,7 +1051,10 @@
                 "text": "3.2 Detention. Waiting time beyond two free hours at a Customer site is billed at $85.00 per hour, per occurrence, as a single line."
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           }
         ],
         "metrics": {
@@ -961,72 +1069,86 @@
             {
               "key_id": "K01",
               "status": "correct",
-              "finding_id": "llm:02"
+              "finding_id": "llm:02",
+              "label": null
             },
             {
               "key_id": "K02",
               "status": "correct",
-              "finding_id": "llm:04"
+              "finding_id": "llm:04",
+              "label": null
             },
             {
               "key_id": "K03",
               "status": "correct",
-              "finding_id": "llm:05"
+              "finding_id": "llm:05",
+              "label": null
             },
             {
               "key_id": "K04",
               "status": "correct",
-              "finding_id": "llm:06"
+              "finding_id": "llm:06",
+              "label": null
             },
             {
               "key_id": "K05",
               "status": "correct",
-              "finding_id": "llm:07"
+              "finding_id": "llm:07",
+              "label": null
             },
             {
               "key_id": "K06",
               "status": "correct",
-              "finding_id": "llm:08"
+              "finding_id": "llm:08",
+              "label": null
             },
             {
               "key_id": "K07",
               "status": "correct",
-              "finding_id": "llm:09"
+              "finding_id": "llm:09",
+              "label": null
             },
             {
               "key_id": "K08",
               "status": "correct",
-              "finding_id": "llm:10"
+              "finding_id": "llm:10",
+              "label": null
             },
             {
               "key_id": "K09",
               "status": "correct",
-              "finding_id": "llm:11"
+              "finding_id": "llm:11",
+              "label": null
             },
             {
               "key_id": "K10",
               "status": "correct",
-              "finding_id": "llm:13"
+              "finding_id": "llm:13",
+              "label": null
             },
             {
               "key_id": "K11",
               "status": "correct",
-              "finding_id": "llm:14"
+              "finding_id": "llm:14",
+              "label": null
             },
             {
               "key_id": "K12",
               "status": "correct",
-              "finding_id": "llm:15"
+              "finding_id": "llm:15",
+              "label": null
             },
             {
               "key_id": "K13",
               "status": "correct",
-              "finding_id": "llm:16"
+              "finding_id": "llm:16",
+              "label": null
             },
             {
               "key_id": "K14",
               "status": "correct",
-              "finding_id": "llm:17"
+              "finding_id": "llm:17",
+              "label": null
             }
           ],
           "false_positives": [
@@ -1075,7 +1197,7 @@
   },
   {
     "seq": 24,
-    "t_ms": 4,
+    "t_ms": 3,
     "type": "step",
     "side": "jev",
     "data": {
@@ -1692,7 +1814,7 @@
   },
   {
     "seq": 51,
-    "t_ms": 6,
+    "t_ms": 5,
     "type": "finding",
     "side": "jev",
     "data": {
@@ -1721,13 +1843,16 @@
             "text": "18%"
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
   {
     "seq": 52,
-    "t_ms": 6,
+    "t_ms": 5,
     "type": "finding",
     "side": "jev",
     "data": {
@@ -1768,13 +1893,16 @@
             "text": "5%"
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
   {
     "seq": 53,
-    "t_ms": 6,
+    "t_ms": 5,
     "type": "finding",
     "side": "jev",
     "data": {
@@ -1809,13 +1937,16 @@
             "text": "5%"
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
   {
     "seq": 54,
-    "t_ms": 6,
+    "t_ms": 5,
     "type": "finding",
     "side": "jev",
     "data": {
@@ -1856,13 +1987,16 @@
             "text": "5%"
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
   {
     "seq": 55,
-    "t_ms": 6,
+    "t_ms": 5,
     "type": "finding",
     "side": "jev",
     "data": {
@@ -1897,13 +2031,16 @@
             "text": "5%"
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
   {
     "seq": 56,
-    "t_ms": 6,
+    "t_ms": 5,
     "type": "finding",
     "side": "jev",
     "data": {
@@ -1944,13 +2081,16 @@
             "text": "5%"
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
   {
     "seq": 57,
-    "t_ms": 6,
+    "t_ms": 5,
     "type": "finding",
     "side": "jev",
     "data": {
@@ -1985,13 +2125,16 @@
             "text": "5%"
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
   {
     "seq": 58,
-    "t_ms": 6,
+    "t_ms": 5,
     "type": "finding",
     "side": "jev",
     "data": {
@@ -2032,13 +2175,16 @@
             "text": "5%"
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
   {
     "seq": 59,
-    "t_ms": 6,
+    "t_ms": 5,
     "type": "finding",
     "side": "jev",
     "data": {
@@ -2073,13 +2219,16 @@
             "text": "5%"
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
   {
     "seq": 60,
-    "t_ms": 6,
+    "t_ms": 5,
     "type": "finding",
     "side": "jev",
     "data": {
@@ -2102,13 +2251,16 @@
             "text": "| L5 | Detention, DC-South, 6 hours | 6 h | $85.00 | $510.00 |"
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
   {
     "seq": 61,
-    "t_ms": 6,
+    "t_ms": 5,
     "type": "finding",
     "side": "jev",
     "data": {
@@ -2149,13 +2301,16 @@
             "text": "5%"
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
   {
     "seq": 62,
-    "t_ms": 6,
+    "t_ms": 5,
     "type": "finding",
     "side": "jev",
     "data": {
@@ -2190,13 +2345,16 @@
             "text": "5%"
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
   {
     "seq": 63,
-    "t_ms": 6,
+    "t_ms": 5,
     "type": "finding",
     "side": "jev",
     "data": {
@@ -2237,13 +2395,16 @@
             "text": "5%"
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
   {
     "seq": 64,
-    "t_ms": 6,
+    "t_ms": 5,
     "type": "finding",
     "side": "jev",
     "data": {
@@ -2278,13 +2439,16 @@
             "text": "5%"
           }
         ],
-        "traceable": true
+        "traceable": true,
+        "verdict": null,
+        "risk": null,
+        "claim": null
       }
     }
   },
   {
     "seq": 65,
-    "t_ms": 6,
+    "t_ms": 5,
     "type": "step",
     "side": "jev",
     "data": {
@@ -2294,7 +2458,7 @@
   },
   {
     "seq": 66,
-    "t_ms": 6,
+    "t_ms": 5,
     "type": "side_completed",
     "side": "jev",
     "data": {
@@ -2326,7 +2490,10 @@
                 "text": "18%"
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "jev:inv-2026-07:discount_not_applied:L1+L2",
@@ -2365,7 +2532,10 @@
                 "text": "5%"
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "jev:inv-2026-07:surcharge_on_undiscounted_base:L3",
@@ -2398,7 +2568,10 @@
                 "text": "5%"
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "jev:inv-2026-08:discount_not_applied:L1+L2",
@@ -2437,7 +2610,10 @@
                 "text": "5%"
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "jev:inv-2026-08:surcharge_on_undiscounted_base:L3",
@@ -2470,7 +2646,10 @@
                 "text": "5%"
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "jev:inv-2026-09:discount_not_applied:L1+L2",
@@ -2509,7 +2688,10 @@
                 "text": "5%"
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "jev:inv-2026-09:surcharge_on_undiscounted_base:L3",
@@ -2542,7 +2724,10 @@
                 "text": "5%"
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "jev:inv-2026-10:discount_not_applied:L1+L2",
@@ -2581,7 +2766,10 @@
                 "text": "5%"
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "jev:inv-2026-10:surcharge_on_undiscounted_base:L3",
@@ -2614,7 +2802,10 @@
                 "text": "5%"
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "jev:inv-2026-10:duplicate_line:L5",
@@ -2635,7 +2826,10 @@
                 "text": "| L5 | Detention, DC-South, 6 hours | 6 h | $85.00 | $510.00 |"
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "jev:inv-2026-11:discount_not_applied:L1+L2",
@@ -2674,7 +2868,10 @@
                 "text": "5%"
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "jev:inv-2026-11:surcharge_on_undiscounted_base:L3",
@@ -2707,7 +2904,10 @@
                 "text": "5%"
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "jev:inv-2026-12:discount_not_applied:L1+L2",
@@ -2746,7 +2946,10 @@
                 "text": "5%"
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           },
           {
             "id": "jev:inv-2026-12:surcharge_on_undiscounted_base:L3",
@@ -2779,11 +2982,14 @@
                 "text": "5%"
               }
             ],
-            "traceable": true
+            "traceable": true,
+            "verdict": null,
+            "risk": null,
+            "claim": null
           }
         ],
         "metrics": {
-          "latency_ms": 5,
+          "latency_ms": 4,
           "requests": 13,
           "input_tokens": 17966,
           "output_tokens": 5477,
@@ -2794,72 +3000,86 @@
             {
               "key_id": "K01",
               "status": "correct",
-              "finding_id": "jev:inv-2026-04:surcharge_over_cap:L3"
+              "finding_id": "jev:inv-2026-04:surcharge_over_cap:L3",
+              "label": null
             },
             {
               "key_id": "K02",
               "status": "correct",
-              "finding_id": "jev:inv-2026-07:discount_not_applied:L1+L2"
+              "finding_id": "jev:inv-2026-07:discount_not_applied:L1+L2",
+              "label": null
             },
             {
               "key_id": "K03",
               "status": "correct",
-              "finding_id": "jev:inv-2026-07:surcharge_on_undiscounted_base:L3"
+              "finding_id": "jev:inv-2026-07:surcharge_on_undiscounted_base:L3",
+              "label": null
             },
             {
               "key_id": "K04",
               "status": "correct",
-              "finding_id": "jev:inv-2026-08:discount_not_applied:L1+L2"
+              "finding_id": "jev:inv-2026-08:discount_not_applied:L1+L2",
+              "label": null
             },
             {
               "key_id": "K05",
               "status": "correct",
-              "finding_id": "jev:inv-2026-08:surcharge_on_undiscounted_base:L3"
+              "finding_id": "jev:inv-2026-08:surcharge_on_undiscounted_base:L3",
+              "label": null
             },
             {
               "key_id": "K06",
               "status": "correct",
-              "finding_id": "jev:inv-2026-09:discount_not_applied:L1+L2"
+              "finding_id": "jev:inv-2026-09:discount_not_applied:L1+L2",
+              "label": null
             },
             {
               "key_id": "K07",
               "status": "correct",
-              "finding_id": "jev:inv-2026-09:surcharge_on_undiscounted_base:L3"
+              "finding_id": "jev:inv-2026-09:surcharge_on_undiscounted_base:L3",
+              "label": null
             },
             {
               "key_id": "K08",
               "status": "correct",
-              "finding_id": "jev:inv-2026-10:discount_not_applied:L1+L2"
+              "finding_id": "jev:inv-2026-10:discount_not_applied:L1+L2",
+              "label": null
             },
             {
               "key_id": "K09",
               "status": "correct",
-              "finding_id": "jev:inv-2026-10:surcharge_on_undiscounted_base:L3"
+              "finding_id": "jev:inv-2026-10:surcharge_on_undiscounted_base:L3",
+              "label": null
             },
             {
               "key_id": "K10",
               "status": "correct",
-              "finding_id": "jev:inv-2026-10:duplicate_line:L5"
+              "finding_id": "jev:inv-2026-10:duplicate_line:L5",
+              "label": null
             },
             {
               "key_id": "K11",
               "status": "correct",
-              "finding_id": "jev:inv-2026-11:discount_not_applied:L1+L2"
+              "finding_id": "jev:inv-2026-11:discount_not_applied:L1+L2",
+              "label": null
             },
             {
               "key_id": "K12",
               "status": "correct",
-              "finding_id": "jev:inv-2026-11:surcharge_on_undiscounted_base:L3"
+              "finding_id": "jev:inv-2026-11:surcharge_on_undiscounted_base:L3",
+              "label": null
             },
             {
               "key_id": "K13",
               "status": "correct",
-              "finding_id": "jev:inv-2026-12:discount_not_applied:L1+L2"
+              "finding_id": "jev:inv-2026-12:discount_not_applied:L1+L2",
+              "label": null
             },
             {
               "key_id": "K14",
               "status": "correct",
-              "finding_id": "jev:inv-2026-12:surcharge_on_undiscounted_base:L3"
+              "finding_id": "jev:inv-2026-12:surcharge_on_undiscounted_base:L3",
+              "label": null
             }
           ],
           "false_positives": [],
@@ -2903,7 +3123,7 @@
   },
   {
     "seq": 67,
-    "t_ms": 6,
+    "t_ms": 5,
     "type": "run_completed",
     "side": null,
     "data": {
@@ -2940,7 +3160,10 @@
                     "text": "18%"
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "jev:inv-2026-07:discount_not_applied:L1+L2",
@@ -2979,7 +3202,10 @@
                     "text": "5%"
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "jev:inv-2026-07:surcharge_on_undiscounted_base:L3",
@@ -3012,7 +3238,10 @@
                     "text": "5%"
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "jev:inv-2026-08:discount_not_applied:L1+L2",
@@ -3051,7 +3280,10 @@
                     "text": "5%"
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "jev:inv-2026-08:surcharge_on_undiscounted_base:L3",
@@ -3084,7 +3316,10 @@
                     "text": "5%"
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "jev:inv-2026-09:discount_not_applied:L1+L2",
@@ -3123,7 +3358,10 @@
                     "text": "5%"
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "jev:inv-2026-09:surcharge_on_undiscounted_base:L3",
@@ -3156,7 +3394,10 @@
                     "text": "5%"
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "jev:inv-2026-10:discount_not_applied:L1+L2",
@@ -3195,7 +3436,10 @@
                     "text": "5%"
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "jev:inv-2026-10:surcharge_on_undiscounted_base:L3",
@@ -3228,7 +3472,10 @@
                     "text": "5%"
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "jev:inv-2026-10:duplicate_line:L5",
@@ -3249,7 +3496,10 @@
                     "text": "| L5 | Detention, DC-South, 6 hours | 6 h | $85.00 | $510.00 |"
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "jev:inv-2026-11:discount_not_applied:L1+L2",
@@ -3288,7 +3538,10 @@
                     "text": "5%"
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "jev:inv-2026-11:surcharge_on_undiscounted_base:L3",
@@ -3321,7 +3574,10 @@
                     "text": "5%"
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "jev:inv-2026-12:discount_not_applied:L1+L2",
@@ -3360,7 +3616,10 @@
                     "text": "5%"
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "jev:inv-2026-12:surcharge_on_undiscounted_base:L3",
@@ -3393,11 +3652,14 @@
                     "text": "5%"
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               }
             ],
             "metrics": {
-              "latency_ms": 5,
+              "latency_ms": 4,
               "requests": 13,
               "input_tokens": 17966,
               "output_tokens": 5477,
@@ -3408,72 +3670,86 @@
                 {
                   "key_id": "K01",
                   "status": "correct",
-                  "finding_id": "jev:inv-2026-04:surcharge_over_cap:L3"
+                  "finding_id": "jev:inv-2026-04:surcharge_over_cap:L3",
+                  "label": null
                 },
                 {
                   "key_id": "K02",
                   "status": "correct",
-                  "finding_id": "jev:inv-2026-07:discount_not_applied:L1+L2"
+                  "finding_id": "jev:inv-2026-07:discount_not_applied:L1+L2",
+                  "label": null
                 },
                 {
                   "key_id": "K03",
                   "status": "correct",
-                  "finding_id": "jev:inv-2026-07:surcharge_on_undiscounted_base:L3"
+                  "finding_id": "jev:inv-2026-07:surcharge_on_undiscounted_base:L3",
+                  "label": null
                 },
                 {
                   "key_id": "K04",
                   "status": "correct",
-                  "finding_id": "jev:inv-2026-08:discount_not_applied:L1+L2"
+                  "finding_id": "jev:inv-2026-08:discount_not_applied:L1+L2",
+                  "label": null
                 },
                 {
                   "key_id": "K05",
                   "status": "correct",
-                  "finding_id": "jev:inv-2026-08:surcharge_on_undiscounted_base:L3"
+                  "finding_id": "jev:inv-2026-08:surcharge_on_undiscounted_base:L3",
+                  "label": null
                 },
                 {
                   "key_id": "K06",
                   "status": "correct",
-                  "finding_id": "jev:inv-2026-09:discount_not_applied:L1+L2"
+                  "finding_id": "jev:inv-2026-09:discount_not_applied:L1+L2",
+                  "label": null
                 },
                 {
                   "key_id": "K07",
                   "status": "correct",
-                  "finding_id": "jev:inv-2026-09:surcharge_on_undiscounted_base:L3"
+                  "finding_id": "jev:inv-2026-09:surcharge_on_undiscounted_base:L3",
+                  "label": null
                 },
                 {
                   "key_id": "K08",
                   "status": "correct",
-                  "finding_id": "jev:inv-2026-10:discount_not_applied:L1+L2"
+                  "finding_id": "jev:inv-2026-10:discount_not_applied:L1+L2",
+                  "label": null
                 },
                 {
                   "key_id": "K09",
                   "status": "correct",
-                  "finding_id": "jev:inv-2026-10:surcharge_on_undiscounted_base:L3"
+                  "finding_id": "jev:inv-2026-10:surcharge_on_undiscounted_base:L3",
+                  "label": null
                 },
                 {
                   "key_id": "K10",
                   "status": "correct",
-                  "finding_id": "jev:inv-2026-10:duplicate_line:L5"
+                  "finding_id": "jev:inv-2026-10:duplicate_line:L5",
+                  "label": null
                 },
                 {
                   "key_id": "K11",
                   "status": "correct",
-                  "finding_id": "jev:inv-2026-11:discount_not_applied:L1+L2"
+                  "finding_id": "jev:inv-2026-11:discount_not_applied:L1+L2",
+                  "label": null
                 },
                 {
                   "key_id": "K12",
                   "status": "correct",
-                  "finding_id": "jev:inv-2026-11:surcharge_on_undiscounted_base:L3"
+                  "finding_id": "jev:inv-2026-11:surcharge_on_undiscounted_base:L3",
+                  "label": null
                 },
                 {
                   "key_id": "K13",
                   "status": "correct",
-                  "finding_id": "jev:inv-2026-12:discount_not_applied:L1+L2"
+                  "finding_id": "jev:inv-2026-12:discount_not_applied:L1+L2",
+                  "label": null
                 },
                 {
                   "key_id": "K14",
                   "status": "correct",
-                  "finding_id": "jev:inv-2026-12:surcharge_on_undiscounted_base:L3"
+                  "finding_id": "jev:inv-2026-12:surcharge_on_undiscounted_base:L3",
+                  "label": null
                 }
               ],
               "false_positives": [],
@@ -3528,7 +3804,10 @@
                 "confidence": null,
                 "review_reason": null,
                 "evidence": [],
-                "traceable": false
+                "traceable": false,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "llm:02",
@@ -3549,7 +3828,10 @@
                     "text": "5.2 The surcharge percentage follows the published diesel index for the invoice month but may not exceed 18% of line-haul charges."
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "llm:03",
@@ -3570,7 +3852,10 @@
                     "text": "3.2 Detention. Waiting time beyond two free hours at a Customer site is billed at $85.00 per hour, per occurrence, as a single line."
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "llm:04",
@@ -3591,7 +3876,10 @@
                     "text": "4.1 When cumulative Loads in the Contract Year exceed 1,000, Customer receives a discount of 5% off all line-haul charges.\n\n4.2 The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000, and to all later invoices in the Contract Year."
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "llm:05",
@@ -3612,7 +3900,10 @@
                     "text": "5.1 Carrier may add a fuel surcharge calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount)."
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "llm:06",
@@ -3633,7 +3924,10 @@
                     "text": "4.1 When cumulative Loads in the Contract Year exceed 1,000, Customer receives a discount of 5% off all line-haul charges.\n\n4.2 The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000, and to all later invoices in the Contract Year."
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "llm:07",
@@ -3654,7 +3948,10 @@
                     "text": "5.1 Carrier may add a fuel surcharge calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount)."
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "llm:08",
@@ -3675,7 +3972,10 @@
                     "text": "4.1 When cumulative Loads in the Contract Year exceed 1,000, Customer receives a discount of 5% off all line-haul charges.\n\n4.2 The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000, and to all later invoices in the Contract Year."
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "llm:09",
@@ -3696,7 +3996,10 @@
                     "text": "5.1 Carrier may add a fuel surcharge calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount)."
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "llm:10",
@@ -3717,7 +4020,10 @@
                     "text": "4.1 When cumulative Loads in the Contract Year exceed 1,000, Customer receives a discount of 5% off all line-haul charges.\n\n4.2 The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000, and to all later invoices in the Contract Year."
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "llm:11",
@@ -3738,7 +4044,10 @@
                     "text": "5.1 Carrier may add a fuel surcharge calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount)."
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "llm:12",
@@ -3759,7 +4068,10 @@
                     "text": "3.2 Detention. Waiting time beyond two free hours at a Customer site is billed at $85.00 per hour, per occurrence, as a single line."
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "llm:13",
@@ -3780,7 +4092,10 @@
                     "text": "3.2 Detention. Waiting time beyond two free hours at a Customer site is billed at $85.00 per hour, per occurrence, as a single line."
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "llm:14",
@@ -3801,7 +4116,10 @@
                     "text": "4.1 When cumulative Loads in the Contract Year exceed 1,000, Customer receives a discount of 5% off all line-haul charges.\n\n4.2 The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000, and to all later invoices in the Contract Year."
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "llm:15",
@@ -3822,7 +4140,10 @@
                     "text": "5.1 Carrier may add a fuel surcharge calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount)."
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "llm:16",
@@ -3843,7 +4164,10 @@
                     "text": "4.1 When cumulative Loads in the Contract Year exceed 1,000, Customer receives a discount of 5% off all line-haul charges.\n\n4.2 The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000, and to all later invoices in the Contract Year."
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "llm:17",
@@ -3864,7 +4188,10 @@
                     "text": "5.1 Carrier may add a fuel surcharge calculated as a percentage of the line-haul charges billed on the same invoice (after any volume discount)."
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               },
               {
                 "id": "llm:18",
@@ -3885,7 +4212,10 @@
                     "text": "3.2 Detention. Waiting time beyond two free hours at a Customer site is billed at $85.00 per hour, per occurrence, as a single line."
                   }
                 ],
-                "traceable": true
+                "traceable": true,
+                "verdict": null,
+                "risk": null,
+                "claim": null
               }
             ],
             "metrics": {
@@ -3900,72 +4230,86 @@
                 {
                   "key_id": "K01",
                   "status": "correct",
-                  "finding_id": "llm:02"
+                  "finding_id": "llm:02",
+                  "label": null
                 },
                 {
                   "key_id": "K02",
                   "status": "correct",
-                  "finding_id": "llm:04"
+                  "finding_id": "llm:04",
+                  "label": null
                 },
                 {
                   "key_id": "K03",
                   "status": "correct",
-                  "finding_id": "llm:05"
+                  "finding_id": "llm:05",
+                  "label": null
                 },
                 {
                   "key_id": "K04",
                   "status": "correct",
-                  "finding_id": "llm:06"
+                  "finding_id": "llm:06",
+                  "label": null
                 },
                 {
                   "key_id": "K05",
                   "status": "correct",
-                  "finding_id": "llm:07"
+                  "finding_id": "llm:07",
+                  "label": null
                 },
                 {
                   "key_id": "K06",
                   "status": "correct",
-                  "finding_id": "llm:08"
+                  "finding_id": "llm:08",
+                  "label": null
                 },
                 {
                   "key_id": "K07",
                   "status": "correct",
-                  "finding_id": "llm:09"
+                  "finding_id": "llm:09",
+                  "label": null
                 },
                 {
                   "key_id": "K08",
                   "status": "correct",
-                  "finding_id": "llm:10"
+                  "finding_id": "llm:10",
+                  "label": null
                 },
                 {
                   "key_id": "K09",
                   "status": "correct",
-                  "finding_id": "llm:11"
+                  "finding_id": "llm:11",
+                  "label": null
                 },
                 {
                   "key_id": "K10",
                   "status": "correct",
-                  "finding_id": "llm:13"
+                  "finding_id": "llm:13",
+                  "label": null
                 },
                 {
                   "key_id": "K11",
                   "status": "correct",
-                  "finding_id": "llm:14"
+                  "finding_id": "llm:14",
+                  "label": null
                 },
                 {
                   "key_id": "K12",
                   "status": "correct",
-                  "finding_id": "llm:15"
+                  "finding_id": "llm:15",
+                  "label": null
                 },
                 {
                   "key_id": "K13",
                   "status": "correct",
-                  "finding_id": "llm:16"
+                  "finding_id": "llm:16",
+                  "label": null
                 },
                 {
                   "key_id": "K14",
                   "status": "correct",
-                  "finding_id": "llm:17"
+                  "finding_id": "llm:17",
+                  "label": null
                 }
               ],
               "false_positives": [

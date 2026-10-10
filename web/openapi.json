@@ -435,6 +435,17 @@
             ],
             "title": "Billed"
           },
+          "claim": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Claim"
+          },
           "confidence": {
             "anyOf": [
               {
@@ -510,6 +521,23 @@
             ],
             "title": "Review Reason"
           },
+          "risk": {
+            "anyOf": [
+              {
+                "enum": [
+                  "low",
+                  "medium",
+                  "high",
+                  "critical"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Risk"
+          },
           "traceable": {
             "default": true,
             "title": "Traceable",
@@ -525,6 +553,31 @@
               }
             ],
             "title": "Variance"
+          },
+          "verdict": {
+            "anyOf": [
+              {
+                "enum": [
+                  "present",
+                  "absent",
+                  "partial"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "verified",
+                  "unsupported",
+                  "contradicted",
+                  "fabricated"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Verdict"
           }
         },
         "required": [
@@ -921,6 +974,17 @@
           "key_id": {
             "title": "Key Id",
             "type": "string"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label"
           },
           "status": {
             "enum": [

@@ -271,6 +271,8 @@ export interface components {
     Finding: {
       /** Billed */
       billed?: string | null;
+      /** Claim */
+      claim?: string | null;
       /** Confidence */
       confidence?: number | null;
       /** Doc Id */
@@ -296,6 +298,8 @@ export interface components {
       line_ref?: string | null;
       /** Review Reason */
       review_reason?: string | null;
+      /** Risk */
+      risk?: ('low' | 'medium' | 'high' | 'critical') | null;
       /**
        * Traceable
        * @default true
@@ -303,6 +307,11 @@ export interface components {
       traceable: boolean;
       /** Variance */
       variance?: string | null;
+      /** Verdict */
+      verdict?:
+        | ('present' | 'absent' | 'partial')
+        | ('verified' | 'unsupported' | 'contradicted' | 'fabricated')
+        | null;
     };
     /**
      * Health
@@ -451,6 +460,8 @@ export interface components {
       finding_id: string | null;
       /** Key Id */
       key_id: string;
+      /** Label */
+      label?: string | null;
       /**
        * Status
        * @enum {string}
