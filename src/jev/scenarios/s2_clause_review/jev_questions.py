@@ -24,11 +24,13 @@ class NumberedLine:
 def numbered_lines(doc: Document) -> list[NumberedLine]:
     lines: list[NumberedLine] = []
     offset = 0
-    for number, raw in enumerate(doc.text.splitlines(keepends=True), start=1):
-        text = raw.rstrip("\r\n")
+    # Only "\n" ends a line, as in the answer key's numbering; splitlines() would also split
+    # on form feeds and Unicode separators and shift every later line number.
+    for number, raw in enumerate(doc.text.split("\n"), start=1):
+        text = raw.rstrip("\r")
         if text.strip():
             lines.append(NumberedLine(f"L{number:03d}", text, offset, offset + len(text)))
-        offset += len(raw)
+        offset += len(raw) + 1
     return lines
 
 

@@ -14,6 +14,7 @@ EXISTS = {"present": 0.97, "partial": 0.5, "absent": 0.03}
 class FakeS2Jev:
     key: S2Key
     confidence: float = 0.95
+    where_confidence: dict[str, float] = field(default_factory=dict)  # question key -> conf
     nouls: dict[str, float] = field(default_factory=dict)  # question key -> forced noul
     lines: dict[str, str] = field(default_factory=dict)  # question key -> forced line id
     risk_probabilities: dict[str, dict[str, float]] = field(default_factory=dict)
@@ -35,16 +36,20 @@ class FakeS2Jev:
                 nouls[qkey] = NoulA(noul=self.nouls.get(qkey, EXISTS[item.status]))
             elif kind == "where":
                 line = self.lines.get(qkey) or f"L{item.first_line or 1:03d}"
-                choices[qkey] = ChoiceA(
-                    choice=line, probabilities={line: self.confidence}, confidence=self.confidence
-                )
+                conf = self.where_confidence.get(qkey, self.confidence)
+                choices[qkey] = ChoiceA(choice=line, probabilities={line: conf}, confidence=conf)
             else:
-                probabilities = self.risk_probabilities.get(qkey) or {
-                    str(RISK_INDEX[item.risk or "low"]): self.confidence,
-                    "0" if item.risk != "low" else "1": 1 - self.confidence,
-                }
-                top = max(probabilities.values())
-                scores[qkey] = ScoreA(score=0.0, probabilities=probabilities, confidence=top)
+                probabilities = (
+                    self.risk_probabilities[qkey]
+                    if qkey in self.risk_probabilities
+                    else {
+                        str(RISK_INDEX[item.risk or "low"]): self.confidence,
+                        "0" if item.risk != "low" else "1": 1 - self.confidence,
+                    }
+                )
+                top = max(probabilities.values(), default=0.0)
+                mean = sum(int(k) * p for k, p in probabilities.items() if k.isdigit())
+                scores[qkey] = ScoreA(score=mean, probabilities=probabilities, confidence=top)
         return JevResult(
             model="jev-1.13.0",
             latency_ms=120,

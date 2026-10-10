@@ -18,9 +18,13 @@ from jev.scenarios.s2_clause_review.jev_questions import (
 )
 from jev.scoring.metrics import CallUsage
 
-# From the semantic-find recipe, frozen before the key review (PLAN-M2 §3).
-FOUND, ABSENT = 0.7, 0.35
+# From the semantic-find recipe, frozen before the key review (PLAN-M2 §3). Known limitation:
+# "partial" comes from a binary Noul landing mid-range, which reads as uncertainty, not as
+# "present but deficient"; a three-way question could separate the two in a later milestone.
+PRESENT, ABSENT = 0.7, 0.35
 RISKS: tuple[Risk, ...] = ("low", "medium", "high", "critical")
+# Levels this close to the most likely one count as tied; a tie goes to the higher risk.
+RISK_TIE = 0.05
 
 
 @dataclass(frozen=True)
@@ -33,13 +37,17 @@ class Judgement:
 
 
 def _verdict(noul: float) -> ClauseVerdict:
-    return "present" if noul >= FOUND else "absent" if noul < ABSENT else "partial"
+    return "present" if noul >= PRESENT else "absent" if noul < ABSENT else "partial"
 
 
-def _risk(probabilities: dict[str, float]) -> Risk:
-    """The most likely level; a tie goes to the higher risk (the cautious reading)."""
-    level = max(probabilities, key=lambda k: (probabilities[k], int(k)))
-    return RISKS[int(level)]
+def _risk(probabilities: dict[str, float]) -> Risk | None:
+    """The most likely level, cautiously: near ties go to the higher risk. None when the
+    answer has no readable level (keys are 0-based level indices as strings)."""
+    levels = {int(k): p for k, p in probabilities.items() if k.isdigit() and int(k) < len(RISKS)}
+    if not levels:
+        return None
+    top = max(levels.values())
+    return RISKS[max(level for level, p in levels.items() if p >= top - RISK_TIE)]
 
 
 def _judge(
@@ -47,30 +55,42 @@ def _judge(
 ) -> Judgement:
     exists = result.nouls.get(f"{clause.id}__exists")
     where = result.choices.get(f"{clause.id}__where")
-    risk = result.scores.get(f"{clause.id}__risk")
+    score = result.scores.get(f"{clause.id}__risk")
     if exists is None:
-        return Judgement(None, None, None, None, ("Jev gave no answer on whether it is there",))
+        reason = "Jev gave no answer on whether it is there"
+        return Judgement(verdict=None, line=None, risk=None, confidence=None, reasons=(reason,))
     verdict = _verdict(exists.noul)
     reasons: list[str] = []
-    confidences = [exists.confidence]
+    # A partial verdict *is* a mid-range "exists" answer, so its near-zero confidence says
+    # nothing more; the gate then rests on the other answers.
+    confidences = [] if verdict == "partial" else [("exists", exists.confidence)]
     line = None
-    if verdict != "absent":  # the line pick always names some line, so ignore it when absent
+    if verdict != "absent":  # a line pick always names some line, so ignore it when absent
         if where is None:
             reasons.append("Jev gave no answer on where it is")
         else:
-            line, confidences = lines.get(where.choice), [*confidences, where.confidence]
-    if risk is None:
+            line = lines.get(where.choice)
+            confidences.append(("where", where.confidence))
+            if line is None:
+                reasons.append(f"Jev named line {where.choice}, which is not in the document")
+    risk = _risk(score.probabilities) if score else None
+    if score is None:
         reasons.append("Jev gave no answer on its risk")
+    elif risk is None:
+        reasons.append("Jev's risk answer was unreadable")
     else:
-        confidences.append(risk.confidence)
-    confidence = min(confidences)
+        confidences.append(("risk", score.confidence))
     if verdict == "partial":
-        # Its "is it there" answer sits near a coin flip by definition; say why, not "0%".
-        reasons.append("partial: related wording that may not do what the checklist asks")
-    elif confidence < threshold:
-        reasons.append(f"confidence {confidence:.0%} is below {threshold:.0%}")
+        reasons.insert(0, "partial: related wording that may not do what the checklist asks")
+    weakest = min(confidences, key=lambda named: named[1], default=None)
+    if weakest and weakest[1] < threshold:
+        reasons.append(f"{weakest[0]} {weakest[1]:.0%} is below {threshold:.0%}")
     return Judgement(
-        verdict, line, _risk(risk.probabilities) if risk else None, confidence, tuple(reasons)
+        verdict=verdict,
+        line=line,
+        risk=risk,
+        confidence=weakest[1] if weakest else None,
+        reasons=tuple(reasons),
     )
 
 
@@ -140,5 +160,9 @@ def _answers_event(request: JevRequest, result: JevResult) -> dict[str, object]:
         "latency_ms": result.latency_ms,
         "choices": {k: [a.choice, a.confidence] for k, a in result.choices.items()},
         "nouls": {k: a.noul for k, a in result.nouls.items()},
-        "scores": {k: [_risk(a.probabilities), a.confidence] for k, a in result.scores.items()},
+        "scores": {
+            k: [risk, a.confidence]
+            for k, a in result.scores.items()
+            if (risk := _risk(a.probabilities)) is not None
+        },
     }

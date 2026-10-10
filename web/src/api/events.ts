@@ -26,6 +26,8 @@ const StepDataSchema = z.discriminatedUnion('step', [
     // display only, so not range-checked: a float a hair past 1 must not fail a live run
     choices: z.record(z.string(), z.tuple([z.string(), z.number()])).exactOptional(),
     nouls: z.record(z.string(), z.number()).exactOptional(),
+    // Jev Score answers: question id -> [most likely level, confidence] (S2 risk)
+    scores: z.record(z.string(), z.tuple([z.string(), z.number()])).exactOptional(),
     // LLM: why there was no usable answer, if so
     refusal: z.string().nullable().exactOptional(),
     error: z.string().nullable().exactOptional(),
