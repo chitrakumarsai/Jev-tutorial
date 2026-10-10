@@ -42,6 +42,11 @@ npm --prefix web run coverage
 npm --prefix web run lint
 npm --prefix web run typecheck
 npm --prefix web run build
+
+# E2E (Playwright; starts the API in replay mode and Vite itself, never calls live APIs)
+npm --prefix web exec playwright install chromium firefox webkit   # once
+npm --prefix web run e2e          # journey, axe (WCAG 2.2 AA), reduced motion, screenshots
+npm --prefix web run e2e:update   # re-record screenshot baselines (macOS) after a visual change
 ```
 
 ## API budget

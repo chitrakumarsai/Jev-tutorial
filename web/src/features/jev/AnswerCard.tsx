@@ -32,35 +32,43 @@ export function AnswerCard({ request }: Props) {
         </h3>
         {request.answers.length > 0 && <ConfidenceRing value={lowest} label="Lowest confidence" />}
       </div>
-      <dl className="answer-card__answers">
-        {request.answers.map((answer) => (
-          <div key={answer.key} className="answer">
-            <dt className="answer__question">{answer.question}</dt>
-            <dd className="answer__value">
-              <code>{answer.answer}</code>
-            </dd>
-            <dd className="answer__probability">
-              <span className="answer__bar" aria-hidden="true">
-                <motion.span
-                  className="answer__fill"
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: answer.probability }}
-                  transition={{
-                    duration: motionTokens.duration.normal,
-                    ease: motionTokens.easing.smooth,
-                  }}
-                />
-              </span>
-              <span className="answer__figure">
-                <span className="visually-hidden">
-                  {answer.kind === 'yes_no' ? 'Probability of yes' : 'Probability'}{' '}
+      {/* It scrolls when there are many answers, so the keyboard must be able to reach it. */}
+      <div
+        className="answer-card__scroll"
+        role="group"
+        aria-label={`Typed answers, ${request.label.full}`}
+        tabIndex={0}
+      >
+        <dl className="answer-card__answers">
+          {request.answers.map((answer) => (
+            <div key={answer.key} className="answer">
+              <dt className="answer__question">{answer.question}</dt>
+              <dd className="answer__value">
+                <code>{answer.answer}</code>
+              </dd>
+              <dd className="answer__probability">
+                <span className="answer__bar" aria-hidden="true">
+                  <motion.span
+                    className="answer__fill"
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: answer.probability }}
+                    transition={{
+                      duration: motionTokens.duration.normal,
+                      ease: motionTokens.easing.smooth,
+                    }}
+                  />
                 </span>
-                {formatPercent(answer.probability)}
-              </span>
-            </dd>
-          </div>
-        ))}
-      </dl>
+                <span className="answer__figure">
+                  <span className="visually-hidden">
+                    {answer.kind === 'yes_no' ? 'Probability of yes' : 'Probability'}{' '}
+                  </span>
+                  {formatPercent(answer.probability)}
+                </span>
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
     </motion.section>
   );
 }

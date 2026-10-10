@@ -96,4 +96,22 @@ describe('JevPipeline', () => {
     expect(within(october).getByText('yes')).toBeInTheDocument();
     expect(october).toHaveTextContent('Probability of yes 90%');
   });
+
+  it('lets the keyboard reach a long, scrolling list of answers', async () => {
+    const user = userEvent.setup();
+    render(<JevPipeline progress={completedView().sides.jev} />);
+    const contract = screen.getByRole('region', { name: /Master services agreement/ });
+    const answers = within(contract).getByRole('group', {
+      name: /^Typed answers, Master services agreement/,
+    });
+
+    const tabStops: Element[] = [];
+    for (let i = 0; i < 30 && document.activeElement !== answers; i++) {
+      await user.tab();
+      if (document.activeElement) tabStops.push(document.activeElement);
+    }
+
+    expect(tabStops).toContain(answers);
+    expect(within(answers).getByText('Late-fee grace days')).toBeInTheDocument();
+  });
 });
