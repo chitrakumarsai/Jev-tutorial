@@ -560,7 +560,12 @@
                 "enum": [
                   "present",
                   "absent",
-                  "partial",
+                  "partial"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "verified",
                   "unsupported",
                   "contradicted",

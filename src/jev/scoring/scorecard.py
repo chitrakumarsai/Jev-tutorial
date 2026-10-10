@@ -24,7 +24,7 @@ class ScoreItem(_Frozen):
     key_id: str
     status: ItemStatus
     finding_id: str | None
-    label: str | None = None  # how the UI names a missed item, e.g. "Breach notification"
+    label: str | None = None  # display name for the key item, e.g. "Breach notification"
 
 
 class SummaryRow(_Frozen):

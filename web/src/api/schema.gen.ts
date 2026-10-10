@@ -309,15 +309,8 @@ export interface components {
       variance?: string | null;
       /** Verdict */
       verdict?:
-        | (
-            | 'present'
-            | 'absent'
-            | 'partial'
-            | 'verified'
-            | 'unsupported'
-            | 'contradicted'
-            | 'fabricated'
-          )
+        | ('present' | 'absent' | 'partial')
+        | ('verified' | 'unsupported' | 'contradicted' | 'fabricated')
         | null;
     };
     /**

@@ -158,6 +158,20 @@ describe('FindingSchema for S2 and S3', () => {
     expect(FindingSchema.safeParse({ ...base, [field]: value }).success).toBe(false);
   });
 
+  it('accepts the null fields S1 findings carry', () => {
+    const s1 = { ...base, verdict: null, risk: null, claim: null };
+
+    expect(FindingSchema.safeParse(s1).success).toBe(true);
+  });
+
+  it.each([
+    [{ verdict: 'verified', risk: 'high' }],
+    [{ verdict: 'absent', risk: 'high' }],
+    [{ verdict: 'present', claim: 'A claim.' }],
+  ])('rejects fields that do not fit the verdict: %o', (fields) => {
+    expect(FindingSchema.safeParse({ ...base, ...fields }).success).toBe(false);
+  });
+
   it('accepts a labelled score item', () => {
     const item = { key_id: 'K3', status: 'missed', finding_id: null, label: 'Breach notice' };
     const card = { items: [item], false_positives: [], trap_hits: [], summary: [] };

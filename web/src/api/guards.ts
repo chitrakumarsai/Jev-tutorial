@@ -21,27 +21,48 @@ export const SpanRefSchema = z
   .object({ doc_id: z.string(), start: Count, end: Count, text: z.string() })
   .refine((span) => span.end >= span.start, 'span ends before it starts');
 
-export const FindingSchema = z.object({
-  id: z.string(),
-  kind: z.string(),
-  doc_id: z.string(),
-  line_ref: z.string().nullable().exactOptional(),
-  billed: MoneySchema.nullable().exactOptional(),
-  expected: MoneySchema.nullable().exactOptional(),
-  variance: MoneySchema.nullable().exactOptional(),
-  lane: z.enum(['auto', 'review']),
-  confidence: Probability.nullable().exactOptional(),
-  review_reason: z.string().nullable().exactOptional(),
-  evidence: z.array(SpanRefSchema),
-  traceable: z.boolean(),
-  // S2: is the checklist clause in the agreement? S3: does the citation hold up?
-  verdict: z
-    .enum(['present', 'absent', 'partial', 'verified', 'unsupported', 'contradicted', 'fabricated'])
-    .nullable()
-    .exactOptional(),
-  risk: z.enum(['low', 'medium', 'high', 'critical']).nullable().exactOptional(),
-  claim: z.string().nullable().exactOptional(),
-});
+export const FindingSchema = z
+  .object({
+    id: z.string(),
+    kind: z.string(),
+    doc_id: z.string(),
+    line_ref: z.string().nullable().exactOptional(),
+    billed: MoneySchema.nullable().exactOptional(),
+    expected: MoneySchema.nullable().exactOptional(),
+    variance: MoneySchema.nullable().exactOptional(),
+    lane: z.enum(['auto', 'review']),
+    confidence: Probability.nullable().exactOptional(),
+    review_reason: z.string().nullable().exactOptional(),
+    evidence: z.array(SpanRefSchema),
+    traceable: z.boolean(),
+    // S2: is the checklist clause in the agreement? S3: does the citation hold up?
+    verdict: z
+      .enum([
+        'present',
+        'absent',
+        'partial',
+        'verified',
+        'unsupported',
+        'contradicted',
+        'fabricated',
+      ])
+      .nullable()
+      .exactOptional(),
+    risk: z.enum(['low', 'medium', 'high', 'critical']).nullable().exactOptional(),
+    claim: z.string().nullable().exactOptional(),
+  })
+  // Mirrors Finding._fields_fit_the_verdict: risk only on a present or partial clause,
+  // a claim never on a clause verdict.
+  .refine(
+    (f) => f.risk == null || f.verdict === 'present' || f.verdict === 'partial',
+    'a risk level does not fit this verdict',
+  )
+  .refine(
+    (f) =>
+      f.claim == null ||
+      !(f.verdict === 'present' || f.verdict === 'absent' || f.verdict === 'partial'),
+    'a claim does not fit this verdict',
+  );
 
 export const MetricsSchema = z.object({
   latency_ms: Count,

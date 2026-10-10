@@ -51,3 +51,25 @@ def test_a_score_item_may_carry_a_display_label() -> None:
 
     assert item.label == "Breach notification"
     assert ScoreItem(key_id="K1", status="correct", finding_id="F1").label is None
+
+
+@pytest.mark.parametrize(
+    "fields",
+    [
+        {"verdict": "verified", "risk": "high"},
+        {"verdict": "fabricated", "risk": "low"},
+        {"verdict": "present", "claim": "A claim."},
+        {"verdict": "absent", "risk": "high"},
+    ],
+)
+def test_fields_that_do_not_fit_the_verdict_are_refused(fields: dict[str, str]) -> None:
+    with pytest.raises(ValidationError, match="does not fit"):
+        Finding.model_validate({"id": "F1", "kind": "x", "doc_id": "d", **fields})
+
+
+def test_all_new_fields_round_trip_and_are_frozen() -> None:
+    finding = Finding(id="F1", kind="c", doc_id="memo", verdict="contradicted", claim="X.")
+
+    assert Finding.model_validate_json(finding.model_dump_json()) == finding
+    with pytest.raises(ValidationError):
+        finding.verdict = "verified"  # type: ignore[misc]
