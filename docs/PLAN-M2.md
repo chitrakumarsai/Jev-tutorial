@@ -172,6 +172,13 @@ Well within the $5 cap per key. Each recording still needs your explicit approva
 
 ## 8. Decisions (accepted by presenter, 2026-10-10)
 
+**Revisions after the first S2 recordings (presenter, 2026-10-12).** The first live S2 runs showed the comparison was not like for like. Jev was asked a yes/no "does any line provide it" question, so "partial" could only appear as a coin flip, while the LLM was asked a three-way question with "partial" defined. Two fixes followed, and the stale recordings were discarded:
+- **Same question for both sides.** Jev's status is now a three-way Choice using the exact definitions the LLM prompt uses (`s2_clause_review/verdicts.py`). This replaces the Noul with its 0.7 / 0.35 thresholds.
+- **K01 key range.** The range is widened to lines 67–69 so it includes 9.1's exclusion of indirect losses, which the checklist names. No verdict or risk changed.
+- **Second recordings (same question): verdicts and risks matched for both sides on all runs.** Two more fixes followed (presenter, 2026-10-12), and those recordings were also discarded:
+  - **Provision lines only.** Jev's line options are provision lines. Headings, the note and the header fields are left out, just as the LLM can only quote provisions of 8 words or more.
+  - **Section confidence.** The gate's line confidence is the probability Jev puts on the lines of the section it picked. Uncertainty between lines of the same clause no longer sends a finding to review.
+
 1. **D-1: S3 memo source**: **(a) accepted**: LLM-drafted once (approved live call) + errors planted by hand. Rejected: (b) fully hand-written, (c) live each run without a scorecard.
 2. **S2 document**: **a new Northwind Data Processing & Services Addendum: accepted** (the S1 MSA was written for pricing, not clause risk).
 3. **Generic results shape**: **API-driven `summary` rows: accepted** (not a results component per scenario).

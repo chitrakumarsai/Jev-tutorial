@@ -2,18 +2,18 @@
   "scenario_id": "s2_clause_review",
   "version": 1,
   "authored_at": "2026-10-10",
-  "reviewed_at": "2026-10-10",
+  "reviewed_at": "2026-10-12",
   "line_numbering": "1-based lines of documents/addendum.md",
   "items": [
     {
       "id": "K01",
       "clause_id": "limitation_of_liability",
       "status": "present",
-      "first_line": 68,
+      "first_line": 67,
       "last_line": 69,
       "quote": "total liability under this Addendum is limited to the Fees paid in the",
       "risk": "high",
-      "rationale": "9.2 caps liability at one month's Fees, far below the usual 12 months.",
+      "rationale": "9.1 excludes indirect losses and 9.2 caps liability at one month's Fees, far below the usual 12 months. Range widened to include 9.1 (presenter decision 2026-10-12), since the checklist names the exclusion.",
       "trap": false
     },
     {

@@ -49,7 +49,13 @@ def test_every_checklist_clause_has_a_four_level_rubric() -> None:
 
 
 def test_the_bundled_key_records_the_presenters_review() -> None:
-    assert load_s2_key(DATA).reviewed_at == "2026-10-10"
+    assert load_s2_key(DATA).reviewed_at == "2026-10-12"
+
+
+def test_the_liability_clause_includes_the_indirect_loss_exclusion_the_checklist_names() -> None:
+    liability = next(i for i in load_s2_key(DATA).items if i.clause_id == "limitation_of_liability")
+
+    assert (liability.first_line, liability.last_line) == (67, 69)
 
 
 def test_the_key_plants_the_traps_from_the_plan() -> None:

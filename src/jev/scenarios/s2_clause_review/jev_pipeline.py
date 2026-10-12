@@ -1,6 +1,7 @@
 """S2 on the Jev side: one Jev request judges, for every checklist clause, which line addresses
-it, whether any line does, and how risky its terms are. Code turns those typed answers into a
-verdict per clause and sends anything uncertain or only partly there to the review lane."""
+it, whether it is present, partial or absent, and how risky its terms are. Code turns those typed
+answers into a verdict per clause and sends anything uncertain or only partly there to the review
+lane."""
 
 from dataclasses import dataclass
 
@@ -18,10 +19,10 @@ from jev.scenarios.s2_clause_review.jev_questions import (
 )
 from jev.scoring.metrics import CallUsage
 
-# From the semantic-find recipe, frozen before the key review (PLAN-M2 §3). Known limitation:
-# "partial" comes from a binary Noul landing mid-range, which reads as uncertainty, not as
-# "present but deficient"; a three-way question could separate the two in a later milestone.
-PRESENT, ABSENT = 0.7, 0.35
+# The verdict is Jev's three-way status choice, defined in the same words the LLM is given
+# (presenter decision 2026-10-12; replaces the recipe's Noul thresholds, which could only
+# reach "partial" as a coin flip).
+VERDICTS: frozenset[str] = frozenset({"present", "partial", "absent"})
 RISKS: tuple[Risk, ...] = ("low", "medium", "high", "critical")
 # Levels this close to the most likely one count as tied; a tie goes to the higher risk.
 RISK_TIE = 0.05
@@ -36,10 +37,6 @@ class Judgement:
     reasons: tuple[str, ...]
 
 
-def _verdict(noul: float) -> ClauseVerdict:
-    return "present" if noul >= PRESENT else "absent" if noul < ABSENT else "partial"
-
-
 def _risk(probabilities: dict[str, float]) -> Risk | None:
     """The most likely level, cautiously: near ties go to the higher risk. None when the
     answer has no readable level (keys are 0-based level indices as strings)."""
@@ -50,27 +47,40 @@ def _risk(probabilities: dict[str, float]) -> Risk | None:
     return RISKS[max(level for level, p in levels.items() if p >= top - RISK_TIE)]
 
 
+def _section_confidence(
+    probabilities: dict[str, float], line: NumberedLine | None, lines: dict[str, NumberedLine]
+) -> float:
+    """How sure Jev is of *where the clause is*: the probability on every line of the section
+    it picked. Doubt between lines of one clause (9.1 or 9.2) is not doubt about its place."""
+    if line is None or line.section is None:
+        return probabilities.get(line.id, 0.0) if line else 0.0
+    total = sum(
+        p
+        for line_id, p in probabilities.items()
+        if (other := lines.get(line_id)) is not None and other.section == line.section
+    )
+    return min(total, 1.0)
+
+
 def _judge(
     clause: ChecklistClause, result: JevResult, lines: dict[str, NumberedLine], threshold: float
 ) -> Judgement:
-    exists = result.nouls.get(f"{clause.id}__exists")
+    status = result.choices.get(f"{clause.id}__status")
     where = result.choices.get(f"{clause.id}__where")
     score = result.scores.get(f"{clause.id}__risk")
-    if exists is None:
-        reason = "Jev gave no answer on whether it is there"
+    if status is None or status.choice not in VERDICTS:
+        reason = "Jev gave no readable answer on whether it is there"
         return Judgement(verdict=None, line=None, risk=None, confidence=None, reasons=(reason,))
-    verdict = _verdict(exists.noul)
+    verdict: ClauseVerdict = status.choice  # type: ignore[assignment]  # checked against VERDICTS
     reasons: list[str] = []
-    # A partial verdict *is* a mid-range "exists" answer, so its near-zero confidence says
-    # nothing more; the gate then rests on the other answers.
-    confidences = [] if verdict == "partial" else [("exists", exists.confidence)]
+    confidences = [("status", status.confidence)]
     line = None
     if verdict != "absent":  # a line pick always names some line, so ignore it when absent
         if where is None:
             reasons.append("Jev gave no answer on where it is")
         else:
             line = lines.get(where.choice)
-            confidences.append(("where", where.confidence))
+            confidences.append(("where", _section_confidence(where.probabilities, line, lines)))
             if line is None:
                 reasons.append(f"Jev named line {where.choice}, which is not in the document")
     risk = _risk(score.probabilities) if score else None
