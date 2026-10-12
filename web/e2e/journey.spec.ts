@@ -57,4 +57,20 @@ test.describe('replay journey', () => {
     );
     await expect(page.getByText('Not in the agreement').first()).toBeVisible();
   });
+
+  test('replays the citation check and catches every planted error', async ({ page }) => {
+    await page.getByLabel('Scenario').selectOption({ label: 'Citation check' });
+    await expect(page.getByRole('tab', { name: /Audit memo/ })).toBeVisible();
+
+    await replayToResults(page);
+
+    const scorecard = page.getByRole('table', { name: /Scorecard/ });
+    await expect(scorecard.getByRole('row', { name: /Fabricated quote caught/ })).toContainText(
+      'Yes',
+    );
+    await expect(scorecard.getByRole('row', { name: /Planted errors caught/ })).toContainText(
+      '3 of 3',
+    );
+    await expect(page.getByText('Citation C3').first()).toBeVisible();
+  });
 });

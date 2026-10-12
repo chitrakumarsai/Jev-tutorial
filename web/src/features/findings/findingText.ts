@@ -29,6 +29,11 @@ export const VERDICT_LABELS: Readonly<
   fabricated: { text: 'Quote not in the source', symbol: '✕' },
 };
 
+/** "jev-C7" -> "C7": S3 findings are named after the memo citation they check. */
+export function citationId(finding: Finding): string {
+  return finding.id.split('-').at(-1) ?? finding.id;
+}
+
 export function riskLabel(risk: Risk): string {
   return `${risk.charAt(0).toUpperCase()}${risk.slice(1)} risk`;
 }
@@ -47,6 +52,11 @@ export function kindLabel(kind: string): string {
 
 /** One finding as the parsed response carried it: raw fields, exact strings. */
 export function parsedLine(finding: Finding): string {
+  if (finding.kind === 'citation' && finding.verdict != null) {
+    return [citationId(finding), finding.doc_id, finding.line_ref ?? MISSING, finding.verdict].join(
+      '  ',
+    );
+  }
   if (!isMoneyFinding(finding) && finding.verdict != null) {
     return [
       finding.doc_id,

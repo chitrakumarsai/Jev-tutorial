@@ -161,3 +161,10 @@ describe('S2 clause review', () => {
     ]);
   });
 });
+
+describe('S3 citation check', () => {
+  it('names each citation request and its question', () => {
+    expect(requestLabel('s3.citation.C7')).toEqual({ short: 'C7', full: 'Citation C7' });
+    expect(questionLabel('relation')).toBe('How the passage relates to the claim');
+  });
+});

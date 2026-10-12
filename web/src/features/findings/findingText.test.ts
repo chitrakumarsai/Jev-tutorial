@@ -54,4 +54,20 @@ describe('parsedLine', () => {
       'addendum  L068  limitation_of_liability  present  risk high  quote found',
     );
   });
+
+  it('prints a citation finding with its id and verdict', () => {
+    const citation = {
+      id: 'llm-C3',
+      kind: 'citation',
+      doc_id: 'msa',
+      line_ref: '§4.2',
+      lane: 'auto' as const,
+      evidence: [],
+      traceable: true,
+      verdict: 'fabricated' as const,
+      claim: 'c',
+    };
+
+    expect(parsedLine(citation)).toBe('C3  msa  §4.2  fabricated');
+  });
 });

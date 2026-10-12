@@ -39,6 +39,7 @@ export interface JevPipeline {
 }
 
 const TERMS: Readonly<Record<string, string>> = {
+  relation: 'How the passage relates to the claim',
   zone_a_rate: 'Zone A rate',
   zone_b_rate: 'Zone B rate',
   detention_rate: 'Detention rate',
@@ -63,6 +64,7 @@ const CLAUSE_QUESTIONS: Readonly<Record<string, string>> = {
   risk: 'risk level',
 };
 const CLAUSES_PURPOSE = 's2.clauses';
+const CITATION_PURPOSE = /^s3\.citation\.(C\d+)$/;
 const CLAUSE_KEY = /^(.+)__(where|status|risk)$/;
 const CLAUSE_ORDER = ['where', 'status', 'risk'];
 // The backend's cut-off for reading a yes/no answer (NOUL_YES in jev_pipeline.py).
@@ -94,6 +96,8 @@ export function questionLabel(key: string): string {
 /** "s1.contract" is the agreement; "s1.invoice.inv-2026-04" is that invoice. */
 export function requestLabel(purpose: string): DocumentLabel {
   if (purpose === CLAUSES_PURPOSE) return { short: 'Clauses', full: 'Clause checklist' };
+  const citation = CITATION_PURPOSE.exec(purpose)?.[1];
+  if (citation) return { short: citation, full: `Citation ${citation}` };
   if (purpose.endsWith('.contract')) return documentLabel('msa');
   return documentLabel(purpose.split('.').at(-1) ?? purpose);
 }

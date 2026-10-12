@@ -2,6 +2,7 @@
 
 > Source of truth: [PRD.md](PRD.md) Phase 6 (**S2 + S3**). Builds on [PLAN.md](PLAN.md) (Milestone 1, S1 MVP, complete with U9 / PR #17) and the ADRs in [adr/](adr/).
 > Drafted 2026-10-10. **Status: approved by the presenter 2026-10-10** (decisions in §8 accepted as recommended).
+> **Delivered 2026-10-12:** S2 and S3 are implemented, recorded (3 live runs each) and replayable in the app, with E2E journeys (PRs #18–#33). See the README's scenario table for the recorded results.
 > Success (PRD): all three scenarios scored and animated, and S2 counts toward the headline metric (Jev accuracy ≥ LLM on the S1 **and** S2 answer keys across 3 runs).
 
 ---

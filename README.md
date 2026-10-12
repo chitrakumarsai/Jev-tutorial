@@ -5,7 +5,17 @@ A demo app for the team and business stakeholders. It runs the same synthetic au
 - **Plain LLM:** one well-written prompt to OpenAI (`gpt-6-luna`) that reads, extracts, calculates and judges.
 - **Jev + code:** code finds candidate values and does every calculation; [TypeSafe's Jev](https://docs.typesafe.ai/introduction) makes small typed judgments (Choice / Score / Noul) with calibrated confidence; low-confidence items go to an auditor review lane.
 
-Both sides are scored against hand-written answer keys. See [docs/PRD.md](docs/PRD.md) and [docs/PLAN.md](docs/PLAN.md).
+Both sides are scored against hand-written answer keys. See [docs/PRD.md](docs/PRD.md), [docs/PLAN.md](docs/PLAN.md) and [docs/PLAN-M2.md](docs/PLAN-M2.md).
+
+## Scenarios
+
+| Scenario | What both sides do | Recorded result (3 runs each) |
+|---|---|---|
+| **S1 Contract-to-invoice reconciliation** | Check 12 freight invoices against the agreement | Jev + code 14/14, exact total variance |
+| **S2 Clause risk review** | Check a data-processing addendum against a 10-clause checklist, one clause missing | Both 10/10; Jev's answers identical across runs; the 2 partial clauses go to review |
+| **S3 Citation check** | Check the 10 citations of an LLM-drafted memo, four errors planted | Jev 10/10 with no wrong verdict and identical verdicts; uncertain ones go to review. LLM 9, 10, 9 |
+
+Both sides get the same documents, the same definitions and the same question for each item, and the LLM's exact prompt is shown in the app. Live calls are recorded by the presenter (`jev.cli record <s1|s2|s3>`), and Replay plays those real responses back.
 
 > Synthetic data only (fictional "Northwind Logistics"). Not for real audit work.
 
