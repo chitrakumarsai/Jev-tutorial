@@ -196,3 +196,27 @@ def test_only_newlines_split_lines_so_numbering_matches_the_file() -> None:
         ("L004", "line four"),
     ]
     assert all(doc.text[line.start : line.end] == line.text for line in lines)
+
+
+async def test_doubt_between_lines_of_the_same_clause_is_not_doubt_about_where_it_is() -> None:
+    split = {"limitation_of_liability__where": {"L067": 0.5, "L068": 0.45, "L084": 0.05}}
+    fake = FakeS2Jev(KEY, where_confidence={"limitation_of_liability__where": 0.5})
+    fake.where_probabilities.update(split)
+
+    output, _ = await run(fake)
+    liability = next(f for f in output.findings if f.kind == "limitation_of_liability")
+
+    assert liability.lane == "auto"
+    assert liability.confidence == pytest.approx(0.95)
+
+
+async def test_doubt_across_sections_still_goes_to_review() -> None:
+    split = {"limitation_of_liability__where": {"L067": 0.5, "L074": 0.45, "L084": 0.05}}
+    fake = FakeS2Jev(KEY, where_confidence={"limitation_of_liability__where": 0.5})
+    fake.where_probabilities.update(split)
+
+    output, _ = await run(fake)
+    liability = next(f for f in output.findings if f.kind == "limitation_of_liability")
+
+    assert liability.lane == "review"
+    assert "where 50% is below 80%" in str(liability.review_reason)

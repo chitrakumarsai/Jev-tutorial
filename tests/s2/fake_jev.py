@@ -13,6 +13,7 @@ class FakeS2Jev:
     key: S2Key
     confidence: float = 0.95
     where_confidence: dict[str, float] = field(default_factory=dict)  # question key -> conf
+    where_probabilities: dict[str, dict[str, float]] = field(default_factory=dict)
     statuses: dict[str, str] = field(default_factory=dict)  # question key -> forced status
     status_confidence: dict[str, float] = field(default_factory=dict)
     lines: dict[str, str] = field(default_factory=dict)  # question key -> forced line id
@@ -40,7 +41,8 @@ class FakeS2Jev:
             elif kind == "where":
                 line = self.lines.get(qkey) or f"L{item.first_line or 1:03d}"
                 conf = self.where_confidence.get(qkey, self.confidence)
-                choices[qkey] = ChoiceA(choice=line, probabilities={line: conf}, confidence=conf)
+                probabilities = self.where_probabilities.get(qkey) or {line: conf}
+                choices[qkey] = ChoiceA(choice=line, probabilities=probabilities, confidence=conf)
             else:
                 probabilities = (
                     self.risk_probabilities[qkey]

@@ -47,6 +47,21 @@ def _risk(probabilities: dict[str, float]) -> Risk | None:
     return RISKS[max(level for level, p in levels.items() if p >= top - RISK_TIE)]
 
 
+def _section_confidence(
+    probabilities: dict[str, float], line: NumberedLine | None, lines: dict[str, NumberedLine]
+) -> float:
+    """How sure Jev is of *where the clause is*: the probability on every line of the section
+    it picked. Doubt between lines of one clause (9.1 or 9.2) is not doubt about its place."""
+    if line is None or line.section is None:
+        return probabilities.get(line.id, 0.0) if line else 0.0
+    total = sum(
+        p
+        for line_id, p in probabilities.items()
+        if (other := lines.get(line_id)) is not None and other.section == line.section
+    )
+    return min(total, 1.0)
+
+
 def _judge(
     clause: ChecklistClause, result: JevResult, lines: dict[str, NumberedLine], threshold: float
 ) -> Judgement:
@@ -65,7 +80,7 @@ def _judge(
             reasons.append("Jev gave no answer on where it is")
         else:
             line = lines.get(where.choice)
-            confidences.append(("where", where.confidence))
+            confidences.append(("where", _section_confidence(where.probabilities, line, lines)))
             if line is None:
                 reasons.append(f"Jev named line {where.choice}, which is not in the document")
     risk = _risk(score.probabilities) if score else None

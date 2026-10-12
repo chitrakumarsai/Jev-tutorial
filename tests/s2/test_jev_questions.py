@@ -50,7 +50,8 @@ def test_the_state_carries_every_numbered_line_once() -> None:
     assert "L068| 9.2 Each party's total liability" in text
     where = request.questions[f"{CHECKLIST.clauses[0].id}__where"]
     assert isinstance(where, ChoiceQ)
-    assert len(where.criteria) == len(numbered_lines(ADDENDUM)) <= MAX_CHOICE_OPTIONS
+    provisions = [line for line in numbered_lines(ADDENDUM) if line.is_provision]
+    assert len(where.criteria) == len(provisions) <= MAX_CHOICE_OPTIONS
 
 
 def test_jev_gets_the_same_status_definitions_as_the_llm_prompt() -> None:
@@ -64,3 +65,25 @@ def test_jev_gets_the_same_status_definitions_as_the_llm_prompt() -> None:
     for description in status.criteria.values():
         assert isinstance(description, str)
         assert description in flat
+
+
+def test_jev_may_only_point_at_provision_lines_not_headings_or_header_fields() -> None:
+    request = clause_request(ADDENDUM, CHECKLIST, run_id="r1")
+    where = request.questions[f"{CHECKLIST.clauses[0].id}__where"]
+    assert isinstance(where, ChoiceQ)
+    by_id = {line.id: line for line in numbered_lines(ADDENDUM)}
+
+    options = [by_id[line_id].text for line_id in where.criteria]
+    assert "L040" not in where.criteria  # "## 5. Audit"
+    assert not any(t.startswith(("#", ">", "**")) for t in options)
+    assert "L042" in where.criteria and "L068" in where.criteria
+    state = request.state
+    assert isinstance(state, dict) and "L040| ## 5. Audit" in str(state["addendum"])
+
+
+def test_every_line_knows_its_section() -> None:
+    by_id = {line.id: line for line in numbered_lines(ADDENDUM)}
+
+    assert by_id["L067"].section == by_id["L068"].section == "9"
+    assert by_id["L074"].section == "10"
+    assert by_id["L001"].section is None  # the title, before any section
