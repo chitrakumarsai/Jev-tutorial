@@ -101,6 +101,23 @@ def save_draft(draft: MemoDraft, out_dir: Path) -> None:
     (out_dir / "memo.md").write_text(memo, "utf-8")
 
 
+def _ask(input_fn: Callable[[str], str], estimate: Decimal) -> str:
+    try:
+        return input_fn(
+            f"Drafting the S3 memo: one live LLM call, worst case ${estimate:.4f}. "
+            f"Type {CONFIRM_WORD} to spend: "
+        )
+    except (EOFError, KeyboardInterrupt):
+        return ""
+
+
+async def _call_and_close(llm: DraftLlm, request: LlmRequest) -> LlmResult[Any]:
+    try:
+        return await llm.parse(request, MemoDraft)
+    finally:
+        await llm.aclose()
+
+
 def draft_memo(
     documents: DocumentSet,
     out_dir: Path,
@@ -115,19 +132,17 @@ def draft_memo(
     try:
         estimate = llm.estimate(request, MemoDraft)
         guard.preflight({("openai", llm.key_fp): estimate})
-        try:
-            answer = input_fn(
-                f"Drafting the S3 memo: one live LLM call, worst case ${estimate:.4f}. "
-                f"Type {CONFIRM_WORD} to spend: "
-            )
-        except (EOFError, KeyboardInterrupt):
-            answer = ""
-        if answer.strip() != CONFIRM_WORD:
-            print("Cancelled; nothing was sent.", file=sys.stderr)
-            return 1
-        result = asyncio.run(llm.parse(request, MemoDraft))
-    finally:
+        answer = _ask(input_fn, estimate)
+    except BaseException:
         asyncio.run(llm.aclose())
+        raise
+    if answer.strip() != CONFIRM_WORD:
+        asyncio.run(llm.aclose())
+        print("Cancelled; nothing was sent.", file=sys.stderr)
+        return 1
+    # The call and closing its connections must share one event loop: closing in a second
+    # asyncio.run fails ("Event loop is closed") after the call has been paid for.
+    result = asyncio.run(_call_and_close(llm, request))
     if result.parsed is None:
         print(
             f"No usable draft ({result.refusal or result.error}); nothing saved.", file=sys.stderr

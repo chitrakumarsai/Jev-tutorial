@@ -1,6 +1,7 @@
 """D6: one approved live call drafts the S3 audit memo; nothing is sent without RECORD-style
 confirmation, and every quote is checked against the S1 documents."""
 
+import asyncio
 import json
 from decimal import Decimal
 from pathlib import Path
@@ -42,11 +43,13 @@ class FakeLlm:
 
     def __init__(self, draft: MemoDraft | None) -> None:
         self.draft, self.requests, self.closed = draft, [], False
+        self.loops: dict[str, int] = {}
 
     def estimate(self, request: LlmRequest, schema: type[Any]) -> Decimal:
         return Decimal("0.0200")
 
     async def parse(self, request: LlmRequest, schema: type[Any]) -> LlmResult[Any]:
+        self.loops["parse"] = id(asyncio.get_running_loop())
         self.requests.append(request)
         return LlmResult[schema](  # type: ignore[valid-type]
             model="gpt-6-luna",
@@ -56,6 +59,7 @@ class FakeLlm:
         )
 
     async def aclose(self) -> None:
+        self.loops["aclose"] = id(asyncio.get_running_loop())
         self.closed = True
 
 
@@ -148,3 +152,14 @@ def test_the_cli_refuses_while_live_mode_is_off(
     assert code == 1
     assert "Refused" in capsys.readouterr().err
     assert not (tmp_path / "memo_draft.json").exists()
+
+
+def test_the_call_and_closing_its_connections_share_one_event_loop(tmp_path: Path) -> None:
+    # Regression: closing in a second asyncio.run raised "Event loop is closed" after a
+    # paid call, so the draft was lost.
+    llm = FakeLlm(a_draft())
+
+    code, _ = run(tmp_path, llm, CONFIRM_WORD)
+
+    assert code == 0
+    assert llm.loops["parse"] == llm.loops["aclose"]
