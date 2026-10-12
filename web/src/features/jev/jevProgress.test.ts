@@ -126,10 +126,38 @@ describe('S2 clause review', () => {
     );
 
     const answers = pipeline.requests[0]?.answers ?? [];
-    expect(answers.map((a) => [a.question, a.answer, a.confidence])).toEqual([
-      ['Insurance: which line', 'L055', 0.9],
-      ['Insurance: is it there', 'partial', 0.92],
-      ['Insurance: risk level', 'high', 0.88],
+    expect(answers.map((a) => [a.question, a.answer, a.probability, a.kind])).toEqual([
+      ['Insurance: which line', 'L055', 0.9, 'choice'],
+      ['Insurance: is it there', 'partial', 0.92, 'choice'],
+      ['Insurance: risk level', 'high', 0.88, 'score'],
+    ]);
+  });
+
+  it('keeps each clause’s three answers together, in checklist order', () => {
+    const pipeline = jevPipeline(
+      progress(
+        step({
+          step: 'answers',
+          purpose: 's2.clauses',
+          latency_ms: 1,
+          choices: {
+            soc2_audit__where: ['L010', 0.9],
+            insurance__where: ['L055', 0.9],
+            soc2_audit__status: ['present', 0.9],
+            insurance__status: ['partial', 0.9],
+          },
+          scores: { soc2_audit__risk: ['low', 0.9], insurance__risk: ['high', 0.9] },
+        }),
+      ),
+    );
+
+    expect(pipeline.requests[0]?.answers.map((a) => a.question)).toEqual([
+      'Soc2 audit: which line',
+      'Soc2 audit: is it there',
+      'Soc2 audit: risk level',
+      'Insurance: which line',
+      'Insurance: is it there',
+      'Insurance: risk level',
     ]);
   });
 });

@@ -60,7 +60,11 @@ export function AnswerCard({ request }: Props) {
                 </span>
                 <span className="answer__figure">
                   <span className="visually-hidden">
-                    {answer.kind === 'yes_no' ? 'Probability of yes' : 'Probability'}{' '}
+                    {answer.kind === 'yes_no'
+                      ? 'Probability of yes'
+                      : answer.kind === 'score'
+                        ? 'Confidence in this level'
+                        : 'Probability'}{' '}
                   </span>
                   {formatPercent(answer.probability)}
                 </span>

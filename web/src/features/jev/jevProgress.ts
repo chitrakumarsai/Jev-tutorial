@@ -16,7 +16,8 @@ export interface TypedAnswer {
   readonly probability: number;
   /** Confidence in the answer shown: the probability, or for yes/no max(p, 1 - p). */
   readonly confidence: number;
-  readonly kind: 'choice' | 'yes_no';
+  /** A Score answer (S2 risk) carries Jev's confidence in its level, not a probability. */
+  readonly kind: 'choice' | 'yes_no' | 'score';
 }
 
 export interface JevRequest {
@@ -62,6 +63,8 @@ const CLAUSE_QUESTIONS: Readonly<Record<string, string>> = {
   risk: 'risk level',
 };
 const CLAUSES_PURPOSE = 's2.clauses';
+const CLAUSE_KEY = /^(.+)__(where|status|risk)$/;
+const CLAUSE_ORDER = ['where', 'status', 'risk'];
 // The backend's cut-off for reading a yes/no answer (NOUL_YES in jev_pipeline.py).
 const YES = 0.5;
 
@@ -72,9 +75,9 @@ function readable(key: string): string {
 
 /** A question id as a person would ask it ("L4 duplicates L5?"). */
 export function questionLabel(key: string): string {
-  const clause = /^([a-z_]+)__(where|status|risk)$/.exec(key);
-  if (clause?.[1] && clause[2])
-    return `${readable(clause[1])}: ${CLAUSE_QUESTIONS[clause[2]] ?? ''}`;
+  const clause = CLAUSE_KEY.exec(key);
+  const clauseQuestion = clause?.[2] ? CLAUSE_QUESTIONS[clause[2]] : undefined;
+  if (clause?.[1] && clauseQuestion) return `${readable(clause[1])}: ${clauseQuestion}`;
   if (key.endsWith(REVERSED)) {
     return `${questionLabel(key.slice(0, -REVERSED.length))}, options reversed`;
   }
@@ -96,6 +99,23 @@ export function requestLabel(purpose: string): DocumentLabel {
 }
 
 type AnswersStep = Extract<StepData, { step: 'answers' }>;
+
+/** S2: a clause's where / status / risk answers side by side, clauses in first-seen order.
+ * Other answers keep their order. */
+function byClause(answers: TypedAnswer[]): TypedAnswer[] {
+  const clauses: string[] = [];
+  for (const answer of answers) {
+    const id = CLAUSE_KEY.exec(answer.key)?.[1];
+    if (id && !clauses.includes(id)) clauses.push(id);
+  }
+  if (clauses.length === 0) return answers;
+  const rank = (answer: TypedAnswer): number => {
+    const match = CLAUSE_KEY.exec(answer.key);
+    if (!match?.[1] || !match[2]) return Number.MAX_SAFE_INTEGER;
+    return clauses.indexOf(match[1]) * CLAUSE_ORDER.length + CLAUSE_ORDER.indexOf(match[2]);
+  };
+  return [...answers].sort((a, b) => rank(a) - rank(b));
+}
 
 function typedAnswers(data: AnswersStep): TypedAnswer[] {
   const choices = Object.entries(data.choices ?? {}).map(
@@ -124,10 +144,10 @@ function typedAnswers(data: AnswersStep): TypedAnswer[] {
       answer,
       probability: confidence,
       confidence,
-      kind: 'choice',
+      kind: 'score',
     }),
   );
-  return [...choices, ...scores, ...yesNo];
+  return byClause([...choices, ...scores, ...yesNo]);
 }
 
 function withRequest(requests: readonly JevRequest[], purpose: string): JevRequest[] {
