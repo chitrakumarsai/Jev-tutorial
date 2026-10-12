@@ -43,4 +43,16 @@ test.describe('replay journey', () => {
     await expect(page.getByText('Live calls are turned off on this server.')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Run live' })).toBeDisabled();
   });
+
+  test('offers the clause review, with its addendum and exact prompt, before it is recorded', async ({
+    page,
+  }) => {
+    await page.getByLabel('Scenario').selectOption({ label: 'Clause risk review' });
+
+    await expect(page.getByRole('heading', { level: 2, name: 'Clause risk review' })).toBeVisible();
+    await expect(page.getByRole('tab', { name: /Data processing addendum/ })).toBeVisible();
+    await expect(page.getByText('acting for the Customer', { exact: false })).toBeAttached();
+    await expect(page.getByText('No recordings yet. Record a live run first.')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Replay recorded run' })).toBeDisabled();
+  });
 });

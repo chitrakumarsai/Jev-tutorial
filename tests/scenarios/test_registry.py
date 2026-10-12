@@ -58,7 +58,7 @@ def test_s1_spec_builds_the_same_requests_as_the_s1_pipelines() -> None:
     docs = spec.load_documents(DATA)
 
     settings = Settings(_env_file=None, review_threshold=0.8)  # type: ignore[call-arg]
-    jev, llm = spec.build_pipelines(docs, settings, "run-1")
+    jev, llm = spec.load_pipelines(DATA)(docs, settings, "run-1")
 
     direct_docs = load_s1_documents(DATA)
     assert (
@@ -92,3 +92,17 @@ def test_a_spec_can_be_copied_under_another_id() -> None:
     copy = replace(spec, id="s1_copy", title="Copy")
 
     assert (copy.id, copy.title, spec.id) == ("s1_copy", "Copy", SCENARIO_ID)
+
+
+def test_s2_is_registered_with_its_alias_and_consistent_data() -> None:
+    spec = get_scenario("s2")
+    assert spec is not None
+    settings = Settings(_env_file=None, review_threshold=0.8)  # type: ignore[call-arg]
+
+    jev, llm = spec.load_pipelines(DATA)(spec.load_documents(DATA), settings, "run-1")
+
+    assert spec.id == "s2_clause_review"
+    assert len(jev.requests()) == 1
+    assert '<document id="addendum">' in llm.request().input
+    assert spec.validate_data(DATA) == []
+    assert spec.load_scorer(DATA)([]).of == 10

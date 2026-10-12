@@ -12,4 +12,11 @@ describe('documentLabel', () => {
   ])('labels %s', (docId, label) => {
     expect(documentLabel(docId)).toEqual(label);
   });
+
+  it('names the S2 addendum', () => {
+    expect(documentLabel('addendum')).toEqual({
+      short: 'Addendum',
+      full: 'Data processing addendum',
+    });
+  });
 });
