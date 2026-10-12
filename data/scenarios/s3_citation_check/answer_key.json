@@ -1,0 +1,88 @@
+{
+  "scenario_id": "s3_citation_check",
+  "version": 1,
+  "authored_at": "2026-10-12",
+  "reviewed_at": null,
+  "items": [
+    {
+      "id": "K1",
+      "citation_id": "C1",
+      "verdict": "verified",
+      "section_correct": false,
+      "trap": true,
+      "rationale": "Planted: the quote is real and supports the claim, but it is in \u00a73.1 (Rates), not \u00a75.1 (Fuel surcharge)."
+    },
+    {
+      "id": "K2",
+      "citation_id": "C2",
+      "verdict": "verified",
+      "section_correct": true,
+      "trap": false,
+      "rationale": "\u00a74.1 states the 5% discount once cumulative Loads exceed 1,000."
+    },
+    {
+      "id": "K3",
+      "citation_id": "C3",
+      "verdict": "fabricated",
+      "section_correct": null,
+      "trap": true,
+      "rationale": "Planted: no document contains this quote; it also reverses \u00a74.2 (the discount starts the month after)."
+    },
+    {
+      "id": "K4",
+      "citation_id": "C4",
+      "verdict": "verified",
+      "section_correct": true,
+      "trap": false,
+      "rationale": "June invoice lines L1\u2013L2 show 140 + 50 loads."
+    },
+    {
+      "id": "K5",
+      "citation_id": "C5",
+      "verdict": "verified",
+      "section_correct": true,
+      "trap": false,
+      "rationale": "July invoice lines L1\u2013L2 bill line-haul at the full contract rates."
+    },
+    {
+      "id": "K6",
+      "citation_id": "C6",
+      "verdict": "verified",
+      "section_correct": true,
+      "trap": false,
+      "rationale": "April invoice L3 bills a 22% fuel surcharge of $57,530."
+    },
+    {
+      "id": "K7",
+      "citation_id": "C7",
+      "verdict": "contradicted",
+      "section_correct": true,
+      "trap": true,
+      "rationale": "Planted: \u00a75.2 caps the surcharge at 18%, not 25%."
+    },
+    {
+      "id": "K8",
+      "citation_id": "C8",
+      "verdict": "unsupported",
+      "section_correct": true,
+      "trap": true,
+      "rationale": "Planted: \u00a73.2 sets two free hours and the detention rate; it says nothing about written pre-approval."
+    },
+    {
+      "id": "K9",
+      "citation_id": "C9",
+      "verdict": "verified",
+      "section_correct": true,
+      "trap": false,
+      "rationale": "December invoice L4 bills two hours of detention."
+    },
+    {
+      "id": "K10",
+      "citation_id": "C10",
+      "verdict": "verified",
+      "section_correct": true,
+      "trap": false,
+      "rationale": "May invoice L5 bills the 1.5% late fee on the March invoice paid 11 May."
+    }
+  ]
+}

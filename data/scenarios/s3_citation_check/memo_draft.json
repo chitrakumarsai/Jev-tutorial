@@ -1,0 +1,76 @@
+{
+  "title": "2026 Freight Invoice Review — Northwind Logistics",
+  "body": "To: Audit Committee\nSubject: Comparison of 2026 freight invoices with NWL-MSA-2026-014\n\nI reviewed the twelve monthly invoices against the agreement’s rates, discount, fuel-surcharge, detention, and late-fee terms. The base line-haul rates are consistent with the contractual Zone A and Zone B prices. [C1] The invoiced quantities and subtotals generally recalculate at those rates; the principal exception is that eligible later invoices do not reflect the volume discount.\n\nThe agreement grants a 5% discount on all line-haul charges once cumulative annual Loads exceed 1,000. [C2] The discount begins with invoices issued for the calendar month after the threshold is first exceeded, rather than on the threshold-crossing month itself. [C3] Loads from January through May total 895; June adds 190, bringing the cumulative total to 1,085 and triggering the discount for July invoices. [C4] The July invoice, however, shows the full $247,850 line-haul subtotal at undiscounted rates. [C5] The same issue continues from August through December: the invoices show no reduction to line-haul charges. The resulting line-haul discount shortfall for July–December is $74,980.\n\nThe fuel surcharge also requires correction for the discounted months. Under the agreement it is calculated on the same invoice’s line-haul charges after any volume discount and cannot exceed 18%. In April, before the volume discount became effective, the carrier billed 22% of the $261,500 line-haul subtotal, or $57,530. [C6] That exceeds the contractual cap; at 18%, the April surcharge would be $47,070, a potential overcharge of $10,460. [C7] For July–December, applying each invoice’s stated percentage to the discounted line-haul base would reduce fuel surcharges by approximately $12,561. Thus, the estimated combined exposure for the volume discount and related fuel calculation is approximately $87,541, before considering detention. These are calculated amounts and should be confirmed against supporting records and any applicable index publication.\n\nDetention charges also appear inconsistent with the two free hours allowed per occurrence. [C8] December bills $170 for a stated two-hour detention, although no time exceeds the free allowance. [C9] The February four-hour charge and May three-hour charge also appear to include the free hours; assuming the stated durations include all waiting time, those three invoices together appear to overstate detention by $510. The carrier should provide occurrence-level time records and explain its billing convention before any final adjustment is recorded.\n\nThe May invoice’s $4,075.08 late fee on the March invoice appears arithmetically consistent with 1.5% of $271,672. The stated payment date, 11 May, is more than 30 days after the 31 March invoice date, and the agreement permits such a fee to be billed later. [C10] I saw no repeat onboarding charge in the invoices reviewed. The monthly invoice dates and stated net-30 due dates are also generally consistent with the agreement; the supplied invoices alone do not establish when payments were made, other than the payment date stated for March.\n\nI recommend that management request corrected invoices or credits for the apparent April surcharge excess and July–December discount and surcharge amounts, and obtain supporting detention records. The agreement allows an annual audit with 15 business days’ notice and requires overbilled amounts identified in an audit to be credited within 30 days. Management should retain its recalculation and confirm the resulting credits against the carrier’s records.",
+  "citations": [
+    {
+      "id": "C1",
+      "claim": "The base line-haul rates are consistent with the contractual Zone A and Zone B prices.",
+      "quote": "Zone A: $1,250.00 per Load. Zone B: $1,480.00 per Load.",
+      "doc_id": "msa",
+      "section": "§3.1"
+    },
+    {
+      "id": "C2",
+      "claim": "The agreement grants a 5% discount on all line-haul charges once cumulative annual Loads exceed 1,000.",
+      "quote": "When cumulative Loads in the Contract Year exceed 1,000, Customer receives a discount of 5% off all line-haul charges.",
+      "doc_id": "msa",
+      "section": "§4.1"
+    },
+    {
+      "id": "C3",
+      "claim": "The discount begins with invoices issued for the calendar month after the threshold is first exceeded.",
+      "quote": "The discount applies to every invoice issued for the calendar month after the month in which cumulative Loads first exceed 1,000, and to all later invoices in the Contract Year.",
+      "doc_id": "msa",
+      "section": "§4.2"
+    },
+    {
+      "id": "C4",
+      "claim": "Loads from January through May total 895; June adds 190, bringing the cumulative total to 1,085 and triggering the discount for July invoices.",
+      "quote": "| L1 | Line-haul, Zone A | 140 loads | $1,250.00 | $175,000.00 |\n| L2 | Line-haul, Zone B | 50 loads | $1,480.00 | $74,000.00 |",
+      "doc_id": "inv-2026-06",
+      "section": "L1–L2"
+    },
+    {
+      "id": "C5",
+      "claim": "The July invoice shows the full $247,850 line-haul subtotal at undiscounted rates.",
+      "quote": "| L1 | Line-haul, Zone A | 145 loads | $1,250.00 | $181,250.00 |\n| L2 | Line-haul, Zone B | 45 loads | $1,480.00 | $66,600.00 |",
+      "doc_id": "inv-2026-07",
+      "section": "L1–L2"
+    },
+    {
+      "id": "C6",
+      "claim": "In April, the carrier billed 22% of the $261,500 line-haul subtotal, or $57,530.",
+      "quote": "|  | Line-haul subtotal |  |  | $261,500.00 |\n| L3 | Fuel surcharge (22.0% of line-haul) |  |  | $57,530.00 |",
+      "doc_id": "inv-2026-04",
+      "section": "L3"
+    },
+    {
+      "id": "C7",
+      "claim": "The April surcharge exceeds the contractual cap; at 18%, the surcharge would be $47,070, a potential overcharge of $10,460.",
+      "quote": "The surcharge percentage follows the published diesel index for the invoice month but may not exceed 18% of line-haul charges.",
+      "doc_id": "msa",
+      "section": "§5.2"
+    },
+    {
+      "id": "C8",
+      "claim": "Detention charges appear inconsistent with the two free hours allowed per occurrence.",
+      "quote": "Waiting time beyond two free hours at a Customer site is billed at $85.00 per hour, per occurrence, as a single line.",
+      "doc_id": "msa",
+      "section": "§3.2"
+    },
+    {
+      "id": "C9",
+      "claim": "December bills $170 for a stated two-hour detention, although no time exceeds the free allowance.",
+      "quote": "| L4 | Detention, Store 042, 2 hours | 2 h | $85.00 | $170.00 |",
+      "doc_id": "inv-2026-12",
+      "section": "L4"
+    },
+    {
+      "id": "C10",
+      "claim": "The May invoice’s $4,075.08 late fee on the March invoice appears arithmetically consistent with 1.5% of $271,672 and the stated late payment date.",
+      "quote": "Late fee on INV-2026-03 (invoice date 31 March 2026, paid 11 May 2026): 1.5% of $271,672.00",
+      "doc_id": "inv-2026-05",
+      "section": "L5"
+    }
+  ]
+}
