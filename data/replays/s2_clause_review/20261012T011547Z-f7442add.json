@@ -1,0 +1,831 @@
+{
+  "id": "20261012T011547Z-f7442add",
+  "scenario_id": "s2_clause_review",
+  "recorded_at": "2026-10-12T01:15:47.960890+00:00",
+  "jev_model": "jev-latest",
+  "llm_model": "gpt-6-luna",
+  "calls": [
+    {
+      "request_hash": "d3a741fca2669535831f23c25d8c74e40984ae83b42eb9b07585a491378ca7d3",
+      "provider": "typesafe",
+      "purpose": "s2.clauses",
+      "model": "jev-latest",
+      "latency_ms": 395,
+      "result": {
+        "model": "jev-1.13.0",
+        "latency_ms": 395,
+        "choices": {
+          "limitation_of_liability__where": {
+            "choice": "L068",
+            "probabilities": {
+              "L013": 0.0,
+              "L014": 0.0,
+              "L015": 0.0,
+              "L016": 0.0,
+              "L020": 0.0,
+              "L021": 0.0,
+              "L022": 0.0,
+              "L023": 0.0,
+              "L027": 0.0,
+              "L028": 0.0,
+              "L029": 0.0,
+              "L030": 0.0,
+              "L034": 0.0,
+              "L035": 0.0,
+              "L036": 0.0,
+              "L037": 0.0,
+              "L038": 0.0,
+              "L042": 0.0,
+              "L043": 0.0,
+              "L044": 0.0,
+              "L045": 0.0,
+              "L049": 0.0,
+              "L050": 0.0,
+              "L051": 0.0,
+              "L055": 0.0,
+              "L056": 0.0,
+              "L060": 0.0,
+              "L061": 0.0,
+              "L062": 0.0,
+              "L063": 0.0,
+              "L067": 0.39,
+              "L068": 0.55,
+              "L069": 0.06,
+              "L073": 0.0,
+              "L074": 0.0,
+              "L075": 0.0,
+              "L076": 0.0,
+              "L077": 0.0,
+              "L078": 0.0,
+              "L079": 0.0,
+              "L080": 0.0,
+              "L084": 0.0,
+              "L085": 0.0,
+              "L089": 0.0,
+              "L090": 0.0
+            },
+            "confidence": 0.54
+          },
+          "limitation_of_liability__status": {
+            "choice": "present",
+            "probabilities": {
+              "present": 1.0,
+              "partial": 0.0,
+              "absent": 0.0
+            },
+            "confidence": 1.0
+          },
+          "indemnity__where": {
+            "choice": "L060",
+            "probabilities": {
+              "L013": 0.0,
+              "L014": 0.0,
+              "L015": 0.0,
+              "L016": 0.0,
+              "L020": 0.0,
+              "L021": 0.0,
+              "L022": 0.0,
+              "L023": 0.0,
+              "L027": 0.0,
+              "L028": 0.0,
+              "L029": 0.0,
+              "L030": 0.0,
+              "L034": 0.0,
+              "L035": 0.0,
+              "L036": 0.0,
+              "L037": 0.0,
+              "L038": 0.0,
+              "L042": 0.0,
+              "L043": 0.0,
+              "L044": 0.0,
+              "L045": 0.0,
+              "L049": 0.0,
+              "L050": 0.0,
+              "L051": 0.0,
+              "L055": 0.0,
+              "L056": 0.0,
+              "L060": 0.95,
+              "L061": 0.05,
+              "L062": 0.0,
+              "L063": 0.0,
+              "L067": 0.0,
+              "L068": 0.0,
+              "L069": 0.0,
+              "L073": 0.0,
+              "L074": 0.0,
+              "L075": 0.0,
+              "L076": 0.0,
+              "L077": 0.0,
+              "L078": 0.0,
+              "L079": 0.0,
+              "L080": 0.0,
+              "L084": 0.0,
+              "L085": 0.0,
+              "L089": 0.0,
+              "L090": 0.0
+            },
+            "confidence": 0.95
+          },
+          "indemnity__status": {
+            "choice": "present",
+            "probabilities": {
+              "present": 1.0,
+              "partial": 0.0,
+              "absent": 0.0
+            },
+            "confidence": 1.0
+          },
+          "termination_for_convenience__where": {
+            "choice": "L077",
+            "probabilities": {
+              "L013": 0.0,
+              "L014": 0.0,
+              "L015": 0.0,
+              "L016": 0.0,
+              "L020": 0.0,
+              "L021": 0.0,
+              "L022": 0.0,
+              "L023": 0.0,
+              "L027": 0.0,
+              "L028": 0.0,
+              "L029": 0.0,
+              "L030": 0.0,
+              "L034": 0.0,
+              "L035": 0.0,
+              "L036": 0.0,
+              "L037": 0.0,
+              "L038": 0.0,
+              "L042": 0.0,
+              "L043": 0.0,
+              "L044": 0.0,
+              "L045": 0.0,
+              "L049": 0.0,
+              "L050": 0.0,
+              "L051": 0.0,
+              "L055": 0.0,
+              "L056": 0.0,
+              "L060": 0.0,
+              "L061": 0.0,
+              "L062": 0.0,
+              "L063": 0.0,
+              "L067": 0.0,
+              "L068": 0.0,
+              "L069": 0.0,
+              "L073": 0.0,
+              "L074": 0.0,
+              "L075": 0.0,
+              "L076": 0.0,
+              "L077": 1.0,
+              "L078": 0.0,
+              "L079": 0.0,
+              "L080": 0.0,
+              "L084": 0.0,
+              "L085": 0.0,
+              "L089": 0.0,
+              "L090": 0.0
+            },
+            "confidence": 1.0
+          },
+          "termination_for_convenience__status": {
+            "choice": "present",
+            "probabilities": {
+              "present": 1.0,
+              "partial": 0.0,
+              "absent": 0.0
+            },
+            "confidence": 1.0
+          },
+          "auto_renewal__where": {
+            "choice": "L074",
+            "probabilities": {
+              "L013": 0.0,
+              "L014": 0.0,
+              "L015": 0.0,
+              "L016": 0.0,
+              "L020": 0.0,
+              "L021": 0.0,
+              "L022": 0.0,
+              "L023": 0.0,
+              "L027": 0.0,
+              "L028": 0.0,
+              "L029": 0.0,
+              "L030": 0.0,
+              "L034": 0.0,
+              "L035": 0.0,
+              "L036": 0.0,
+              "L037": 0.0,
+              "L038": 0.0,
+              "L042": 0.0,
+              "L043": 0.0,
+              "L044": 0.0,
+              "L045": 0.0,
+              "L049": 0.0,
+              "L050": 0.0,
+              "L051": 0.0,
+              "L055": 0.0,
+              "L056": 0.0,
+              "L060": 0.0,
+              "L061": 0.0,
+              "L062": 0.0,
+              "L063": 0.0,
+              "L067": 0.0,
+              "L068": 0.0,
+              "L069": 0.0,
+              "L073": 0.0,
+              "L074": 0.74,
+              "L075": 0.18,
+              "L076": 0.08,
+              "L077": 0.0,
+              "L078": 0.0,
+              "L079": 0.0,
+              "L080": 0.0,
+              "L084": 0.0,
+              "L085": 0.0,
+              "L089": 0.0,
+              "L090": 0.0
+            },
+            "confidence": 0.73
+          },
+          "auto_renewal__status": {
+            "choice": "present",
+            "probabilities": {
+              "present": 1.0,
+              "partial": 0.0,
+              "absent": 0.0
+            },
+            "confidence": 1.0
+          },
+          "governing_law__where": {
+            "choice": "L084",
+            "probabilities": {
+              "L013": 0.0,
+              "L014": 0.0,
+              "L015": 0.0,
+              "L016": 0.0,
+              "L020": 0.0,
+              "L021": 0.0,
+              "L022": 0.0,
+              "L023": 0.0,
+              "L027": 0.0,
+              "L028": 0.0,
+              "L029": 0.0,
+              "L030": 0.0,
+              "L034": 0.0,
+              "L035": 0.0,
+              "L036": 0.0,
+              "L037": 0.0,
+              "L038": 0.0,
+              "L042": 0.0,
+              "L043": 0.0,
+              "L044": 0.0,
+              "L045": 0.0,
+              "L049": 0.0,
+              "L050": 0.0,
+              "L051": 0.0,
+              "L055": 0.0,
+              "L056": 0.0,
+              "L060": 0.0,
+              "L061": 0.0,
+              "L062": 0.0,
+              "L063": 0.0,
+              "L067": 0.0,
+              "L068": 0.0,
+              "L069": 0.0,
+              "L073": 0.0,
+              "L074": 0.0,
+              "L075": 0.0,
+              "L076": 0.0,
+              "L077": 0.0,
+              "L078": 0.0,
+              "L079": 0.0,
+              "L080": 0.0,
+              "L084": 0.89,
+              "L085": 0.11,
+              "L089": 0.0,
+              "L090": 0.0
+            },
+            "confidence": 0.89
+          },
+          "governing_law__status": {
+            "choice": "present",
+            "probabilities": {
+              "present": 1.0,
+              "partial": 0.0,
+              "absent": 0.0
+            },
+            "confidence": 1.0
+          },
+          "breach_notification__where": {
+            "choice": "L036",
+            "probabilities": {
+              "L013": 0.0,
+              "L014": 0.0,
+              "L015": 0.0,
+              "L016": 0.0,
+              "L020": 0.0,
+              "L021": 0.0,
+              "L022": 0.0,
+              "L023": 0.0,
+              "L027": 0.01,
+              "L028": 0.14,
+              "L029": 0.25,
+              "L030": 0.02,
+              "L034": 0.01,
+              "L035": 0.0,
+              "L036": 0.51,
+              "L037": 0.01,
+              "L038": 0.0,
+              "L042": 0.0,
+              "L043": 0.0,
+              "L044": 0.02,
+              "L045": 0.0,
+              "L049": 0.0,
+              "L050": 0.01,
+              "L051": 0.0,
+              "L055": 0.0,
+              "L056": 0.0,
+              "L060": 0.0,
+              "L061": 0.0,
+              "L062": 0.0,
+              "L063": 0.0,
+              "L067": 0.0,
+              "L068": 0.0,
+              "L069": 0.0,
+              "L073": 0.0,
+              "L074": 0.0,
+              "L075": 0.0,
+              "L076": 0.0,
+              "L077": 0.0,
+              "L078": 0.0,
+              "L079": 0.0,
+              "L080": 0.0,
+              "L084": 0.0,
+              "L085": 0.0,
+              "L089": 0.01,
+              "L090": 0.01
+            },
+            "confidence": 0.5
+          },
+          "breach_notification__status": {
+            "choice": "absent",
+            "probabilities": {
+              "present": 0.0,
+              "partial": 0.04,
+              "absent": 0.96
+            },
+            "confidence": 0.94
+          },
+          "audit_rights__where": {
+            "choice": "L042",
+            "probabilities": {
+              "L013": 0.0,
+              "L014": 0.0,
+              "L015": 0.0,
+              "L016": 0.0,
+              "L020": 0.0,
+              "L021": 0.0,
+              "L022": 0.0,
+              "L023": 0.0,
+              "L027": 0.0,
+              "L028": 0.0,
+              "L029": 0.0,
+              "L030": 0.0,
+              "L034": 0.0,
+              "L035": 0.0,
+              "L036": 0.0,
+              "L037": 0.0,
+              "L038": 0.0,
+              "L042": 0.78,
+              "L043": 0.13,
+              "L044": 0.0,
+              "L045": 0.0,
+              "L049": 0.0,
+              "L050": 0.03,
+              "L051": 0.060000000000000005,
+              "L055": 0.0,
+              "L056": 0.0,
+              "L060": 0.0,
+              "L061": 0.0,
+              "L062": 0.0,
+              "L063": 0.0,
+              "L067": 0.0,
+              "L068": 0.0,
+              "L069": 0.0,
+              "L073": 0.0,
+              "L074": 0.0,
+              "L075": 0.0,
+              "L076": 0.0,
+              "L077": 0.0,
+              "L078": 0.0,
+              "L079": 0.0,
+              "L080": 0.0,
+              "L084": 0.0,
+              "L085": 0.0,
+              "L089": 0.0,
+              "L090": 0.0
+            },
+            "confidence": 0.78
+          },
+          "audit_rights__status": {
+            "choice": "partial",
+            "probabilities": {
+              "present": 0.0,
+              "partial": 0.55,
+              "absent": 0.45
+            },
+            "confidence": 0.33
+          },
+          "insurance__where": {
+            "choice": "L055",
+            "probabilities": {
+              "L013": 0.0,
+              "L014": 0.0,
+              "L015": 0.0,
+              "L016": 0.0,
+              "L020": 0.0,
+              "L021": 0.0,
+              "L022": 0.0,
+              "L023": 0.0,
+              "L027": 0.0,
+              "L028": 0.0,
+              "L029": 0.0,
+              "L030": 0.0,
+              "L034": 0.0,
+              "L035": 0.0,
+              "L036": 0.0,
+              "L037": 0.0,
+              "L038": 0.0,
+              "L042": 0.0,
+              "L043": 0.0,
+              "L044": 0.0,
+              "L045": 0.0,
+              "L049": 0.0,
+              "L050": 0.0,
+              "L051": 0.0,
+              "L055": 0.99,
+              "L056": 0.01,
+              "L060": 0.0,
+              "L061": 0.0,
+              "L062": 0.0,
+              "L063": 0.0,
+              "L067": 0.0,
+              "L068": 0.0,
+              "L069": 0.0,
+              "L073": 0.0,
+              "L074": 0.0,
+              "L075": 0.0,
+              "L076": 0.0,
+              "L077": 0.0,
+              "L078": 0.0,
+              "L079": 0.0,
+              "L080": 0.0,
+              "L084": 0.0,
+              "L085": 0.0,
+              "L089": 0.0,
+              "L090": 0.0
+            },
+            "confidence": 0.99
+          },
+          "insurance__status": {
+            "choice": "partial",
+            "probabilities": {
+              "present": 0.01,
+              "partial": 0.95,
+              "absent": 0.04
+            },
+            "confidence": 0.92
+          },
+          "subcontracting__where": {
+            "choice": "L037",
+            "probabilities": {
+              "L013": 0.0,
+              "L014": 0.0,
+              "L015": 0.0,
+              "L016": 0.0,
+              "L020": 0.0,
+              "L021": 0.0,
+              "L022": 0.0,
+              "L023": 0.0,
+              "L027": 0.0,
+              "L028": 0.0,
+              "L029": 0.0,
+              "L030": 0.0,
+              "L034": 0.15000000000000002,
+              "L035": 0.03,
+              "L036": 0.0,
+              "L037": 0.74,
+              "L038": 0.08,
+              "L042": 0.0,
+              "L043": 0.0,
+              "L044": 0.0,
+              "L045": 0.0,
+              "L049": 0.0,
+              "L050": 0.0,
+              "L051": 0.0,
+              "L055": 0.0,
+              "L056": 0.0,
+              "L060": 0.0,
+              "L061": 0.0,
+              "L062": 0.0,
+              "L063": 0.0,
+              "L067": 0.0,
+              "L068": 0.0,
+              "L069": 0.0,
+              "L073": 0.0,
+              "L074": 0.0,
+              "L075": 0.0,
+              "L076": 0.0,
+              "L077": 0.0,
+              "L078": 0.0,
+              "L079": 0.0,
+              "L080": 0.0,
+              "L084": 0.0,
+              "L085": 0.0,
+              "L089": 0.0,
+              "L090": 0.0
+            },
+            "confidence": 0.73
+          },
+          "subcontracting__status": {
+            "choice": "present",
+            "probabilities": {
+              "present": 1.0,
+              "partial": 0.0,
+              "absent": 0.0
+            },
+            "confidence": 1.0
+          },
+          "data_retention_and_deletion__where": {
+            "choice": "L049",
+            "probabilities": {
+              "L013": 0.0,
+              "L014": 0.0,
+              "L015": 0.0,
+              "L016": 0.0,
+              "L020": 0.0,
+              "L021": 0.0,
+              "L022": 0.0,
+              "L023": 0.0,
+              "L027": 0.0,
+              "L028": 0.0,
+              "L029": 0.0,
+              "L030": 0.0,
+              "L034": 0.0,
+              "L035": 0.0,
+              "L036": 0.0,
+              "L037": 0.0,
+              "L038": 0.0,
+              "L042": 0.0,
+              "L043": 0.0,
+              "L044": 0.0,
+              "L045": 0.0,
+              "L049": 0.78,
+              "L050": 0.22,
+              "L051": 0.0,
+              "L055": 0.0,
+              "L056": 0.0,
+              "L060": 0.0,
+              "L061": 0.0,
+              "L062": 0.0,
+              "L063": 0.0,
+              "L067": 0.0,
+              "L068": 0.0,
+              "L069": 0.0,
+              "L073": 0.0,
+              "L074": 0.0,
+              "L075": 0.0,
+              "L076": 0.0,
+              "L077": 0.0,
+              "L078": 0.0,
+              "L079": 0.0,
+              "L080": 0.0,
+              "L084": 0.0,
+              "L085": 0.0,
+              "L089": 0.0,
+              "L090": 0.0
+            },
+            "confidence": 0.78
+          },
+          "data_retention_and_deletion__status": {
+            "choice": "present",
+            "probabilities": {
+              "present": 1.0,
+              "partial": 0.0,
+              "absent": 0.0
+            },
+            "confidence": 1.0
+          }
+        },
+        "scores": {
+          "limitation_of_liability__risk": {
+            "score": 2.02,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.0,
+              "2": 0.98,
+              "3": 0.02
+            },
+            "confidence": 0.98
+          },
+          "indemnity__risk": {
+            "score": 0.01,
+            "probabilities": {
+              "0": 1.0,
+              "1": 0.0,
+              "2": 0.0,
+              "3": 0.0
+            },
+            "confidence": 1.0
+          },
+          "termination_for_convenience__risk": {
+            "score": 0.0,
+            "probabilities": {
+              "0": 1.0,
+              "1": 0.0,
+              "2": 0.0,
+              "3": 0.0
+            },
+            "confidence": 1.0
+          },
+          "auto_renewal__risk": {
+            "score": 2.0,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.0,
+              "2": 1.0,
+              "3": 0.0
+            },
+            "confidence": 1.0
+          },
+          "governing_law__risk": {
+            "score": 0.0,
+            "probabilities": {
+              "0": 1.0,
+              "1": 0.0,
+              "2": 0.0,
+              "3": 0.0
+            },
+            "confidence": 1.0
+          },
+          "breach_notification__risk": {
+            "score": 3.0,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.0,
+              "2": 0.0,
+              "3": 1.0
+            },
+            "confidence": 1.0
+          },
+          "audit_rights__risk": {
+            "score": 2.0,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.0,
+              "2": 1.0,
+              "3": 0.0
+            },
+            "confidence": 1.0
+          },
+          "insurance__risk": {
+            "score": 2.0,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.0,
+              "2": 1.0,
+              "3": 0.0
+            },
+            "confidence": 1.0
+          },
+          "subcontracting__risk": {
+            "score": 2.0,
+            "probabilities": {
+              "0": 0.0,
+              "1": 0.0,
+              "2": 1.0,
+              "3": 0.0
+            },
+            "confidence": 1.0
+          },
+          "data_retention_and_deletion__risk": {
+            "score": 0.0,
+            "probabilities": {
+              "0": 1.0,
+              "1": 0.0,
+              "2": 0.0,
+              "3": 0.0
+            },
+            "confidence": 1.0
+          }
+        },
+        "nouls": {},
+        "usage": {
+          "input_tokens": 8332,
+          "output_tokens": 5327
+        }
+      }
+    },
+    {
+      "request_hash": "d7722ae17041dcfa7aa98c53f1260a9e4d5db6a42eb114575e2e793caed4e10c",
+      "provider": "openai",
+      "purpose": "s2.llm",
+      "model": "gpt-6-luna",
+      "latency_ms": 10985,
+      "result": {
+        "model": "gpt-6-luna",
+        "latency_ms": 10985,
+        "usage": {
+          "input_tokens": 2138,
+          "output_tokens": 1231,
+          "reasoning_tokens": 492
+        },
+        "parsed": {
+          "clauses": [
+            {
+              "clause_id": "limitation_of_liability",
+              "status": "present",
+              "section": "9.2",
+              "quote": "Each party's total liability under this Addendum is limited to the Fees paid in the one (1) month immediately preceding the event giving rise to the claim.",
+              "risk": "high",
+              "explanation": "The mutual cap is only one month of Fees, which falls in the high-risk range."
+            },
+            {
+              "clause_id": "indemnity",
+              "status": "present",
+              "section": "8.1",
+              "quote": "Each party will defend and indemnify the other against third-party claims that its software or materials infringe intellectual property rights.",
+              "risk": "low",
+              "explanation": "The parties give mutual indemnity for third-party intellectual property claims, with a carve-out for the indemnified party's own modifications or misuse."
+            },
+            {
+              "clause_id": "termination_for_convenience",
+              "status": "present",
+              "section": "10.3",
+              "quote": "Either party may terminate this Addendum for convenience on sixty (60) days' written notice to the other party.",
+              "risk": "low",
+              "explanation": "Either party may terminate for convenience on 60 days' notice, within the low-risk range."
+            },
+            {
+              "clause_id": "auto_renewal",
+              "status": "present",
+              "section": "10.2",
+              "quote": "It renews automatically for successive twelve (12) month terms unless either party gives written notice of non-renewal at least ninety (90) days before the end of the current term.",
+              "risk": "high",
+              "explanation": "The addendum renews automatically and requires 90 days' advance notice to opt out, which is high risk."
+            },
+            {
+              "clause_id": "governing_law",
+              "status": "present",
+              "section": "11.1-11.2",
+              "quote": "The parties submit to the exclusive jurisdiction of the courts of Delaware.",
+              "risk": "low",
+              "explanation": "The addendum names Delaware law and Delaware courts, a US state law and forum."
+            },
+            {
+              "clause_id": "breach_notification",
+              "status": "absent",
+              "section": null,
+              "quote": null,
+              "risk": "critical",
+              "explanation": "The addendum contains no obligation to notify Customer of unauthorised access to or loss of Customer Data."
+            },
+            {
+              "clause_id": "audit_rights",
+              "status": "partial",
+              "section": "5.1",
+              "quote": "If Customer disputes an invoice, Customer may ask Carrier for the delivery records supporting the disputed line items.",
+              "risk": "high",
+              "explanation": "Customer can obtain records only for invoice disputes, with no right to audit or inspect Carrier's data handling."
+            },
+            {
+              "clause_id": "insurance",
+              "status": "partial",
+              "section": "7.1",
+              "quote": "Carrier will maintain the insurance required by Section 9 of the MSA throughout the term of this Addendum.",
+              "risk": "high",
+              "explanation": "Insurance is required only by reference to the MSA, and this addendum states no coverage types or amounts."
+            },
+            {
+              "clause_id": "subcontracting",
+              "status": "present",
+              "section": "4.1",
+              "quote": "Carrier may engage subcontractors to perform line-haul or last-mile services without Customer's prior consent.",
+              "risk": "high",
+              "explanation": "Carrier needs no prior consent, provides notice only after engaging subcontractors, and remains responsible for their acts and omissions."
+            },
+            {
+              "clause_id": "data_retention_and_deletion",
+              "status": "present",
+              "section": "6.2",
+              "quote": "Within 30 days after the MSA ends, Carrier will delete all Customer Data and, on written request, certify the deletion in writing.",
+              "risk": "low",
+              "explanation": "Carrier must delete Customer Data within 30 days after the MSA ends."
+            }
+          ]
+        },
+        "refusal": null,
+        "error": null
+      }
+    }
+  ]
+}
