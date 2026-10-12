@@ -174,3 +174,34 @@
   font-size: var(--text-xs);
   color: var(--color-review);
 }
+
+/* Clause and citation verdicts (S2, S3): a symbol and words, then a semantic tint. */
+.ledger-row__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0 var(--space-1);
+  border: var(--rule-hairline);
+  font-weight: 600;
+}
+
+.ledger-row__chip--present,
+.ledger-row__chip--verified {
+  color: var(--color-verified);
+}
+
+.ledger-row__chip--partial,
+.ledger-row__chip--unsupported {
+  color: var(--color-review);
+}
+
+.ledger-row__chip--absent,
+.ledger-row__chip--contradicted,
+.ledger-row__chip--fabricated {
+  color: var(--color-discrepancy);
+}
+
+.ledger-row__risk--high,
+.ledger-row__risk--critical {
+  font-weight: 600;
+}

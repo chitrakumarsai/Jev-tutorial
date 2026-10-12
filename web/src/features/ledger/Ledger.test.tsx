@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { Finding, SideResult } from '../../api/types';
 import { completedView } from '../../test/fixtures/replay';
+import { TraceContext } from '../trace/traceContext';
 import { Ledger } from './Ledger';
 import { ReviewLane } from './ReviewLane';
 import { traceTargets, verdicts } from './ledgerRows';
@@ -147,5 +148,83 @@ describe('Ledger', () => {
     render(<Ledger side="jev" findings={[finding({})]} result={result} />);
 
     expect(screen.queryByText('Total variance')).not.toBeInTheDocument();
+  });
+
+  describe('clause findings (S2)', () => {
+    const clause = (overrides: Partial<Finding>): Finding =>
+      finding({
+        id: 'c1',
+        kind: 'limitation_of_liability',
+        doc_id: 'addendum',
+        line_ref: 'L068',
+        variance: null,
+        verdict: 'present',
+        risk: 'high',
+        evidence: [{ doc_id: 'addendum', start: 0, end: 9, text: 'Liability' }],
+        ...overrides,
+      });
+    const card = (status: 'correct' | 'wrong_value', id = 'c1') =>
+      withScorecard(jevResult, {
+        items: [{ key_id: 'K01', status, finding_id: id }],
+        false_positives: [],
+        trap_hits: [],
+        variance: null,
+      });
+
+    it('shows a present clause with its risk and its line, and no money', () => {
+      render(
+        <TraceContext value={() => undefined}>
+          <Ledger side="jev" findings={[clause({})]} result={card('correct')} />
+        </TraceContext>,
+      );
+
+      expect(screen.getByText('Limitation of liability')).toBeInTheDocument();
+      expect(screen.getByText('Present')).toBeInTheDocument();
+      expect(screen.getByText('High risk')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Addendum · L068/ })).toBeInTheDocument();
+      expect(screen.queryByText(/Billed|Variance/)).not.toBeInTheDocument();
+    });
+
+    it('says plainly when a clause is not in the agreement', () => {
+      const absent = clause({
+        verdict: 'absent',
+        risk: 'critical',
+        line_ref: null,
+        evidence: [],
+        traceable: true, // an absent clause claims nothing to trace
+      });
+
+      render(
+        <TraceContext value={() => undefined}>
+          <Ledger side="jev" findings={[absent]} result={card('correct')} />
+        </TraceContext>,
+      );
+
+      expect(screen.getByText('Not in the agreement')).toBeInTheDocument();
+      expect(screen.getByText('Critical risk')).toBeInTheDocument();
+      expect(screen.queryByText('No quote found in the documents')).not.toBeInTheDocument();
+      expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    });
+
+    it('flags a present clause whose quote was not found', () => {
+      const invented = clause({ verdict: 'present', evidence: [], traceable: false });
+
+      render(<Ledger side="llm" findings={[invented]} result={card('correct')} />);
+
+      expect(screen.getByText('No quote found in the documents')).toBeInTheDocument();
+    });
+
+    it('marks a partial clause and a clause the key disagrees with', () => {
+      render(
+        <Ledger
+          side="llm"
+          findings={[clause({ verdict: 'partial', risk: 'high' })]}
+          result={card('wrong_value')}
+        />,
+      );
+
+      expect(screen.getByText('Partly there')).toBeInTheDocument();
+      expect(screen.getByText('Does not match K01')).toBeInTheDocument();
+    });
   });
 });

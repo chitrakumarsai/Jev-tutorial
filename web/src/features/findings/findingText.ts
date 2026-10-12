@@ -13,6 +13,31 @@ const KIND_LABELS: Readonly<Record<string, string>> = {
 
 const MISSING = '—';
 
+type FindingVerdict = NonNullable<Finding['verdict']>;
+type Risk = NonNullable<Finding['risk']>;
+
+/** Clause (S2) and citation (S3) verdicts in plain words, with a symbol so colour is not the only signal. */
+export const VERDICT_LABELS: Readonly<
+  Record<FindingVerdict, { readonly text: string; readonly symbol: string }>
+> = {
+  present: { text: 'Present', symbol: '✓' },
+  partial: { text: 'Partly there', symbol: '◐' },
+  absent: { text: 'Not in the agreement', symbol: '∅' },
+  verified: { text: 'Supported', symbol: '✓' },
+  unsupported: { text: 'Not supported', symbol: '?' },
+  contradicted: { text: 'Contradicted', symbol: '✕' },
+  fabricated: { text: 'Quote not in the source', symbol: '✕' },
+};
+
+export function riskLabel(risk: Risk): string {
+  return `${risk.charAt(0).toUpperCase()}${risk.slice(1)} risk`;
+}
+
+/** Whether a finding is about money (S1) rather than a clause or citation verdict. */
+export function isMoneyFinding(finding: Finding): boolean {
+  return finding.verdict == null;
+}
+
 export function kindLabel(kind: string): string {
   const known = KIND_LABELS[kind];
   if (known) return known;
@@ -22,6 +47,16 @@ export function kindLabel(kind: string): string {
 
 /** One finding as the parsed response carried it: raw fields, exact strings. */
 export function parsedLine(finding: Finding): string {
+  if (!isMoneyFinding(finding) && finding.verdict != null) {
+    return [
+      finding.doc_id,
+      finding.line_ref ?? MISSING,
+      finding.kind,
+      finding.verdict,
+      ...(finding.risk ? [`risk ${finding.risk}`] : []),
+      `quote ${finding.traceable ? 'found' : 'not found'}`,
+    ].join('  ');
+  }
   return [
     finding.doc_id,
     finding.line_ref ?? MISSING,

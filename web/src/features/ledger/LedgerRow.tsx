@@ -6,7 +6,7 @@ import { CountUpMoney } from '../../components/count-up/CountUpMoney';
 import { formatMoney } from '../../lib/format';
 import { motionTokens, springs } from '../../lib/motion';
 import { documentLabel } from '../documents/documentLabel';
-import { kindLabel } from '../findings/findingText';
+import { VERDICT_LABELS, isMoneyFinding, kindLabel, riskLabel } from '../findings/findingText';
 import { TraceButton } from '../trace/TraceButton';
 import { isDiscrepancy, traceTargets, type Verdict } from './ledgerRows';
 
@@ -16,7 +16,7 @@ type Props = {
   verdict: Verdict;
 };
 
-function verdictText(verdict: Verdict): string {
+function verdictText(verdict: Verdict, isMoney: boolean): string {
   switch (verdict.kind) {
     case 'pending':
       return 'Recorded';
@@ -25,7 +25,7 @@ function verdictText(verdict: Verdict): string {
         ? `Matches ${verdict.keyId}, after review`
         : `Matches ${verdict.keyId}`;
     case 'wrong_value':
-      return `Wrong amount for ${verdict.keyId}`;
+      return isMoney ? `Wrong amount for ${verdict.keyId}` : `Does not match ${verdict.keyId}`;
     case 'false_positive':
       return verdict.isTrap ? 'Fell for a planted trap' : 'Not in the answer key';
   }
@@ -88,6 +88,17 @@ export function LedgerRow({ finding, side, verdict }: Props) {
         />
       )}
       <p className="ledger-row__figures">
+        {finding.verdict != null && (
+          <span className={`ledger-row__chip ledger-row__chip--${finding.verdict}`}>
+            <span aria-hidden="true">{VERDICT_LABELS[finding.verdict].symbol}</span>
+            {VERDICT_LABELS[finding.verdict].text}
+          </span>
+        )}
+        {finding.risk != null && (
+          <span className={`ledger-row__risk ledger-row__risk--${finding.risk}`}>
+            {riskLabel(finding.risk)}
+          </span>
+        )}
         {billed && (
           <span>
             Billed {primary ? <TraceButton target={primary}>{billed}</TraceButton> : billed}
@@ -109,7 +120,7 @@ export function LedgerRow({ finding, side, verdict }: Props) {
       </p>
       <p className="ledger-row__notes">
         <span className={`ledger-row__verdict ledger-row__verdict--${verdict.kind}`}>
-          {verdictText(verdict)}
+          {verdictText(verdict, isMoneyFinding(finding))}
         </span>
         {!finding.traceable && (
           <span className="ledger-row__flag">No quote found in the documents</span>
