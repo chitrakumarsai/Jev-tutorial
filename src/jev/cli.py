@@ -2,6 +2,7 @@
 
 uv run python -m jev.cli data validate [--scenario ID]
 uv run python -m jev.cli record s1 --runs 3   # LIVE: spends money, asks for confirmation
+uv run python -m jev.cli draft-memo           # LIVE: one call drafts the S3 memo (D6)
 uv run python -m jev.cli budget init
 uv run python -m jev.cli openapi   # refresh web/openapi.json for the web client
 """
@@ -14,6 +15,7 @@ import uuid
 from collections.abc import Callable, Sequence
 from decimal import Decimal
 from pathlib import Path
+from typing import Any
 
 from pydantic import ValidationError
 
@@ -22,10 +24,16 @@ from jev.budget.ledger import Ledger, LedgerCorruptError, LedgerMissingError
 from jev.budget.pricing import UnknownModelError
 from jev.config import Settings
 from jev.providers.errors import ProviderError
-from jev.providers.factory import LiveDisabledError, MissingKeyError
+from jev.providers.factory import (
+    LiveDisabledError,
+    MissingKeyError,
+    build_guard,
+    build_live_clients,
+)
 from jev.runs.service import PreparedLive, RunService
 from jev.scenarios.registry import SCENARIOS, ScenarioSpec, get_scenario
-from jev.scenarios.s1_reconciliation.documents import DocumentTooLargeError
+from jev.scenarios.s1_reconciliation.documents import DocumentTooLargeError, load_s1_documents
+from jev.scenarios.s3_citation_check.memo_draft import draft_memo
 
 DEFAULT_DATA_DIR = Path("data")
 DEFAULT_OPENAPI_OUT = Path("web/openapi.json")
@@ -156,6 +164,38 @@ def record(service: RunService, *, runs: int, input_fn: Callable[[str], str] = i
     return 0
 
 
+DEFAULT_MEMO_DIR = DEFAULT_DATA_DIR / "scenarios" / "s3_citation_check"
+
+
+class _LlmOnly:
+    """The live OpenAI client for the draft, closing both live clients when done."""
+
+    def __init__(self, clients: Any) -> None:
+        self._clients = clients
+        self.key_fp = clients.llm.key_fp
+        self.estimate = clients.llm.estimate
+        self.parse = clients.llm.parse
+
+    async def aclose(self) -> None:
+        await self._clients.aclose()
+
+
+def _draft_memo(data_dir: Path, out_dir: Path) -> int:
+    settings = Settings()
+    guard = build_guard(settings)
+    try:
+        clients = build_live_clients(settings, guard)
+        return draft_memo(
+            load_s1_documents(data_dir),
+            out_dir,
+            llm_factory=lambda: _LlmOnly(clients),
+            guard=guard,
+        )
+    except _REFUSALS as exc:
+        print(f"Refused: {exc}", file=sys.stderr)
+        return 1
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="jev.cli", description="Jev Audit Lens tools")
     groups = parser.add_subparsers(dest="group", required=True)
@@ -174,12 +214,18 @@ def main(argv: Sequence[str] | None = None) -> int:
     rec.add_argument("scenario", type=scenario_arg, help="id or short alias, e.g. s1")
     rec.add_argument("--runs", type=_runs_arg, default=1)
 
+    memo = groups.add_parser("draft-memo", help="LIVE: draft the S3 memo once (spends money)")
+    memo.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
+    memo.add_argument("--out-dir", type=Path, default=DEFAULT_MEMO_DIR)
+
     spec = groups.add_parser("openapi", help="export the API spec for the web client")
     spec.add_argument("--out", type=Path, default=DEFAULT_OPENAPI_OUT)
 
     args = parser.parse_args(argv)
     if args.group == "record":  # pragma: no cover - interactive, exercised via record()
         return record(RunService(Settings(), scenario=args.scenario), runs=args.runs)
+    if args.group == "draft-memo":
+        return _draft_memo(args.data_dir, args.out_dir)
     if args.group == "budget":
         return _budget_init(args.ledger_path)
     if args.group == "openapi":
