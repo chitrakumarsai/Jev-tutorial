@@ -227,4 +227,28 @@ describe('Ledger', () => {
       expect(screen.getByText('Does not match K01')).toBeInTheDocument();
     });
   });
+
+  it('names a citation finding by its id and shows the claim it checks', () => {
+    const citation = finding({
+      id: 'jev-C7',
+      kind: 'citation',
+      doc_id: 'msa',
+      line_ref: '§5.2',
+      variance: null,
+      verdict: 'contradicted',
+      claim: 'The agreement caps the fuel surcharge at 25%.',
+    });
+    const card = withScorecard(jevResult, {
+      items: [{ key_id: 'K7', status: 'correct', finding_id: 'jev-C7' }],
+      false_positives: [],
+      trap_hits: [],
+      variance: null,
+    });
+
+    render(<Ledger side="jev" findings={[citation]} result={card} />);
+
+    expect(screen.getByText('Citation C7')).toBeInTheDocument();
+    expect(screen.getByText('“The agreement caps the fuel surcharge at 25%.”')).toBeInTheDocument();
+    expect(screen.getByText('Contradicted')).toBeInTheDocument();
+  });
 });

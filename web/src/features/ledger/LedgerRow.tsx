@@ -6,7 +6,13 @@ import { CountUpMoney } from '../../components/count-up/CountUpMoney';
 import { formatMoney } from '../../lib/format';
 import { motionTokens, springs } from '../../lib/motion';
 import { documentLabel } from '../documents/documentLabel';
-import { VERDICT_LABELS, isMoneyFinding, kindLabel, riskLabel } from '../findings/findingText';
+import {
+  VERDICT_LABELS,
+  citationId,
+  isMoneyFinding,
+  kindLabel,
+  riskLabel,
+} from '../findings/findingText';
 import { TraceButton } from '../trace/TraceButton';
 import { isDiscrepancy, traceTargets, type Verdict } from './ledgerRows';
 
@@ -79,8 +85,13 @@ export function LedgerRow({ finding, side, verdict }: Props) {
             where
           )}
         </span>{' '}
-        <span className="ledger-row__kind">{kindLabel(finding.kind)}</span>
+        <span className="ledger-row__kind">
+          {finding.kind === 'citation'
+            ? `Citation ${citationId(finding)}`
+            : kindLabel(finding.kind)}
+        </span>
       </p>
+      {finding.claim && <p className="ledger-row__claim">“{finding.claim}”</p>}
       {side === 'jev' && finding.confidence != null && (
         <ConfidenceRing
           value={finding.confidence}

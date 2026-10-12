@@ -205,3 +205,11 @@
 .ledger-row__risk--critical {
   font-weight: 600;
 }
+
+/* S3: the memo claim a citation is checked against. */
+.ledger-row__claim {
+  grid-column: 2 / -1;
+  margin: 0;
+  font-style: italic;
+  color: var(--color-muted);
+}
