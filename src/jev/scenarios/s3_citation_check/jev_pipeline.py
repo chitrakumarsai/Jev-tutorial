@@ -119,7 +119,7 @@ class JevS3Pipeline:
         result = results.get(citation.id)
         judged = (
             _judge(result, located, citation.section, self._threshold)
-            if located and result
+            if located is not None and result is not None
             else None
         )
         return _finding(citation, located, judged)
@@ -147,5 +147,10 @@ class JevS3Pipeline:
                 )
                 return citation_id, result
 
-        pairs = await asyncio.gather(*(ask(cid, r) for cid, r in self._requests.items()))
-        return dict(pairs)
+        # A TaskGroup cancels the other requests if one fails, so nothing more is spent.
+        try:
+            async with asyncio.TaskGroup() as group:
+                tasks = [group.create_task(ask(cid, r)) for cid, r in self._requests.items()]
+        except ExceptionGroup as failed:  # surface the provider's own error, as gather did
+            raise failed.exceptions[0] from None
+        return dict(task.result() for task in tasks)

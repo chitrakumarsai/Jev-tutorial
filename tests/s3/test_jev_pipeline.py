@@ -2,16 +2,19 @@
 passage holding it supports, contradicts or says nothing about the claim, code gates and notes
 a wrong section."""
 
+import asyncio
 from typing import Any
 
 import pytest
 
+from jev.domain.documents import Document, DocumentSet
 from jev.providers.jev.types import ChoiceQ
 from jev.scenarios.s1_reconciliation.documents import load_s1_documents
 from jev.scenarios.s3_citation_check.answer_key import load_s3_key
 from jev.scenarios.s3_citation_check.documents import load_memo
 from jev.scenarios.s3_citation_check.jev_pipeline import JevS3Pipeline
 from jev.scenarios.s3_citation_check.locate import locate
+from jev.scenarios.s3_citation_check.memo_draft import MemoCitation
 from jev.scenarios.s3_citation_check.verdicts import RELATION_VERDICT, RELATIONS
 from tests.s1.facts import DATA
 from tests.s3.fake_jev import FakeS3Jev
@@ -64,7 +67,7 @@ def test_one_request_per_found_quote_with_the_claim_and_its_passage() -> None:
     assert [r.purpose for r in requests] == [
         f"s3.citation.{c.id}" for c in MEMO.citations if c.id != "C3"
     ]
-    first = requests[0]
+    first = next(r for r in requests if r.purpose == "s3.citation.C1")
     assert isinstance(first.state, dict)
     assert first.state["claim"] == CITATIONS["C1"].claim
     assert str(first.state["passage"]).startswith("3.1 Line-haul rates.")
@@ -125,6 +128,55 @@ async def test_the_events_the_ui_plays() -> None:
     steps = [data.get("step", type_) for type_, data in events]
     assert steps[0] == "candidates"
     assert steps.count("request_sent") == steps.count("answers") == 9
-    assert steps[-12:] == ["computed", *["finding"] * 10, "gated"]
+    n = len(MEMO.citations)
+    assert steps[-(n + 2) :] == ["computed", *["finding"] * n, "gated"]
     assert events[0][1] == {"step": "candidates", "requests": 9, "questions": 9}
     assert len(output.usages) == 9 and output.models == ("jev-1.13.0",)
+
+
+def _cite(section: str, quote: str, text: str) -> tuple[MemoCitation, DocumentSet]:
+    docs = DocumentSet(documents=(Document(doc_id="msa", text=text),))
+    return MemoCitation(id="C1", claim="c", quote=quote, doc_id="msa", section=section), docs
+
+
+def test_a_quote_that_appears_twice_is_taken_from_the_cited_clause() -> None:
+    text = "1.1 Fees are due monthly in arrears.\n2.1 Fees are due monthly in arrears.\n"
+    citation, docs = _cite("§2.1", "Fees are due monthly in arrears.", text)
+
+    located = locate(citation, docs)
+
+    assert located is not None
+    assert (located.actual_section, located.section_ok) == ("§2.1", True)
+    assert located.passage.startswith("2.1 ")
+
+
+@pytest.mark.parametrize("section", ["Section 2.1", "cl. 2.1", "§ 2.1"])
+def test_other_ways_of_citing_a_clause_are_understood(section: str) -> None:
+    citation, docs = _cite(
+        section, "Fees are due monthly in arrears.", "2.1 Fees are due monthly in arrears.\r\n"
+    )
+
+    located = locate(citation, docs)
+
+    assert located is not None and located.section_ok
+    assert not located.passage.endswith("\r")
+
+
+class _FailingJev(FakeS3Jev):
+    async def evaluate(self, request: Any) -> Any:
+        if request.purpose.endswith(".C2"):
+            raise RuntimeError("provider down")
+        await asyncio.sleep(0.05)
+        self.finished.append(request.purpose)
+        return await super().evaluate(request)
+
+
+async def test_one_failed_request_stops_the_others_instead_of_spending_on() -> None:
+    fake = _FailingJev(KEY)
+    fake.finished = []
+
+    with pytest.raises(RuntimeError, match="provider down"):
+        await run(fake)
+    await asyncio.sleep(0.15)  # long enough for any request left running to finish
+
+    assert fake.finished == []
