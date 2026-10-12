@@ -55,6 +55,13 @@ const LINE_QUESTIONS: Readonly<Record<string, string>> = {
   base: 'late-fee base',
 };
 const REVERSED = '__rev';
+// S2 asks three questions per checklist clause: "<clause>__where|status|risk".
+const CLAUSE_QUESTIONS: Readonly<Record<string, string>> = {
+  where: 'which line',
+  status: 'is it there',
+  risk: 'risk level',
+};
+const CLAUSES_PURPOSE = 's2.clauses';
 // The backend's cut-off for reading a yes/no answer (NOUL_YES in jev_pipeline.py).
 const YES = 0.5;
 
@@ -65,6 +72,9 @@ function readable(key: string): string {
 
 /** A question id as a person would ask it ("L4 duplicates L5?"). */
 export function questionLabel(key: string): string {
+  const clause = /^([a-z_]+)__(where|status|risk)$/.exec(key);
+  if (clause?.[1] && clause[2])
+    return `${readable(clause[1])}: ${CLAUSE_QUESTIONS[clause[2]] ?? ''}`;
   if (key.endsWith(REVERSED)) {
     return `${questionLabel(key.slice(0, -REVERSED.length))}, options reversed`;
   }
@@ -80,6 +90,7 @@ export function questionLabel(key: string): string {
 
 /** "s1.contract" is the agreement; "s1.invoice.inv-2026-04" is that invoice. */
 export function requestLabel(purpose: string): DocumentLabel {
+  if (purpose === CLAUSES_PURPOSE) return { short: 'Clauses', full: 'Clause checklist' };
   if (purpose.endsWith('.contract')) return documentLabel('msa');
   return documentLabel(purpose.split('.').at(-1) ?? purpose);
 }
@@ -105,7 +116,18 @@ function typedAnswers(data: AnswersStep): TypedAnswer[] {
     confidence: Math.max(probability, 1 - probability),
     kind: 'yes_no',
   }));
-  return [...choices, ...yesNo];
+  // Score answers (S2 risk): the most likely level and Jev's confidence in it.
+  const scores = Object.entries(data.scores ?? {}).map(
+    ([key, [answer, confidence]]): TypedAnswer => ({
+      key,
+      question: questionLabel(key),
+      answer,
+      probability: confidence,
+      confidence,
+      kind: 'choice',
+    }),
+  );
+  return [...choices, ...scores, ...yesNo];
 }
 
 function withRequest(requests: readonly JevRequest[], purpose: string): JevRequest[] {

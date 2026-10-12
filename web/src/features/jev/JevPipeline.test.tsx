@@ -114,4 +114,18 @@ describe('JevPipeline', () => {
     expect(tabStops).toContain(answers);
     expect(within(answers).getByText('Late-fee grace days')).toBeInTheDocument();
   });
+
+  it('says "request" for a single request', () => {
+    render(
+      <JevPipeline
+        progress={{
+          steps: [step({ step: 'candidates', requests: 1, questions: 30 })],
+          findings: [],
+          result: null,
+        }}
+      />,
+    );
+
+    expect(screen.getByText('30 typed questions in 1 request')).toBeInTheDocument();
+  });
 });

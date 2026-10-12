@@ -93,3 +93,43 @@ describe('jevPipeline', () => {
     expect(contract?.answers.find((a) => a.key === 'late_fee_grace_days')?.probability).toBe(0.7);
   });
 });
+
+describe('S2 clause review', () => {
+  it('names the clause request and its three questions per clause', () => {
+    expect(requestLabel('s2.clauses')).toEqual({
+      short: 'Clauses',
+      full: 'Clause checklist',
+    });
+    expect(questionLabel('limitation_of_liability__where')).toBe(
+      'Limitation of liability: which line',
+    );
+    expect(questionLabel('audit_rights__status')).toBe('Audit rights: is it there');
+    expect(questionLabel('insurance__risk')).toBe('Insurance: risk level');
+  });
+
+  it('shows Jev’s risk answers alongside its choices', () => {
+    const pipeline = jevPipeline(
+      progress(
+        step({ step: 'candidates', requests: 1, questions: 3 }),
+        step({ step: 'request_sent', purpose: 's2.clauses', questions: 3 }),
+        step({
+          step: 'answers',
+          purpose: 's2.clauses',
+          latency_ms: 360,
+          choices: {
+            insurance__where: ['L055', 0.9],
+            insurance__status: ['partial', 0.92],
+          },
+          scores: { insurance__risk: ['high', 0.88] },
+        }),
+      ),
+    );
+
+    const answers = pipeline.requests[0]?.answers ?? [];
+    expect(answers.map((a) => [a.question, a.answer, a.confidence])).toEqual([
+      ['Insurance: which line', 'L055', 0.9],
+      ['Insurance: is it there', 'partial', 0.92],
+      ['Insurance: risk level', 'high', 0.88],
+    ]);
+  });
+});
