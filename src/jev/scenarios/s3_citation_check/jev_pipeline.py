@@ -13,6 +13,7 @@ from jev.domain.findings import CitationVerdict, Finding
 from jev.providers.jev.port import JevPort
 from jev.providers.jev.types import ChoiceQ, Description, JevRequest, JevResult
 from jev.scenarios.base import EventSink, SideOutput
+from jev.scenarios.s3_citation_check.documents import sources_only
 from jev.scenarios.s3_citation_check.locate import Located, locate
 from jev.scenarios.s3_citation_check.memo_draft import MemoCitation, MemoDraft
 from jev.scenarios.s3_citation_check.verdicts import RELATION_VERDICT, RELATIONS
@@ -89,6 +90,7 @@ class JevS3Pipeline:
     ) -> None:
         self._memo = memo
         self._threshold = review_threshold
+        documents = sources_only(documents)  # never the memo body
         self._located = {c.id: locate(c, documents) for c in memo.citations}
         self._requests = {
             c.id: citation_request(c, found, run_id)

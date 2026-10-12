@@ -9,6 +9,7 @@ export interface DocumentLabel {
 export function documentLabel(docId: string): DocumentLabel {
   if (docId === 'msa') return { short: 'MSA', full: 'Master services agreement' };
   if (docId === 'addendum') return { short: 'Addendum', full: 'Data processing addendum' };
+  if (docId === 'memo') return { short: 'Memo', full: 'Audit memo' };
   const id = docId.toUpperCase();
   const month = /^inv-\d{4}-(\d{2})$/.exec(docId)?.[1];
   const name = month ? MONTHS[Number(month) - 1] : undefined;

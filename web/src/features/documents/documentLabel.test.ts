@@ -19,4 +19,8 @@ describe('documentLabel', () => {
       full: 'Data processing addendum',
     });
   });
+
+  it('names the S3 audit memo', () => {
+    expect(documentLabel('memo')).toEqual({ short: 'Memo', full: 'Audit memo' });
+  });
 });

@@ -9,6 +9,7 @@ from jev.domain.findings import Finding
 from jev.providers.openai.port import LlmPort
 from jev.providers.openai.types import LlmRequest
 from jev.scenarios.base import EventSink, SideOutput
+from jev.scenarios.s3_citation_check.documents import sources_only
 from jev.scenarios.s3_citation_check.llm_schema import S3LlmCitation, S3LlmReport
 from jev.scenarios.s3_citation_check.locate import locate
 from jev.scenarios.s3_citation_check.memo_draft import MemoCitation, MemoDraft
@@ -63,7 +64,7 @@ def _citations_text(memo: MemoDraft) -> str:
 
 class LlmS3Pipeline:
     def __init__(self, documents: DocumentSet, memo: MemoDraft, *, run_id: str) -> None:
-        self._docs = documents
+        self._docs = sources_only(documents)  # never the memo body
         self._memo = memo
         self._run_id = run_id
 

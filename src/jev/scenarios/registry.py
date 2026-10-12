@@ -25,6 +25,13 @@ from jev.scenarios.s2_clause_review.llm_pipeline import LlmS2Pipeline
 from jev.scenarios.s2_clause_review.llm_schema import S2LlmReport
 from jev.scenarios.s2_clause_review.scorer import load_s2_scorer
 from jev.scenarios.s2_clause_review.validation import validate_s2_data
+from jev.scenarios.s3_citation_check import documents as s3_documents
+from jev.scenarios.s3_citation_check.jev_pipeline import JevS3Pipeline
+from jev.scenarios.s3_citation_check.llm_pipeline import INSTRUCTIONS as S3_INSTRUCTIONS
+from jev.scenarios.s3_citation_check.llm_pipeline import LlmS3Pipeline
+from jev.scenarios.s3_citation_check.llm_schema import S3LlmReport
+from jev.scenarios.s3_citation_check.scorer import load_s3_scorer
+from jev.scenarios.s3_citation_check.validation import validate_s3_data
 from jev.scoring.scorecard import Scorer
 
 # (documents, settings, run id) -> the two sides of one run
@@ -107,7 +114,39 @@ S2 = ScenarioSpec(
     validate_data=validate_s2_data,
 )
 
-SCENARIOS: tuple[ScenarioSpec, ...] = (S1, S2)
+
+def _load_s3_pipelines(data_dir: Path) -> PipelineFactory:
+    memo = s3_documents.load_memo(data_dir)
+
+    def build(
+        docs: DocumentSet, settings: Settings, run_id: str
+    ) -> tuple[JevSidePipeline, LlmSidePipeline]:
+        sources = s3_documents.sources_only(docs)  # neither side reads the memo body
+        return (
+            JevS3Pipeline(sources, memo, review_threshold=settings.review_threshold, run_id=run_id),
+            LlmS3Pipeline(sources, memo, run_id=run_id),
+        )
+
+    return build
+
+
+S3 = ScenarioSpec(
+    id=s3_documents.SCENARIO_ID,
+    alias="s3",
+    title="Citation check",
+    description=(
+        "Check the 10 citations in an LLM-drafted audit memo against the freight agreement "
+        "and invoices, including four planted errors."
+    ),
+    llm_instructions=S3_INSTRUCTIONS,
+    llm_schema=S3LlmReport,
+    load_documents=s3_documents.load_s3_documents,
+    load_scorer=load_s3_scorer,
+    load_pipelines=_load_s3_pipelines,
+    validate_data=validate_s3_data,
+)
+
+SCENARIOS: tuple[ScenarioSpec, ...] = (S1, S2, S3)
 
 
 def get_scenario(name: str) -> ScenarioSpec | None:
