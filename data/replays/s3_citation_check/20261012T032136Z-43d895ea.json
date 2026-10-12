@@ -1,0 +1,333 @@
+{
+  "id": "20261012T032136Z-43d895ea",
+  "scenario_id": "s3_citation_check",
+  "recorded_at": "2026-10-12T03:21:36.201197+00:00",
+  "jev_model": "jev-latest",
+  "llm_model": "gpt-6-luna",
+  "calls": [
+    {
+      "request_hash": "5ebe3f19a345b4a4d9b40f27736e5dd2969a4ce7d802b0d967d0a75484e8a13a",
+      "provider": "typesafe",
+      "purpose": "s3.citation.C5",
+      "model": "jev-latest",
+      "latency_ms": 280,
+      "result": {
+        "model": "jev-1.13.0",
+        "latency_ms": 280,
+        "choices": {
+          "relation": {
+            "choice": "supports",
+            "probabilities": {
+              "supports": 0.6799999999999999,
+              "contradicts": 0.03,
+              "says_nothing": 0.29
+            },
+            "confidence": 0.52
+          }
+        },
+        "scores": {},
+        "nouls": {},
+        "usage": {
+          "input_tokens": 490,
+          "output_tokens": 44
+        }
+      }
+    },
+    {
+      "request_hash": "0c7931d92fdba0cddf0337d5444b2c0ed8a54fd17aa61de6da2bac05bf89acb8",
+      "provider": "typesafe",
+      "purpose": "s3.citation.C4",
+      "model": "jev-latest",
+      "latency_ms": 284,
+      "result": {
+        "model": "jev-1.13.0",
+        "latency_ms": 284,
+        "choices": {
+          "relation": {
+            "choice": "supports",
+            "probabilities": {
+              "supports": 0.9,
+              "contradicts": 0.01,
+              "says_nothing": 0.09
+            },
+            "confidence": 0.85
+          }
+        },
+        "scores": {},
+        "nouls": {},
+        "usage": {
+          "input_tokens": 468,
+          "output_tokens": 44
+        }
+      }
+    },
+    {
+      "request_hash": "c8c8309d15cc36fdbb2fb511a7f32437f0544e8c713688dda644a968ac290600",
+      "provider": "typesafe",
+      "purpose": "s3.citation.C2",
+      "model": "jev-latest",
+      "latency_ms": 297,
+      "result": {
+        "model": "jev-1.13.0",
+        "latency_ms": 297,
+        "choices": {
+          "relation": {
+            "choice": "supports",
+            "probabilities": {
+              "supports": 0.83,
+              "contradicts": 0.16,
+              "says_nothing": 0.01
+            },
+            "confidence": 0.74
+          }
+        },
+        "scores": {},
+        "nouls": {},
+        "usage": {
+          "input_tokens": 432,
+          "output_tokens": 44
+        }
+      }
+    },
+    {
+      "request_hash": "e1ee7df763dbae97f5358fdfdc285c175a364783bdc76b294f82b850e73a71d6",
+      "provider": "typesafe",
+      "purpose": "s3.citation.C1",
+      "model": "jev-latest",
+      "latency_ms": 352,
+      "result": {
+        "model": "jev-1.13.0",
+        "latency_ms": 352,
+        "choices": {
+          "relation": {
+            "choice": "supports",
+            "probabilities": {
+              "supports": 1.0,
+              "contradicts": 0.0,
+              "says_nothing": 0.0
+            },
+            "confidence": 1.0
+          }
+        },
+        "scores": {},
+        "nouls": {},
+        "usage": {
+          "input_tokens": 449,
+          "output_tokens": 44
+        }
+      }
+    },
+    {
+      "request_hash": "edcf976c7b3eefe0de8e2371623b2a47c82a05e09dee80806861c974e3827991",
+      "provider": "typesafe",
+      "purpose": "s3.citation.C9",
+      "model": "jev-latest",
+      "latency_ms": 272,
+      "result": {
+        "model": "jev-1.13.0",
+        "latency_ms": 272,
+        "choices": {
+          "relation": {
+            "choice": "supports",
+            "probabilities": {
+              "supports": 0.86,
+              "contradicts": 0.02,
+              "says_nothing": 0.12
+            },
+            "confidence": 0.79
+          }
+        },
+        "scores": {},
+        "nouls": {},
+        "usage": {
+          "input_tokens": 428,
+          "output_tokens": 44
+        }
+      }
+    },
+    {
+      "request_hash": "2353758095e2d537742cf8a11ef37baed27e545a2e0219c6712ef15543f79aea",
+      "provider": "typesafe",
+      "purpose": "s3.citation.C7",
+      "model": "jev-latest",
+      "latency_ms": 300,
+      "result": {
+        "model": "jev-1.13.0",
+        "latency_ms": 300,
+        "choices": {
+          "relation": {
+            "choice": "contradicts",
+            "probabilities": {
+              "supports": 0.0,
+              "contradicts": 1.0,
+              "says_nothing": 0.0
+            },
+            "confidence": 1.0
+          }
+        },
+        "scores": {},
+        "nouls": {},
+        "usage": {
+          "input_tokens": 434,
+          "output_tokens": 46
+        }
+      }
+    },
+    {
+      "request_hash": "12cfb7a7e81c3ce1ca173d7d658bf9d32e5e2dd3c781380c7da0f091deb77879",
+      "provider": "typesafe",
+      "purpose": "s3.citation.C8",
+      "model": "jev-latest",
+      "latency_ms": 348,
+      "result": {
+        "model": "jev-1.13.0",
+        "latency_ms": 348,
+        "choices": {
+          "relation": {
+            "choice": "says_nothing",
+            "probabilities": {
+              "supports": 0.0,
+              "contradicts": 0.04,
+              "says_nothing": 0.96
+            },
+            "confidence": 0.94
+          }
+        },
+        "scores": {},
+        "nouls": {},
+        "usage": {
+          "input_tokens": 423,
+          "output_tokens": 48
+        }
+      }
+    },
+    {
+      "request_hash": "09d94bb3054a85ecf4bf2d7e3359346f37efc2c82cde10ae0a7ef56d1ef7dee5",
+      "provider": "typesafe",
+      "purpose": "s3.citation.C6",
+      "model": "jev-latest",
+      "latency_ms": 391,
+      "result": {
+        "model": "jev-1.13.0",
+        "latency_ms": 391,
+        "choices": {
+          "relation": {
+            "choice": "supports",
+            "probabilities": {
+              "supports": 0.56,
+              "contradicts": 0.26,
+              "says_nothing": 0.18
+            },
+            "confidence": 0.34
+          }
+        },
+        "scores": {},
+        "nouls": {},
+        "usage": {
+          "input_tokens": 466,
+          "output_tokens": 44
+        }
+      }
+    },
+    {
+      "request_hash": "588156265ed5983a15ee23500f81bdd23d2f218d6dba327f5e6e199e6db879a9",
+      "provider": "typesafe",
+      "purpose": "s3.citation.C10",
+      "model": "jev-latest",
+      "latency_ms": 276,
+      "result": {
+        "model": "jev-1.13.0",
+        "latency_ms": 276,
+        "choices": {
+          "relation": {
+            "choice": "supports",
+            "probabilities": {
+              "supports": 0.96,
+              "contradicts": 0.03,
+              "says_nothing": 0.01
+            },
+            "confidence": 0.94
+          }
+        },
+        "scores": {},
+        "nouls": {},
+        "usage": {
+          "input_tokens": 480,
+          "output_tokens": 44
+        }
+      }
+    },
+    {
+      "request_hash": "20464457bcc1f3297cb548fc40abd0c2c61d6aba5ef99e368227090c16662219",
+      "provider": "openai",
+      "purpose": "s3.llm",
+      "model": "gpt-6-luna",
+      "latency_ms": 8445,
+      "result": {
+        "model": "gpt-6-luna",
+        "latency_ms": 8445,
+        "usage": {
+          "input_tokens": 4981,
+          "output_tokens": 901,
+          "reasoning_tokens": 462
+        },
+        "parsed": {
+          "citations": [
+            {
+              "citation_id": "C1",
+              "verdict": "verified",
+              "reason": "The quoted agreement rates match the claimed $1,250.00 per Load in Zone A and $1,480.00 per Load in Zone B."
+            },
+            {
+              "citation_id": "C2",
+              "verdict": "verified",
+              "reason": "The passage states that exceeding 1,000 cumulative Loads in the Contract Year earns a 5% discount on all line-haul charges."
+            },
+            {
+              "citation_id": "C3",
+              "verdict": "fabricated",
+              "reason": "The quoted wording does not appear in the agreement, which instead says the discount applies to invoices issued for the calendar month after the threshold is exceeded."
+            },
+            {
+              "citation_id": "C4",
+              "verdict": "verified",
+              "reason": "The quoted invoice lines show 140 Zone A loads and 50 Zone B loads for June."
+            },
+            {
+              "citation_id": "C5",
+              "verdict": "unsupported",
+              "reason": "The quoted lines show the stated July load counts and unit prices, but do not establish that those prices are the full contract rates."
+            },
+            {
+              "citation_id": "C6",
+              "verdict": "verified",
+              "reason": "The quoted April invoice lines state the $261,500 line-haul subtotal and a 22.0% surcharge of $57,530."
+            },
+            {
+              "citation_id": "C7",
+              "verdict": "contradicted",
+              "reason": "The agreement caps the surcharge at 18%, not 25%, and the quoted 22% April surcharge exceeds that cap."
+            },
+            {
+              "citation_id": "C8",
+              "verdict": "unsupported",
+              "reason": "The quoted detention provision specifies the hourly charge but says nothing about written pre-approval."
+            },
+            {
+              "citation_id": "C9",
+              "verdict": "verified",
+              "reason": "The quoted December invoice line shows two hours of detention at $85.00 per hour, totaling $170, at Store 042."
+            },
+            {
+              "citation_id": "C10",
+              "verdict": "verified",
+              "reason": "The quoted May invoice line identifies the March invoice, its 11 May 2026 payment date, and a 1.5% fee on $271,672.00, which calculates to $4,075.08."
+            }
+          ]
+        },
+        "refusal": null,
+        "error": null
+      }
+    }
+  ]
+}
