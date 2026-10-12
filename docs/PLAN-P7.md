@@ -1,7 +1,7 @@
 # Jev Audit Lens — Phase 7 Plan (Polish & rehearsal)
 
 > Source: [PRD.md](PRD.md) Phase 7 ("demo-ready: consistency run, recorded replays, visual checks at key breakpoints, reduced-motion verified, dry run completed") and the PRD flow's "optional **Run ×3** for consistency". Builds on Milestones 1–2 (S1–S3 recorded, 3 runs each).
-> Drafted 2026-10-12. **Status: awaiting presenter approval; no code yet.**
+> Drafted 2026-10-12. **Status: approved by the presenter 2026-10-12** (decisions in §3 accepted as recommended).
 
 ## 1. Already done (no work)
 
@@ -22,7 +22,7 @@
 
 Order: P7-5 and P7-1 → P7-2 → P7-3 and P7-4 → P7-6 → P7-7. Each is a PR with reviewers, as before.
 
-## 3. Decisions needed
+## 3. Decisions (accepted by presenter, 2026-10-12)
 
 1. **What "Consistency ×3" runs.** Recommended: **replay the 3 existing separate recordings**, which costs nothing, is deterministic, and is labelled "3 recorded live runs". The alternative is 3 live runs from the UI (about $0.01–0.03 per scenario, needs Live on and a confirmation). Replaying one recording three times would be trivially identical, so it is excluded, as in PLAN.md.
 2. **Where it shows.** Recommended: a panel below the Results, opened by a "Consistency ×3" button. The alternative is a separate view.
