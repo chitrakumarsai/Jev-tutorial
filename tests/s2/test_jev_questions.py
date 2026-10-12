@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from jev.providers.jev.types import MAX_CHOICE_OPTIONS, ChoiceQ, NoulQ, ScoreQ
+from jev.providers.jev.types import MAX_CHOICE_OPTIONS, ChoiceQ, ScoreQ
 from jev.scenarios.s2_clause_review.checklist import load_checklist
 from jev.scenarios.s2_clause_review.documents import ADDENDUM_ID, load_s2_documents
 from jev.scenarios.s2_clause_review.jev_questions import (
@@ -32,9 +32,10 @@ def test_one_request_asks_where_whether_and_how_risky_for_every_clause() -> None
     assert len(request.questions) == 3 * len(CHECKLIST.clauses)
     for clause in CHECKLIST.clauses:
         where = request.questions[f"{clause.id}__where"]
-        exists = request.questions[f"{clause.id}__exists"]
+        status = request.questions[f"{clause.id}__status"]
         risk = request.questions[f"{clause.id}__risk"]
-        assert isinstance(where, ChoiceQ) and isinstance(exists, NoulQ)
+        assert isinstance(where, ChoiceQ) and isinstance(status, ChoiceQ)
+        assert list(status.criteria) == ["present", "partial", "absent"]
         assert isinstance(risk, ScoreQ)
         assert risk.criteria == clause.risk_rubric  # low first, critical last
         assert clause.title in str(where.instructions)
@@ -50,3 +51,16 @@ def test_the_state_carries_every_numbered_line_once() -> None:
     where = request.questions[f"{CHECKLIST.clauses[0].id}__where"]
     assert isinstance(where, ChoiceQ)
     assert len(where.criteria) == len(numbered_lines(ADDENDUM)) <= MAX_CHOICE_OPTIONS
+
+
+def test_jev_gets_the_same_status_definitions_as_the_llm_prompt() -> None:
+    from jev.scenarios.s2_clause_review.llm_pipeline import INSTRUCTIONS
+
+    request = clause_request(ADDENDUM, CHECKLIST, run_id="r1")
+    status = request.questions[f"{CHECKLIST.clauses[0].id}__status"]
+    assert isinstance(status, ChoiceQ)
+
+    flat = " ".join(INSTRUCTIONS.split())
+    for description in status.criteria.values():
+        assert isinstance(description, str)
+        assert description in flat

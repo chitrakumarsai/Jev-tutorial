@@ -48,9 +48,9 @@ async def test_a_located_clause_points_at_its_line_and_an_absent_one_at_nothing(
     text = DOCS.get(ADDENDUM_ID).text
 
     liability = found["limitation_of_liability"]
-    assert liability.line_ref == "L068"
+    assert liability.line_ref == "L067"  # the key's first line: 9.1, the indirect-loss exclusion
     (span,) = liability.evidence
-    assert text[span.start : span.end] == span.text and "total liability" in span.text
+    assert text[span.start : span.end] == span.text and "indirect" in span.text
     breach = found["breach_notification"]
     assert (breach.line_ref, breach.evidence) == (None, ())
 
@@ -84,7 +84,7 @@ async def test_a_risk_tie_is_resolved_to_the_higher_risk() -> None:
 
 
 async def test_a_missing_answer_is_sent_to_review_not_guessed() -> None:
-    fake = FakeS2Jev(KEY, omitted={"insurance__risk", "subcontracting__exists"})
+    fake = FakeS2Jev(KEY, omitted={"insurance__risk", "subcontracting__status"})
 
     output, _ = await run(fake)
     found = {f.kind: f for f in output.findings}
@@ -118,14 +118,18 @@ async def test_every_evidence_span_is_the_text_at_its_offsets() -> None:
     assert spans and all(text[s.start : s.end] == s.text for s in spans)
 
 
-@pytest.mark.parametrize(
-    ("noul", "verdict"),
-    [(0.7, "present"), (0.699, "partial"), (0.35, "partial"), (0.349, "absent")],
-)
-async def test_the_verdict_thresholds_are_exact(noul: float, verdict: str) -> None:
-    output, _ = await run(FakeS2Jev(KEY, nouls={"governing_law__exists": noul}))
+@pytest.mark.parametrize("status", ["present", "partial", "absent"])
+async def test_the_verdict_is_jevs_status_choice(status: str) -> None:
+    output, _ = await run(FakeS2Jev(KEY, statuses={"governing_law__status": status}))
 
-    assert next(f for f in output.findings if f.kind == "governing_law").verdict == verdict
+    assert next(f for f in output.findings if f.kind == "governing_law").verdict == status
+
+
+async def test_a_status_option_jev_made_up_goes_to_review_without_a_verdict() -> None:
+    output, _ = await run(FakeS2Jev(KEY, statuses={"governing_law__status": "maybe"}))
+
+    governing = next(f for f in output.findings if f.kind == "governing_law")
+    assert (governing.verdict, governing.risk, governing.lane) == (None, None, "review")
 
 
 @pytest.mark.parametrize("probabilities", [{"x": 1.0}, {}, {"7": 1.0}, {"1.0": 1.0}])
@@ -162,7 +166,7 @@ async def test_the_low_confidence_reason_names_the_weak_question() -> None:
     assert governing.confidence == pytest.approx(0.62)
 
 
-async def test_a_partial_clause_reports_its_other_answers_confidence_and_their_doubts() -> None:
+async def test_a_partial_clause_reports_the_weakest_answer_and_its_doubts() -> None:
     fake = FakeS2Jev(KEY, where_confidence={"audit_rights__where": 0.5})
 
     output, _ = await run(fake)
@@ -170,7 +174,7 @@ async def test_a_partial_clause_reports_its_other_answers_confidence_and_their_d
 
     reason = str(audit.review_reason)
     assert reason.startswith("partial:") and "where 50% is below 80%" in reason
-    assert audit.confidence == pytest.approx(0.5)  # not ~0 from the coin-flip "exists" answer
+    assert audit.confidence == pytest.approx(0.5)
 
 
 async def test_a_near_tie_in_risk_goes_to_the_higher_level() -> None:

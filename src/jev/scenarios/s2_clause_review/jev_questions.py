@@ -1,14 +1,16 @@
 """S2 questions for Jev, after the semantic-find recipe: the addendum is sent once with every
-line numbered, and for each checklist clause Jev answers three questions in parallel:
-which line addresses it (Choice), whether any line does (Noul), and how risky it is (Score)."""
+line numbered, and for each checklist clause Jev answers three questions in parallel: which line
+addresses it (Choice), whether it is present, partial or absent (Choice, with the same
+definitions the LLM gets), and how risky it is (Score)."""
 
 from dataclasses import dataclass
 
 from pydantic import JsonValue
 
 from jev.domain.documents import Document
-from jev.providers.jev.types import ChoiceQ, JevRequest, NoulCriteriaQ, NoulQ, Question, ScoreQ
+from jev.providers.jev.types import ChoiceQ, Description, JevRequest, Question, ScoreQ
 from jev.scenarios.s2_clause_review.checklist import Checklist, ChecklistClause
+from jev.scenarios.s2_clause_review.verdicts import STATUS_DEFINITIONS
 
 CLAUSES_PURPOSE = "s2.clauses"
 
@@ -34,6 +36,9 @@ def numbered_lines(doc: Document) -> list[NumberedLine]:
     return lines
 
 
+_STATUS_OPTIONS: dict[str, Description | None] = dict(STATUS_DEFINITIONS.items())
+
+
 def _questions(clause: ChecklistClause, line_ids: list[str]) -> dict[str, Question]:
     subject = f"{clause.title}: {clause.look_for}"
     return {
@@ -41,12 +46,9 @@ def _questions(clause: ChecklistClause, line_ids: list[str]) -> dict[str, Questi
             instructions=f"Which line of the `addendum` best addresses this? {subject}",
             criteria=dict.fromkeys(line_ids),
         ),
-        f"{clause.id}__exists": NoulQ(
-            instructions=f"Does any line of the `addendum` actually provide this? {subject}",
-            criteria=NoulCriteriaQ(
-                true="A line in the addendum provides this.",
-                false="No line provides this; related wording that does not do it does not count.",
-            ),
+        f"{clause.id}__status": ChoiceQ(
+            instructions=f"Is this in the `addendum`? {subject}",
+            criteria=_STATUS_OPTIONS,
         ),
         f"{clause.id}__risk": ScoreQ(
             instructions=(

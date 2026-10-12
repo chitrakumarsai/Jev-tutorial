@@ -6,8 +6,6 @@ from jev.providers.jev.types import ChoiceA, JevRequest, JevResult, NoulA, Score
 from jev.scenarios.s2_clause_review.answer_key import S2Key
 
 RISK_INDEX = {"low": 0, "medium": 1, "high": 2, "critical": 3}
-# What a good reader's "does any line address it" looks like for each verdict.
-EXISTS = {"present": 0.97, "partial": 0.5, "absent": 0.03}
 
 
 @dataclass
@@ -15,7 +13,8 @@ class FakeS2Jev:
     key: S2Key
     confidence: float = 0.95
     where_confidence: dict[str, float] = field(default_factory=dict)  # question key -> conf
-    nouls: dict[str, float] = field(default_factory=dict)  # question key -> forced noul
+    statuses: dict[str, str] = field(default_factory=dict)  # question key -> forced status
+    status_confidence: dict[str, float] = field(default_factory=dict)
     lines: dict[str, str] = field(default_factory=dict)  # question key -> forced line id
     risk_probabilities: dict[str, dict[str, float]] = field(default_factory=dict)
     omitted: set[str] = field(default_factory=set)
@@ -32,8 +31,12 @@ class FakeS2Jev:
                 continue
             clause_id, kind = qkey.split("__")
             item = truth[clause_id]
-            if kind == "exists":
-                nouls[qkey] = NoulA(noul=self.nouls.get(qkey, EXISTS[item.status]))
+            if kind == "status":
+                choice = self.statuses.get(qkey, item.status)
+                conf = self.status_confidence.get(qkey, self.confidence)
+                choices[qkey] = ChoiceA(
+                    choice=choice, probabilities={choice: conf}, confidence=conf
+                )
             elif kind == "where":
                 line = self.lines.get(qkey) or f"L{item.first_line or 1:03d}"
                 conf = self.where_confidence.get(qkey, self.confidence)
