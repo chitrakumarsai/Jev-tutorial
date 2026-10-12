@@ -10,7 +10,7 @@
       "verdict": "verified",
       "section_correct": false,
       "trap": true,
-      "rationale": "Planted: the quote is real and supports the claim, but it is in \u00a73.1 (Rates), not \u00a75.1 (Fuel surcharge)."
+      "rationale": "Planted: the quote is real and states these rates, but it is in \u00a73.1 (Rates), not \u00a75.1 (Fuel surcharge). Claim scoped to the quote (presenter, 2026-10-12)."
     },
     {
       "id": "K2",
@@ -34,7 +34,7 @@
       "verdict": "verified",
       "section_correct": true,
       "trap": false,
-      "rationale": "June invoice lines L1\u2013L2 show 140 + 50 loads."
+      "rationale": "June invoice lines L1\u2013L2 show 140 + 50 loads. Claim scoped to the quote (presenter, 2026-10-12)."
     },
     {
       "id": "K5",
@@ -42,7 +42,7 @@
       "verdict": "verified",
       "section_correct": true,
       "trap": false,
-      "rationale": "July invoice lines L1\u2013L2 bill line-haul at the full contract rates."
+      "rationale": "July invoice lines L1\u2013L2 bill 145 and 45 loads at the full contract rates. Claim scoped to the quote (presenter, 2026-10-12)."
     },
     {
       "id": "K6",
@@ -74,7 +74,7 @@
       "verdict": "verified",
       "section_correct": true,
       "trap": false,
-      "rationale": "December invoice L4 bills two hours of detention."
+      "rationale": "December invoice L4 bills two hours of detention, $170. Claim scoped to the quote (presenter, 2026-10-12)."
     },
     {
       "id": "K10",
@@ -82,7 +82,7 @@
       "verdict": "verified",
       "section_correct": true,
       "trap": false,
-      "rationale": "May invoice L5 bills the 1.5% late fee on the March invoice paid 11 May."
+      "rationale": "May invoice L5 bills a $4,075.08 late fee on the March invoice paid 11 May. Claim scoped to the quote (presenter, 2026-10-12)."
     }
   ]
 }
