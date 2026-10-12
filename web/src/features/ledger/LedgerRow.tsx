@@ -16,7 +16,7 @@ type Props = {
   verdict: Verdict;
 };
 
-function verdictText(verdict: Verdict, finding: Finding): string {
+function verdictText(verdict: Verdict, isMoney: boolean): string {
   switch (verdict.kind) {
     case 'pending':
       return 'Recorded';
@@ -25,9 +25,7 @@ function verdictText(verdict: Verdict, finding: Finding): string {
         ? `Matches ${verdict.keyId}, after review`
         : `Matches ${verdict.keyId}`;
     case 'wrong_value':
-      return isMoneyFinding(finding)
-        ? `Wrong amount for ${verdict.keyId}`
-        : `Does not match ${verdict.keyId}`;
+      return isMoney ? `Wrong amount for ${verdict.keyId}` : `Does not match ${verdict.keyId}`;
     case 'false_positive':
       return verdict.isTrap ? 'Fell for a planted trap' : 'Not in the answer key';
   }
@@ -92,7 +90,7 @@ export function LedgerRow({ finding, side, verdict }: Props) {
       <p className="ledger-row__figures">
         {finding.verdict != null && (
           <span className={`ledger-row__chip ledger-row__chip--${finding.verdict}`}>
-            <span aria-hidden="true">{VERDICT_LABELS[finding.verdict].symbol} </span>
+            <span aria-hidden="true">{VERDICT_LABELS[finding.verdict].symbol}</span>
             {VERDICT_LABELS[finding.verdict].text}
           </span>
         )}
@@ -122,7 +120,7 @@ export function LedgerRow({ finding, side, verdict }: Props) {
       </p>
       <p className="ledger-row__notes">
         <span className={`ledger-row__verdict ledger-row__verdict--${verdict.kind}`}>
-          {verdictText(verdict, finding)}
+          {verdictText(verdict, isMoneyFinding(finding))}
         </span>
         {!finding.traceable && (
           <span className="ledger-row__flag">No quote found in the documents</span>

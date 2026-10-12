@@ -13,12 +13,12 @@ const KIND_LABELS: Readonly<Record<string, string>> = {
 
 const MISSING = '—';
 
-type Verdict = NonNullable<Finding['verdict']>;
+type FindingVerdict = NonNullable<Finding['verdict']>;
 type Risk = NonNullable<Finding['risk']>;
 
 /** Clause (S2) and citation (S3) verdicts in plain words, with a symbol so colour is not the only signal. */
 export const VERDICT_LABELS: Readonly<
-  Record<Verdict, { readonly text: string; readonly symbol: string }>
+  Record<FindingVerdict, { readonly text: string; readonly symbol: string }>
 > = {
   present: { text: 'Present', symbol: '✓' },
   partial: { text: 'Partly there', symbol: '◐' },
@@ -47,7 +47,7 @@ export function kindLabel(kind: string): string {
 
 /** One finding as the parsed response carried it: raw fields, exact strings. */
 export function parsedLine(finding: Finding): string {
-  if (finding.verdict != null) {
+  if (!isMoneyFinding(finding) && finding.verdict != null) {
     return [
       finding.doc_id,
       finding.line_ref ?? MISSING,

@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { Finding, SideResult } from '../../api/types';
 import { completedView } from '../../test/fixtures/replay';
+import { TraceContext } from '../trace/traceContext';
 import { Ledger } from './Ledger';
 import { ReviewLane } from './ReviewLane';
 import { traceTargets, verdicts } from './ledgerRows';
@@ -171,23 +172,46 @@ describe('Ledger', () => {
       });
 
     it('shows a present clause with its risk and its line, and no money', () => {
-      render(<Ledger side="jev" findings={[clause({})]} result={card('correct')} />);
+      render(
+        <TraceContext value={() => undefined}>
+          <Ledger side="jev" findings={[clause({})]} result={card('correct')} />
+        </TraceContext>,
+      );
 
       expect(screen.getByText('Limitation of liability')).toBeInTheDocument();
       expect(screen.getByText('Present')).toBeInTheDocument();
       expect(screen.getByText('High risk')).toBeInTheDocument();
-      expect(screen.getByText('Addendum · L068')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Addendum · L068/ })).toBeInTheDocument();
       expect(screen.queryByText(/Billed|Variance/)).not.toBeInTheDocument();
     });
 
     it('says plainly when a clause is not in the agreement', () => {
-      const absent = clause({ verdict: 'absent', risk: 'critical', line_ref: null, evidence: [] });
+      const absent = clause({
+        verdict: 'absent',
+        risk: 'critical',
+        line_ref: null,
+        evidence: [],
+        traceable: true, // an absent clause claims nothing to trace
+      });
 
-      render(<Ledger side="jev" findings={[absent]} result={card('correct')} />);
+      render(
+        <TraceContext value={() => undefined}>
+          <Ledger side="jev" findings={[absent]} result={card('correct')} />
+        </TraceContext>,
+      );
 
       expect(screen.getByText('Not in the agreement')).toBeInTheDocument();
       expect(screen.getByText('Critical risk')).toBeInTheDocument();
       expect(screen.queryByText('No quote found in the documents')).not.toBeInTheDocument();
+      expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    });
+
+    it('flags a present clause whose quote was not found', () => {
+      const invented = clause({ verdict: 'present', evidence: [], traceable: false });
+
+      render(<Ledger side="llm" findings={[invented]} result={card('correct')} />);
+
+      expect(screen.getByText('No quote found in the documents')).toBeInTheDocument();
     });
 
     it('marks a partial clause and a clause the key disagrees with', () => {
