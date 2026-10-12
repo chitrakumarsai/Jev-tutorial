@@ -6,7 +6,7 @@ from jev.domain.findings import CitationVerdict
 
 
 class S3LlmCitation(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", frozen=True)
 
     citation_id: str
     verdict: CitationVerdict
@@ -14,6 +14,6 @@ class S3LlmCitation(BaseModel):
 
 
 class S3LlmReport(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", frozen=True)
 
     citations: list[S3LlmCitation]
