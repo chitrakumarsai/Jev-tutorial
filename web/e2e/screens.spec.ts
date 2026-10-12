@@ -66,3 +66,36 @@ test.describe('three-column layout', () => {
     expect(tab?.height).toBeLessThan(MAX_TAB_HEIGHT_PX);
   });
 });
+
+// Full-page shots tolerate 1% change, which a moved Results row stays under; a shot of the
+// scorecard table alone makes any changed row or value a large share of the image.
+const SCENARIOS = [
+  ['s1', 'Contract-to-invoice reconciliation'],
+  ['s2', 'Clause risk review'],
+  ['s3', 'Citation check'],
+] as const;
+
+for (const theme of THEMES) {
+  test.describe(`${theme} scorecards`, () => {
+    test.use({
+      viewport: { width: 1440, height: HEIGHT },
+      colorScheme: theme,
+      contextOptions: { reducedMotion: 'reduce' },
+    });
+    for (const [id, title] of SCENARIOS) {
+      test(`${id} scorecard table in ${theme}`, async ({ page }) => {
+        await openApp(page);
+        await page.getByLabel('Scenario').selectOption({ label: title });
+        await replayToResults(page);
+        await settle(page);
+
+        const scorecard = page.getByRole('table', { name: 'Scorecard against the answer key' });
+        // Text-only changes (a swapped label) are well under 1% of the table, so the
+        // tolerance here is ten times tighter than for full pages.
+        await expect(scorecard).toHaveScreenshot(`scorecard-${id}-${theme}.png`, {
+          maxDiffPixelRatio: 0.001,
+        });
+      });
+    }
+  });
+}
