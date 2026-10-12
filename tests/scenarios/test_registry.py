@@ -106,3 +106,19 @@ def test_s2_is_registered_with_its_alias_and_consistent_data() -> None:
     assert '<document id="addendum">' in llm.request().input
     assert spec.validate_data(DATA) == []
     assert spec.load_scorer(DATA)([]).of == 10
+
+
+def test_s3_is_registered_with_the_memo_shown_but_not_given_to_either_side() -> None:
+    spec = get_scenario("s3")
+    assert spec is not None
+    docs = spec.load_documents(DATA)
+    settings = Settings(_env_file=None, review_threshold=0.8)  # type: ignore[call-arg]
+
+    jev, llm = spec.load_pipelines(DATA)(docs, settings, "run-1")
+
+    assert spec.id == "s3_citation_check"
+    assert "memo" in [d.doc_id for d in docs.documents]  # for the document viewer
+    assert len(jev.requests()) == 9
+    assert '<document id="memo">' not in llm.request().input
+    assert spec.validate_data(DATA) == []
+    assert spec.load_scorer(DATA)([]).of == 10
