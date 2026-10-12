@@ -36,4 +36,22 @@ describe('parsedLine', () => {
       }),
     ).toBe('msa  —  other  billed —  expected —  variance —  quote found');
   });
+
+  it('prints a clause finding by its verdict and risk, not money', () => {
+    const clause = {
+      id: 'llm-limitation_of_liability',
+      kind: 'limitation_of_liability',
+      doc_id: 'addendum',
+      line_ref: 'L068',
+      lane: 'auto' as const,
+      evidence: [],
+      traceable: true,
+      verdict: 'present' as const,
+      risk: 'high' as const,
+    };
+
+    expect(parsedLine(clause)).toBe(
+      'addendum  L068  limitation_of_liability  present  risk high  quote found',
+    );
+  });
 });

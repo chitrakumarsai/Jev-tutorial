@@ -148,4 +148,59 @@ describe('Ledger', () => {
 
     expect(screen.queryByText('Total variance')).not.toBeInTheDocument();
   });
+
+  describe('clause findings (S2)', () => {
+    const clause = (overrides: Partial<Finding>): Finding =>
+      finding({
+        id: 'c1',
+        kind: 'limitation_of_liability',
+        doc_id: 'addendum',
+        line_ref: 'L068',
+        variance: null,
+        verdict: 'present',
+        risk: 'high',
+        evidence: [{ doc_id: 'addendum', start: 0, end: 9, text: 'Liability' }],
+        ...overrides,
+      });
+    const card = (status: 'correct' | 'wrong_value', id = 'c1') =>
+      withScorecard(jevResult, {
+        items: [{ key_id: 'K01', status, finding_id: id }],
+        false_positives: [],
+        trap_hits: [],
+        variance: null,
+      });
+
+    it('shows a present clause with its risk and its line, and no money', () => {
+      render(<Ledger side="jev" findings={[clause({})]} result={card('correct')} />);
+
+      expect(screen.getByText('Limitation of liability')).toBeInTheDocument();
+      expect(screen.getByText('Present')).toBeInTheDocument();
+      expect(screen.getByText('High risk')).toBeInTheDocument();
+      expect(screen.getByText('Addendum · L068')).toBeInTheDocument();
+      expect(screen.queryByText(/Billed|Variance/)).not.toBeInTheDocument();
+    });
+
+    it('says plainly when a clause is not in the agreement', () => {
+      const absent = clause({ verdict: 'absent', risk: 'critical', line_ref: null, evidence: [] });
+
+      render(<Ledger side="jev" findings={[absent]} result={card('correct')} />);
+
+      expect(screen.getByText('Not in the agreement')).toBeInTheDocument();
+      expect(screen.getByText('Critical risk')).toBeInTheDocument();
+      expect(screen.queryByText('No quote found in the documents')).not.toBeInTheDocument();
+    });
+
+    it('marks a partial clause and a clause the key disagrees with', () => {
+      render(
+        <Ledger
+          side="llm"
+          findings={[clause({ verdict: 'partial', risk: 'high' })]}
+          result={card('wrong_value')}
+        />,
+      );
+
+      expect(screen.getByText('Partly there')).toBeInTheDocument();
+      expect(screen.getByText('Does not match K01')).toBeInTheDocument();
+    });
+  });
 });
