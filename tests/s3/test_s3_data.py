@@ -89,3 +89,7 @@ def test_a_fabricated_citation_has_no_section_to_judge() -> None:
             section_correct=True,
             rationale="r",
         )
+
+
+def test_the_bundled_key_records_the_presenters_review() -> None:
+    assert load_s3_key(DATA).reviewed_at == "2026-10-12"
