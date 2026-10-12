@@ -29,7 +29,7 @@ function stageDetail(pipeline: Pipeline): Record<keyof Pipeline['stages'], strin
   const planned = pipeline.planned;
   return {
     candidates: planned
-      ? `${formatCount(planned.questions)} typed questions in ${formatCount(planned.requests)} requests`
+      ? `${formatCount(planned.questions)} typed questions in ${formatCount(planned.requests)} ${planned.requests === 1 ? 'request' : 'requests'}`
       : 'Regexes over-find amounts, rates and dates',
     questions: planned
       ? `${formatCount(answered)} of ${formatCount(planned.requests)} requests answered`

@@ -93,3 +93,71 @@ describe('jevPipeline', () => {
     expect(contract?.answers.find((a) => a.key === 'late_fee_grace_days')?.probability).toBe(0.7);
   });
 });
+
+describe('S2 clause review', () => {
+  it('names the clause request and its three questions per clause', () => {
+    expect(requestLabel('s2.clauses')).toEqual({
+      short: 'Clauses',
+      full: 'Clause checklist',
+    });
+    expect(questionLabel('limitation_of_liability__where')).toBe(
+      'Limitation of liability: which line',
+    );
+    expect(questionLabel('audit_rights__status')).toBe('Audit rights: is it there');
+    expect(questionLabel('insurance__risk')).toBe('Insurance: risk level');
+  });
+
+  it('shows Jev’s risk answers alongside its choices', () => {
+    const pipeline = jevPipeline(
+      progress(
+        step({ step: 'candidates', requests: 1, questions: 3 }),
+        step({ step: 'request_sent', purpose: 's2.clauses', questions: 3 }),
+        step({
+          step: 'answers',
+          purpose: 's2.clauses',
+          latency_ms: 360,
+          choices: {
+            insurance__where: ['L055', 0.9],
+            insurance__status: ['partial', 0.92],
+          },
+          scores: { insurance__risk: ['high', 0.88] },
+        }),
+      ),
+    );
+
+    const answers = pipeline.requests[0]?.answers ?? [];
+    expect(answers.map((a) => [a.question, a.answer, a.probability, a.kind])).toEqual([
+      ['Insurance: which line', 'L055', 0.9, 'choice'],
+      ['Insurance: is it there', 'partial', 0.92, 'choice'],
+      ['Insurance: risk level', 'high', 0.88, 'score'],
+    ]);
+  });
+
+  it('keeps each clause’s three answers together, in checklist order', () => {
+    const pipeline = jevPipeline(
+      progress(
+        step({
+          step: 'answers',
+          purpose: 's2.clauses',
+          latency_ms: 1,
+          choices: {
+            soc2_audit__where: ['L010', 0.9],
+            insurance__where: ['L055', 0.9],
+            soc2_audit__status: ['present', 0.9],
+            insurance__status: ['partial', 0.9],
+          },
+          scores: { soc2_audit__risk: ['low', 0.9], insurance__risk: ['high', 0.9] },
+        }),
+      ),
+    );
+
+    expect(pipeline.requests[0]?.answers.map((a) => a.question)).toEqual([
+      'Soc2 audit: which line',
+      'Soc2 audit: is it there',
+      'Soc2 audit: risk level',
+      'Insurance: which line',
+      'Insurance: is it there',
+      'Insurance: risk level',
+    ]);
+  });
+});
