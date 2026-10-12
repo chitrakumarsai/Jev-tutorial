@@ -19,16 +19,16 @@ I recommend that management request corrected invoices or credits for the July�
 
 ## Citations
 
-- **C1** (msa §5.1): The base line-haul rates are consistent with the contractual Zone A and Zone B prices.  
+- **C1** (msa §5.1): The agreement sets line-haul rates of $1,250.00 per Load in Zone A and $1,480.00 per Load in Zone B.  
   > Zone A: $1,250.00 per Load. Zone B: $1,480.00 per Load.
 - **C2** (msa §4.1): The agreement grants a 5% discount on all line-haul charges once cumulative annual Loads exceed 1,000.  
   > When cumulative Loads in the Contract Year exceed 1,000, Customer receives a discount of 5% off all line-haul charges.
 - **C3** (msa §4.2): The discount begins with invoices issued for the calendar month after the threshold is first exceeded.  
   > The discount applies from the month in which cumulative Loads first exceed 1,000.
-- **C4** (inv-2026-06 L1–L2): Loads from January through May total 895; June adds 190, bringing the cumulative total to 1,085 and triggering the discount for July invoices.  
+- **C4** (inv-2026-06 L1–L2): June bills 140 loads in Zone A and 50 loads in Zone B.  
   > | L1 | Line-haul, Zone A | 140 loads | $1,250.00 | $175,000.00 |
 | L2 | Line-haul, Zone B | 50 loads | $1,480.00 | $74,000.00 |
-- **C5** (inv-2026-07 L1–L2): The July invoice shows the full $247,850 line-haul subtotal at undiscounted rates.  
+- **C5** (inv-2026-07 L1–L2): July bills 145 Zone A and 45 Zone B loads at the full contract rates of $1,250.00 and $1,480.00.  
   > | L1 | Line-haul, Zone A | 145 loads | $1,250.00 | $181,250.00 |
 | L2 | Line-haul, Zone B | 45 loads | $1,480.00 | $66,600.00 |
 - **C6** (inv-2026-04 L3): In April, the carrier billed 22% of the $261,500 line-haul subtotal, or $57,530.  
@@ -38,7 +38,7 @@ I recommend that management request corrected invoices or credits for the July�
   > The surcharge percentage follows the published diesel index for the invoice month but may not exceed 18% of line-haul charges.
 - **C8** (msa §3.2): Detention must be pre-approved in writing by the Customer.  
   > Waiting time beyond two free hours at a Customer site is billed at $85.00 per hour, per occurrence, as a single line.
-- **C9** (inv-2026-12 L4): December bills $170 for a stated two-hour detention, although no time exceeds the free allowance.  
+- **C9** (inv-2026-12 L4): December bills $170 for two hours of detention at Store 042.  
   > | L4 | Detention, Store 042, 2 hours | 2 h | $85.00 | $170.00 |
-- **C10** (inv-2026-05 L5): The May invoice’s $4,075.08 late fee on the March invoice appears arithmetically consistent with 1.5% of $271,672 and the stated late payment date.  
+- **C10** (inv-2026-05 L5): The May invoice bills a $4,075.08 late fee on the March invoice, which was paid on 11 May 2026.  
   > Late fee on INV-2026-03 (invoice date 31 March 2026, paid 11 May 2026): 1.5% of $271,672.00

@@ -93,3 +93,26 @@ def test_a_fabricated_citation_has_no_section_to_judge() -> None:
 
 def test_the_bundled_key_records_the_presenters_review() -> None:
     assert load_s3_key(DATA).reviewed_at == "2026-10-12"
+
+
+def test_every_number_in_a_verified_claim_is_in_its_passage() -> None:
+    """A verified claim may only state what its quote's lines show: no sums, no figures
+    from elsewhere (Jev judges the passage and never does arithmetic, ADR 0001)."""
+    import re
+
+    from jev.scenarios.s1_reconciliation.documents import load_s1_documents
+    from jev.scenarios.s3_citation_check.locate import locate
+
+    docs = load_s1_documents(DATA)
+    verified = {i.citation_id for i in load_s3_key(DATA).items if i.verdict == "verified"}
+    for citation in load_memo(DATA).citations:
+        located = locate(citation, docs)
+        if citation.id not in verified or located is None:
+            continue
+
+        def numbers(text: str) -> list[str]:
+            return [n.rstrip(",") for n in re.findall(r"\d[\d,]*", text.replace(".00", ""))]
+
+        passage_numbers = set(numbers(located.passage))
+        missing = [n for n in numbers(citation.claim) if n not in passage_numbers]
+        assert missing == [], f"{citation.id}: {missing} not in its passage"
