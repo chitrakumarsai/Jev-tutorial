@@ -1,7 +1,7 @@
 """Score S3 findings against the approved key: per memo citation, the verdict. A wrong cited
 section is noted on findings but not scored (presenter decision 2026-10-12)."""
 
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from functools import partial
 from pathlib import Path
 
@@ -14,7 +14,7 @@ FABRICATED = "fabricated"
 
 def _citation_id(finding: Finding) -> str:
     """Pipelines name findings "<side>-<citation id>", e.g. "jev-C3"."""
-    return finding.id.rsplit("-", 1)[-1]
+    return finding.id.rsplit("-", 1)[-1].upper()
 
 
 def _status(item: S3KeyItem, finding: Finding | None) -> ItemStatus:
@@ -25,24 +25,41 @@ def _status(item: S3KeyItem, finding: Finding | None) -> ItemStatus:
     return "correct_in_review" if finding.lane == "review" else "correct"
 
 
-def _summary(key: S3Key, statuses: dict[str, ItemStatus]) -> tuple[SummaryRow, ...]:
+def _summary(key: S3Key, statuses: Mapping[str, ItemStatus]) -> tuple[SummaryRow, ...]:
+    def right(item: S3KeyItem) -> bool:
+        return statuses[item.citation_id] in ("correct", "correct_in_review")
+
     fabricated = [i for i in key.items if i.verdict == FABRICATED]
-    caught = all(statuses[i.citation_id] in ("correct", "correct_in_review") for i in fabricated)
-    traps = [i for i in key.items if i.trap]
-    found = sum(statuses[i.citation_id] in ("correct", "correct_in_review") for i in traps)
+    caught = bool(fabricated) and all(right(i) for i in fabricated)
+    # Planted errors with a wrong verdict to catch; a planted wrong *section* (C1) is
+    # verified by the key, so the only mistake there is over-flagging it.
+    errors = [i for i in key.items if i.trap and i.verdict != "verified"]
+    sections = [i for i in key.items if i.trap and i.verdict == "verified"]
+    found = sum(right(i) for i in errors)
+    kept = all(right(i) for i in sections)
     wrong = sum(s == "wrong_value" for s in statuses.values())
-    return (
+    rows = [
         SummaryRow(
             label="Fabricated quote caught", kind="text", value="Yes" if caught else "No", ok=caught
         ),
         SummaryRow(
             label="Planted errors caught",
             kind="text",
-            value=f"{found} of {len(traps)}",
-            ok=found == len(traps),
+            value=f"{found} of {len(errors)}",
+            ok=found == len(errors),
         ),
-        SummaryRow(label="Wrong verdicts", kind="count", value=str(wrong), ok=wrong == 0),
-    )
+    ]
+    if sections:
+        rows.append(
+            SummaryRow(
+                label="Wrong-section citation kept",
+                kind="text",
+                value="Yes" if kept else "No",
+                ok=kept,
+            )
+        )
+    rows.append(SummaryRow(label="Wrong verdicts", kind="count", value=str(wrong), ok=wrong == 0))
+    return tuple(rows)
 
 
 def score(findings: Sequence[Finding], key: S3Key) -> Scorecard:
@@ -50,9 +67,15 @@ def score(findings: Sequence[Finding], key: S3Key) -> Scorecard:
     known = {item.citation_id for item in key.items}
     by_id: dict[str, Finding] = {}
     false_positives: list[str] = []
-    for f in findings:  # the first finding per known citation is scored; the rest are not
-        if _citation_id(f) in known and _citation_id(f) not in by_id:
-            by_id[_citation_id(f)] = f
+    for f in findings:  # one finding per known citation: the first with a verdict
+        cid = _citation_id(f)
+        held = by_id.get(cid)
+        if cid not in known:
+            false_positives.append(f.id)
+        elif held is None or (held.verdict is None and f.verdict is not None):
+            if held is not None:
+                false_positives.append(held.id)
+            by_id[cid] = f
         else:
             false_positives.append(f.id)
     statuses = {i.citation_id: _status(i, by_id.get(i.citation_id)) for i in key.items}
@@ -82,4 +105,5 @@ def score(findings: Sequence[Finding], key: S3Key) -> Scorecard:
 
 
 def load_s3_scorer(data_dir: Path) -> Scorer:
+    """A scorer bound to the approved S3 key."""
     return partial(score, key=load_s3_key(data_dir))

@@ -120,5 +120,9 @@ def test_s3_is_registered_with_the_memo_shown_but_not_given_to_either_side() -> 
     assert "memo" in [d.doc_id for d in docs.documents]  # for the document viewer
     assert len(jev.requests()) == 9
     assert '<document id="memo">' not in llm.request().input
+    memo_only = "four errors planted"  # a phrase only the memo's header has
+    assert memo_only in docs.get("memo").text
+    assert all(memo_only not in str(r.state) for r in jev.requests())
+    assert memo_only not in llm.request().input
     assert spec.validate_data(DATA) == []
     assert spec.load_scorer(DATA)([]).of == 10

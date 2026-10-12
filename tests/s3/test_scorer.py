@@ -47,7 +47,8 @@ def test_a_perfect_check_scores_every_citation() -> None:
 
     assert (card.correct, card.of, card.false_positives, card.trap_hits) == (10, 10, (), ())
     assert row(card, "Fabricated quote caught") == ("Yes", True)
-    assert row(card, "Planted errors caught") == ("4 of 4", True)
+    assert row(card, "Planted errors caught") == ("3 of 3", True)
+    assert row(card, "Wrong-section citation kept") == ("Yes", True)
     assert row(card, "Wrong verdicts") == ("0", True)
     assert {s.label for s in card.items} == {f"C{n}" for n in range(1, 11)}
 
@@ -60,7 +61,7 @@ def test_a_correct_answer_in_review_is_counted_separately() -> None:
     card = SCORE(findings(C8={"lane": "review"}))
 
     assert status(card, "C8") == "correct_in_review"
-    assert row(card, "Planted errors caught") == ("4 of 4", True)
+    assert row(card, "Planted errors caught") == ("3 of 3", True)
 
 
 def test_a_wrong_verdict_on_a_planted_error_is_a_trap_hit_when_confident() -> None:
@@ -70,7 +71,7 @@ def test_a_wrong_verdict_on_a_planted_error_is_a_trap_hit_when_confident() -> No
     assert status(confident, "C7") == "wrong_value"
     assert confident.trap_hits == ("jev-C7",)
     assert in_review.trap_hits == ()
-    assert row(confident, "Planted errors caught") == ("3 of 4", False)
+    assert row(confident, "Planted errors caught") == ("2 of 3", False)
     assert row(confident, "Wrong verdicts") == ("1", False)
 
 
@@ -104,3 +105,25 @@ async def test_the_jev_pipeline_with_a_reader_like_the_key_scores_full_marks() -
     output = await pipeline.run(FakeS3Jev(KEY), lambda *event: None)
 
     assert SCORE(output.findings).correct == 10
+
+
+def test_over_flagging_the_wrong_section_citation_is_a_confident_trap_hit() -> None:
+    card = SCORE(findings(C1={"verdict": "unsupported"}))
+
+    assert status(card, "C1") == "wrong_value"
+    assert card.trap_hits == ("jev-C1",)
+    assert row(card, "Wrong-section citation kept") == ("No", False)
+    assert row(card, "Planted errors caught") == ("3 of 3", True)
+
+
+def test_a_repeat_with_a_verdict_beats_an_earlier_one_without() -> None:
+    rows = findings(C2={"verdict": None})
+    card = SCORE([*rows, rows[1].model_copy(update={"verdict": "verified"})])
+
+    assert status(card, "C2") == "correct"
+
+
+def test_citation_ids_are_matched_ignoring_case() -> None:
+    rows = [f.model_copy(update={"id": f.id.lower()}) for f in findings()]
+
+    assert SCORE(rows).correct == 10
