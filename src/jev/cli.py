@@ -87,7 +87,14 @@ def _budget_init(ledger_path: Path | None) -> int:
 def _budget_show() -> int:
     """Spent / cap / headroom per provider. Read-only: never creates the ledger, never
     prints a key or its fingerprint."""
-    initialised, rows = budget_report(Settings())
+    try:
+        initialised, rows = budget_report(Settings())
+    except LedgerCorruptError as exc:  # its message names a line number, never content
+        print(f"The spend ledger is corrupt ({exc}); live calls are refused.", file=sys.stderr)
+        return 1
+    except (OSError, ValidationError) as exc:
+        print(f"Cannot read the budget ({type(exc).__name__}).", file=sys.stderr)
+        return 1
     if not initialised:
         print("No spend ledger yet; create it once with `budget init`.", file=sys.stderr)
         return 1
@@ -249,7 +256,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.group == "budget":
         if args.command == "show":
             return _budget_show()
-        return _budget_init(args.ledger_path)
+        if args.command == "init":
+            return _budget_init(args.ledger_path)
     if args.group == "openapi":
         return _openapi(args.out)
     return _validate(args.data_dir, args.scenario)
