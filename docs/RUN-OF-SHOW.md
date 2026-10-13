@@ -2,7 +2,7 @@
 
 About 15 minutes: S1 → S2 → S3, with Consistency ×3 shown on S3. This plays recorded live runs (Replay) by default, so it costs nothing and gives the same results every time. Task P7-6 of [PLAN-P7.md](PLAN-P7.md).
 
-> **Status: draft for presenter review.** The numbers below were taken from the committed recordings on 2026-10-13. Re-check them if anything is re-recorded.
+> **Status: approved by the presenter on 2026-10-13.** The numbers below were taken from the committed recordings on 2026-10-13. Re-check them if anything is re-recorded.
 
 ## 1. Before the audience arrives (10 minutes)
 
