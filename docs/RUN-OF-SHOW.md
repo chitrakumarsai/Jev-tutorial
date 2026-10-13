@@ -35,8 +35,8 @@ Point at the **Exact prompt sent to the LLM** fold-out to show nothing is hidden
 4. When the results appear:
    - **Both sides find all 14 planted discrepancies.**
    - **Jev + code's total variance is $98,510.71, exact in every run.**
-   - **The LLM's total varies between runs.** In two of the three recordings it also flagged correct detention lines as $170 overcharges, 3 lines in one run ($510) and 4 in the other ($680), by taking off two "free hours" the invoices had already excluded. Its totals were $99,020.71, $98,510.71 and $99,190.71.
-5. Press a dollar figure in the Jev ledger: the line traces back to the exact invoice line it came from.
+   - **The LLM's total varies between runs.** In two of the three recordings it also flagged correct detention lines as $170 overcharges, 3 lines in one run ($510) and 4 in the other ($680), by taking off two "free hours" the invoices had already excluded. Its totals were $99,020.71, $98,510.71 and $99,190.71. **On screen:** Replay plays the newest recording, so the scorecard shows the LLM at **$99,190.71** with **4 false positives**, and **17 of 18** of its findings traceable to a quote. One of its detention flags quotes nothing in the documents. ![S1 results](run-of-show/03-s1-results.jpg)
+5. Press a dollar figure in the Jev ledger: the line traces back to the exact invoice line it came from. ![Trace](run-of-show/04-s1-trace.jpg)
 
 **Takeaway:** "Both found the problems. Only one gives the same right total every time, and every number traces back to its source."
 
@@ -46,10 +46,10 @@ Point at the **Exact prompt sent to the LLM** fold-out to show nothing is hidden
 2. Press **Replay recorded run**.
 3. Results:
    - **Both sides score 10/10 and both catch the missing breach-notification clause** (critical risk).
-   - **Jev sends the 2 "partly there" clauses (audit rights, insurance) to the review lane**, because its confidence is below 80%. They are right, and Jev says it isn't sure.
-4. Point at a review-lane row: it shows the confidence and why the row went to review.
+   - **Jev sends the 2 "partly there" clauses (audit rights, insurance) to the review lane.** Its answers are right. A *partly there* verdict always goes to a person, and for audit rights Jev's confidence was also low (37%, below the 80% line).
+4. Point at a review-lane row: it shows the confidence and why the row went to review. ![S2 review lane](run-of-show/05-s2-review-lane.jpg)
 
-**Takeaway:** "When the answer is clear, both get it. The difference is that Jev tells you which answers it is unsure of, so a reviewer spends time where it matters."
+**Takeaway:** "When the answer is clear, both get it. The difference is that Jev flags what a person should look at, a partial clause or a low-confidence answer, so a reviewer spends time where it matters."
 
 Say this plainly, and don't oversell it: the LLM did not make mistakes on S2.
 
@@ -62,10 +62,13 @@ Say this plainly, and don't oversell it: the LLM did not make mistakes on S2.
    - **Both sides catch the fabricated quote (C3) and all 3 planted errors.** Both keep C1, whose quote is real but cited from the wrong section.
    - **Jev: no wrong verdicts in any run.** 3 to 4 uncertain citations go to the review lane.
    - **LLM: one confidently wrong verdict in two of the three runs.** It called C5 *unsupported*.
-5. In the Memo, press **[C5]**. Both sides' C5 rows are outlined.
+   - **On screen:** the newest recording is one of those two runs, so the scorecard shows the LLM at **9 of 10** with 1 wrong verdict, and Jev at **10 of 10 (4 after review)**. ![S3 results](run-of-show/07-s3-results.jpg)
+5. In the Memo, press **[C5]**. Both sides' C5 rows are outlined: the LLM's is wrong, and Jev's is right and in review. ![C5 picked](run-of-show/08-s3-memo-c5.jpg)
 6. Press **Consistency ×3**. It shows the three recorded live runs, replayed with no spend:
    - **Plain LLM: 1 item changed across 3 runs.** C5 reads *unsupported → verified → unsupported*.
    - **Jev + code: same answer on all 10 items in 3 runs.**
+
+   ![Consistency ×3](run-of-show/09-s3-consistency.jpg)
 
 **Takeaway:** "The same question, asked three times. One system changes its answer, and the other doesn't, and it tells you which answers to check."
 
@@ -96,11 +99,11 @@ Live results can differ from the recordings. That is the point of Consistency ×
 
 | If | Then |
 |---|---|
-| Live is refused (off, budget, provider error) | Say "this is the guard working". Switch to **Replay**, which has the same flow and recorded real responses. |
+| Live is refused (off, budget, provider error) | ![Live refused](run-of-show/10-live-refused.jpg) Say "this is the guard working". Switch to **Replay**, which has the same flow and recorded real responses. |
 | A provider is slow or errors mid-run | The run stops with a message, and whatever arrived is shown. Switch to Replay. |
 | The backend is down ("could not be started") | Restart uvicorn (section 1), reload the page and replay again. |
 | The page looks wrong (zoom, theme) | Set zoom to 100% and pick Light. Reload. |
-| Something else | Use the screenshots from the dry run (P7-7) in this document. |
+| Something else | Use the screenshots in this document. They come from the dry run (section 7). |
 
 ## 6. Timing summary
 
@@ -112,3 +115,26 @@ Live results can differ from the recordings. That is the point of Consistency ×
 | S3 citations + Consistency ×3 | 5 |
 | Close | 1 |
 | **Total** | **15** (plus questions) |
+
+## 7. Dry run (P7-7)
+
+On 2026-10-13 I went through sections 1 to 5 in Replay, using a script that does what the presenter does and checks what this document says: [`web/e2e/dry-run.spec.ts`](../web/e2e/dry-run.spec.ts). All steps passed, and the screenshots above come from that run (light theme, 1440 × 900). To repeat it before a demo, with the backend and frontend stopped:
+
+```bash
+DRY_RUN=1 npm --prefix web run e2e -- --project=chromium dry-run
+```
+
+It replays only, with no live calls and no spend, and rewrites the images in `docs/run-of-show/`.
+
+Fixed in this document during the dry run:
+- **What the default replay shows.** Replay plays the newest recording, so S1 shows the LLM's $99,190.71 total and S3 shows its wrong C5.
+- **Why the S2 partial clauses go to review.** It is the *partly there* verdict, and not only low confidence: Insurance went to review at 92%.
+
+| Step | Screenshot |
+|---|---|
+| S1 before a run | ![S1 ready](run-of-show/01-s1-ready.jpg) |
+| S1 typed answers (request chip) | ![Typed answers](run-of-show/02-s1-jev-typed-answers.jpg) |
+| S2 results | ![S2 results](run-of-show/06-s2-results.jpg) |
+
+**Presenter rehearsal:** _pending. Rehearse once with this document and note any changes here._
+
