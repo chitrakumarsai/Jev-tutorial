@@ -53,9 +53,10 @@ async function recordMotion(page: Page): Promise<void> {
   }, ANIMATED_STEPS);
 }
 
-async function replayAndReadLog(page: Page): Promise<MotionLog> {
+async function replayAndReadLog(page: Page, scenario?: string): Promise<MotionLog> {
   await recordMotion(page);
   await openApp(page);
+  if (scenario) await page.getByLabel('Scenario').selectOption({ label: scenario });
   await replayToResults(page);
   return page.evaluate(() => (window as unknown as { __motionLog: MotionLog }).__motionLog);
 }
@@ -69,6 +70,14 @@ test.describe('with reduced motion', () => {
     expect(log.sawCaret).toBe(false);
     expect(log.movedElements).toBe(0);
   });
+
+  for (const scenario of ['Clause risk review', 'Citation check']) {
+    test(`moves nothing in ${scenario}`, async ({ page }) => {
+      const log = await replayAndReadLog(page, scenario);
+
+      expect(log.movedElements).toBe(0);
+    });
+  }
 
   test('keeps CSS transitions instant', async ({ page }) => {
     await openApp(page);
