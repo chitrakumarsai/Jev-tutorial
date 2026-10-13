@@ -5,7 +5,7 @@ A demo app for the team and business stakeholders. It runs the same synthetic au
 - **Plain LLM:** one well-written prompt to OpenAI (`gpt-6-luna`) that reads, extracts, calculates and judges.
 - **Jev + code:** code finds candidate values and does every calculation; [TypeSafe's Jev](https://docs.typesafe.ai/introduction) makes small typed judgments (Choice / Score / Noul) with calibrated confidence; low-confidence items go to an auditor review lane.
 
-Both sides are scored against hand-written answer keys. See [docs/PRD.md](docs/PRD.md), [docs/PLAN.md](docs/PLAN.md) and [docs/PLAN-M2.md](docs/PLAN-M2.md).
+Both sides are scored against hand-written answer keys. See [docs/PRD.md](docs/PRD.md), [docs/PLAN.md](docs/PLAN.md) and [docs/PLAN-M2.md](docs/PLAN-M2.md). Presenting it? Follow [docs/RUN-OF-SHOW.md](docs/RUN-OF-SHOW.md).
 
 ## Scenarios
 
