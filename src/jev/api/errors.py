@@ -10,6 +10,7 @@ from jev.budget.guard import BudgetExceededError
 from jev.budget.ledger import LedgerCorruptError, LedgerMissingError
 from jev.budget.pricing import UnknownModelError
 from jev.providers.factory import LiveDisabledError, MissingKeyError
+from jev.replay.clients import ReplayStaleError
 from jev.replay.store import ReplayStoreError
 from jev.runs.service import NoRecordingError
 
@@ -30,6 +31,7 @@ DOMAIN_ERRORS: dict[type[Exception], tuple[int, str]] = {
     UnknownModelError: (409, "UNKNOWN_MODEL"),
     NoRecordingError: (404, "NO_RECORDING"),
     ReplayStoreError: (500, "RECORDING_INVALID"),  # unreadable or corrupt, not missing
+    ReplayStaleError: (409, "REPLAY_STALE"),  # the pipeline changed since recording
 }
 
 
