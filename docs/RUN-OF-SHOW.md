@@ -136,5 +136,5 @@ Fixed in this document during the dry run:
 | S1 typed answers (request chip) | ![Typed answers](run-of-show/02-s1-jev-typed-answers.jpg) |
 | S2 results | ![S2 results](run-of-show/06-s2-results.jpg) |
 
-**Presenter rehearsal:** _pending. Rehearse once with this document and note any changes here._
+**Presenter rehearsal:** done on 2026-10-13 with no changes. Signed off by the presenter.
 

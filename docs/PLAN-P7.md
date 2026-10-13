@@ -2,6 +2,8 @@
 
 > Source: [PRD.md](PRD.md) Phase 7 ("demo-ready: consistency run, recorded replays, visual checks at key breakpoints, reduced-motion verified, dry run completed") and the PRD flow's "optional **Run ×3** for consistency". Builds on Milestones 1–2 (S1–S3 recorded, 3 runs each).
 > Drafted 2026-10-12. **Status: approved by the presenter 2026-10-12** (decisions in §3 accepted as recommended).
+>
+> **Delivered 2026-10-13** in PRs #36–#43: P7-1 to P7-7 are done, and the run of show was rehearsed and signed off by the presenter.
 
 ## 1. Already done (no work)
 
