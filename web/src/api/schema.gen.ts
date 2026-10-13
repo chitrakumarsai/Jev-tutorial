@@ -123,6 +123,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/scenarios/{scenario_id}/consistency': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Consistency ×3: each side's answers across the recorded runs (no spend) */
+    get: operations['scenario_consistency_api_scenarios__scenario_id__consistency_get'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/scenarios/{scenario_id}/documents': {
     parameters: {
       query?: never;
@@ -193,6 +210,17 @@ export interface components {
       /** Spent */
       spent: string | null;
     };
+    /** ConsistencyReport */
+    ConsistencyReport: {
+      /** Recordings */
+      recordings: components['schemas']['RecordingMeta'][];
+      /** Scenario Id */
+      scenario_id: string;
+      /** Sides */
+      sides: {
+        [key: string]: components['schemas']['SideConsistency'];
+      };
+    };
     /** DocumentText */
     DocumentText: {
       /** Doc Id */
@@ -203,6 +231,13 @@ export interface components {
     /** Envelope[BudgetReport] */
     Envelope_BudgetReport_: {
       data?: components['schemas']['BudgetReport'] | null;
+      error?: components['schemas']['ApiError'] | null;
+      /** Success */
+      success: boolean;
+    };
+    /** Envelope[ConsistencyReport] */
+    Envelope_ConsistencyReport_: {
+      data?: components['schemas']['ConsistencyReport'] | null;
       error?: components['schemas']['ApiError'] | null;
       /** Success */
       success: boolean;
@@ -323,6 +358,19 @@ export interface components {
        * @constant
        */
       status: 'ok';
+    };
+    /** ItemConsistency */
+    ItemConsistency: {
+      /** Answers */
+      answers: string[];
+      /** Changed */
+      readonly changed: boolean;
+      /** Key Id */
+      key_id: string;
+      /** Label */
+      label: string;
+      /** Statuses */
+      statuses: ('correct' | 'correct_in_review' | 'wrong_value' | 'missed')[];
     };
     /** Metrics */
     Metrics: {
@@ -485,6 +533,13 @@ export interface components {
       /** Trap Hits */
       trap_hits: string[];
       variance?: components['schemas']['VarianceTotal'] | null;
+    };
+    /** SideConsistency */
+    SideConsistency: {
+      /** Changed */
+      readonly changed: number;
+      /** Items */
+      items: components['schemas']['ItemConsistency'][];
     };
     /** SideResult */
     SideResult: {
@@ -818,6 +873,55 @@ export interface operations {
       };
       /** @description Failure envelope */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['Envelope_NoneType_'];
+        };
+      };
+    };
+  };
+  scenario_consistency_api_scenarios__scenario_id__consistency_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        scenario_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['Envelope_ConsistencyReport_'];
+        };
+      };
+      /** @description Failure envelope */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['Envelope_NoneType_'];
+        };
+      };
+      /** @description Failure envelope */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['Envelope_NoneType_'];
+        };
+      };
+      /** @description Failure envelope */
+      500: {
         headers: {
           [name: string]: unknown;
         };

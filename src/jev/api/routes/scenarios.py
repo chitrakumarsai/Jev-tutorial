@@ -16,6 +16,7 @@ from jev.api.models import (
 from jev.api.schemas import Envelope
 from jev.config import Settings
 from jev.replay.models import RecordingMeta
+from jev.runs.consistency import ConsistencyReport, consistency
 from jev.runs.service import RunService
 
 router = APIRouter(prefix="/api/scenarios", tags=["scenarios"])
@@ -60,3 +61,12 @@ def documents(scenario_id: str, services: Services) -> Envelope[list[DocumentTex
 )
 def recordings(scenario_id: str, services: Services) -> Envelope[list[RecordingMeta]]:
     return Envelope.ok(service_for(services, scenario_id).recordings())
+
+
+@router.get(
+    "/{scenario_id}/consistency",
+    summary="Consistency ×3: each side's answers across the recorded runs (no spend)",
+    responses=error_responses(404, 500),
+)
+async def scenario_consistency(scenario_id: str, services: Services) -> Envelope[ConsistencyReport]:
+    return Envelope.ok(await consistency(service_for(services, scenario_id)))

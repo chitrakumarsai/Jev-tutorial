@@ -100,6 +100,35 @@
         "title": "BudgetRow",
         "type": "object"
       },
+      "ConsistencyReport": {
+        "properties": {
+          "recordings": {
+            "items": {
+              "$ref": "#/components/schemas/RecordingMeta"
+            },
+            "title": "Recordings",
+            "type": "array"
+          },
+          "scenario_id": {
+            "title": "Scenario Id",
+            "type": "string"
+          },
+          "sides": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/SideConsistency"
+            },
+            "title": "Sides",
+            "type": "object"
+          }
+        },
+        "required": [
+          "scenario_id",
+          "recordings",
+          "sides"
+        ],
+        "title": "ConsistencyReport",
+        "type": "object"
+      },
       "DocumentText": {
         "properties": {
           "doc_id": {
@@ -149,6 +178,39 @@
           "success"
         ],
         "title": "Envelope[BudgetReport]",
+        "type": "object"
+      },
+      "Envelope_ConsistencyReport_": {
+        "properties": {
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConsistencyReport"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ApiError"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "success": {
+            "title": "Success",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "success"
+        ],
+        "title": "Envelope[ConsistencyReport]",
         "type": "object"
       },
       "Envelope_Health_": {
@@ -601,6 +663,52 @@
           "status"
         ],
         "title": "Health",
+        "type": "object"
+      },
+      "ItemConsistency": {
+        "properties": {
+          "answers": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Answers",
+            "type": "array"
+          },
+          "changed": {
+            "readOnly": true,
+            "title": "Changed",
+            "type": "boolean"
+          },
+          "key_id": {
+            "title": "Key Id",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "statuses": {
+            "items": {
+              "enum": [
+                "correct",
+                "correct_in_review",
+                "wrong_value",
+                "missed"
+              ],
+              "type": "string"
+            },
+            "title": "Statuses",
+            "type": "array"
+          }
+        },
+        "required": [
+          "key_id",
+          "label",
+          "answers",
+          "statuses",
+          "changed"
+        ],
+        "title": "ItemConsistency",
         "type": "object"
       },
       "Metrics": {
@@ -1071,6 +1179,28 @@
           "correct_in_review"
         ],
         "title": "Scorecard",
+        "type": "object"
+      },
+      "SideConsistency": {
+        "properties": {
+          "changed": {
+            "readOnly": true,
+            "title": "Changed",
+            "type": "integer"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ItemConsistency"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items",
+          "changed"
+        ],
+        "title": "SideConsistency",
         "type": "object"
       },
       "SideResult": {
@@ -1565,6 +1695,68 @@
           }
         },
         "summary": "Scenario detail",
+        "tags": [
+          "scenarios"
+        ]
+      }
+    },
+    "/api/scenarios/{scenario_id}/consistency": {
+      "get": {
+        "operationId": "scenario_consistency_api_scenarios__scenario_id__consistency_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "scenario_id",
+            "required": true,
+            "schema": {
+              "title": "Scenario Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_ConsistencyReport_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_NoneType_"
+                }
+              }
+            },
+            "description": "Failure envelope"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_NoneType_"
+                }
+              }
+            },
+            "description": "Failure envelope"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_NoneType_"
+                }
+              }
+            },
+            "description": "Failure envelope"
+          }
+        },
+        "summary": "Consistency ×3: each side's answers across the recorded runs (no spend)",
         "tags": [
           "scenarios"
         ]
