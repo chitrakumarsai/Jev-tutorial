@@ -107,6 +107,7 @@ test.describe('replay journey', () => {
     await expect(current).toHaveCount(2);
     await expect(current.first()).toContainText('Citation C3');
     await expect(current.first()).toBeInViewport();
+    await expect(current.last()).toBeInViewport();
     await expect(page.getByRole('status').filter({ hasText: 'Citation C3' })).toHaveText(
       /2 ledger rows marked/,
     );

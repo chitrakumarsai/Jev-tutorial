@@ -18,6 +18,7 @@ import type { LoadedScenario } from '../features/scenario/loadScenario';
 import { TraceLine } from '../features/trace/TraceLine';
 import { TraceContext, type TraceFn, type TraceTarget } from '../features/trace/traceContext';
 import { useReducedMotion } from '../hooks/useReducedMotion';
+import { scrollOffset } from '../lib/scrollToRows';
 
 type Props = {
   scenario: LoadedScenario;
@@ -76,14 +77,16 @@ export function Comparison({ scenario, runView }: Props) {
     setPicked((previous) => ({ id, seq: (previous?.seq ?? 0) + 1 }));
   }, []);
 
-  // Bring the first of the picked citation's rows into view, once per pick.
+  // Bring the picked citation's rows into view, together when they fit, once per pick.
   useEffect(() => {
     if (!picked) return;
-    const row = gridRef.current?.querySelector(`[data-citation="${picked.id}"]`);
-    // jsdom has no scrollIntoView; browsers do.
-    if (row instanceof HTMLElement && typeof row.scrollIntoView === 'function') {
-      row.scrollIntoView({ block: 'center', behavior: isReduced ? 'auto' : 'smooth' });
-    }
+    const rows = gridRef.current?.querySelectorAll(`[data-citation="${picked.id}"]`) ?? [];
+    const rects = [...rows].map((row) => row.getBoundingClientRect());
+    if (rects.length === 0) return;
+    window.scrollBy({
+      top: scrollOffset(rects, window.innerHeight),
+      behavior: isReduced ? 'instant' : 'smooth',
+    });
   }, [picked, isReduced]);
 
   const traceTo = useCallback<TraceFn>((target, from) => {
