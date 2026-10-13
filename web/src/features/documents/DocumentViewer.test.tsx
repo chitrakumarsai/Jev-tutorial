@@ -113,4 +113,38 @@ describe('DocumentViewer', () => {
     );
     expect(screen.getByRole('tabpanel').querySelector('mark')).toBeNull();
   });
+
+  it('turns memo [Cn] markers into buttons that ask for the citation', async () => {
+    const user = userEvent.setup();
+    const asked: string[] = [];
+    render(
+      <DocumentViewer
+        documents={[{ doc_id: 'memo', text: 'Rates match. [C1] Fees [C7].' }]}
+        highlights={new Map()}
+        selected="memo"
+        onSelect={() => undefined}
+        onCitation={(id) => asked.push(id)}
+      />,
+    );
+
+    await user.click(screen.getByRole('button', { name: 'C7, show in the ledgers' }));
+    screen.getByRole('button', { name: 'C1, show in the ledgers' }).focus();
+    await user.keyboard('{Enter}');
+
+    expect(asked).toEqual(['C7', 'C1']);
+  });
+
+  it('leaves [Cn] as plain text when nothing listens for citations', () => {
+    render(
+      <DocumentViewer
+        documents={[{ doc_id: 'memo', text: 'Rates match. [C1]' }]}
+        highlights={new Map()}
+        selected="memo"
+        onSelect={() => undefined}
+      />,
+    );
+
+    expect(screen.queryByRole('button', { name: /citation/ })).not.toBeInTheDocument();
+    expect(screen.getByText(/Rates match\. \[C1\]/)).toBeInTheDocument();
+  });
 });

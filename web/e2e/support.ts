@@ -51,6 +51,18 @@ export async function replayToResults(page: Page): Promise<void> {
  * a half-faded element would fail a contrast check or a screenshot it passes once settled.
  */
 export async function settle(page: Page): Promise<void> {
+  // Motion starts its animations a frame after mounting; before that there is nothing to wait
+  // for, and a just-mounted row would be scanned at opacity 0.
+  await page.evaluate(
+    () =>
+      new Promise<void>((resolve) => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            resolve();
+          });
+        });
+      }),
+  );
   await page.waitForFunction(() =>
     document
       .getAnimations()

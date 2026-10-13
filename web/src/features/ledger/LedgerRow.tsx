@@ -1,4 +1,5 @@
 import { motion } from 'motion/react';
+import { use } from 'react';
 
 import type { Finding, SideName } from '../../api/types';
 import { ConfidenceRing } from '../../components/confidence-ring/ConfidenceRing';
@@ -14,6 +15,7 @@ import {
   riskLabel,
 } from '../findings/findingText';
 import { TraceButton } from '../trace/TraceButton';
+import { CitationFocusContext } from './citationFocus';
 import { isDiscrepancy, traceTargets, type Verdict } from './ledgerRows';
 
 type Props = {
@@ -65,12 +67,17 @@ function Mark({ verdict }: { verdict: Verdict }) {
 export function LedgerRow({ finding, side, verdict }: Props) {
   const [primary, ...others] = traceTargets(finding);
   const isWrong = isDiscrepancy(verdict);
+  const focusedCitation = use(CitationFocusContext);
+  const citation = finding.kind === 'citation' ? citationId(finding) : undefined;
+  const isCurrent = citation !== undefined && citation === focusedCitation;
   const billed = finding.billed ? formatMoney(finding.billed) : null;
   const where = `${documentLabel(finding.doc_id).short}${finding.line_ref ? ` · ${finding.line_ref}` : ''}`;
   return (
     <motion.li
       layoutId={finding.id}
-      className={`ledger-row ledger-row--${verdict.kind}`}
+      className={`ledger-row ledger-row--${verdict.kind}${isCurrent ? ' ledger-row--current' : ''}`}
+      data-citation={citation}
+      aria-current={isCurrent ? 'true' : undefined}
       initial={{ opacity: 0, y: -motionTokens.distance.sm }}
       animate={{ opacity: 1, y: 0, x: isWrong ? [...motionTokens.shake] : 0 }}
       transition={{ ...springs.snappy, x: { duration: motionTokens.duration.slow } }}

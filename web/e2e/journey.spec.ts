@@ -87,4 +87,37 @@ test.describe('replay journey', () => {
     await expect(llm).toHaveAccessibleName(/1 item changed/);
     await expect(llm.getByRole('row', { name: /C5/ })).toContainText('changed');
   });
+
+  test('links a memo citation to its rows on both sides, from the keyboard', async ({ page }) => {
+    await page.getByLabel('Scenario').selectOption({ label: 'Citation check' });
+    await page.getByRole('tab', { name: /Memo/ }).click();
+    const c3 = page.getByRole('button', { name: 'C3, show in the ledgers' });
+
+    await c3.focus();
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('status').filter({ hasText: 'Citation C3' })).toHaveText(
+      /no ledger rows yet/,
+    );
+
+    await replayToResults(page);
+    await c3.focus();
+    await page.keyboard.press('Enter');
+
+    const current = page.locator('li[aria-current="true"]');
+    await expect(current).toHaveCount(2);
+    await expect(current.first()).toContainText('Citation C3');
+    await expect(current.first()).toBeInViewport();
+    await expect(current.last()).toBeInViewport();
+    await expect(page.getByRole('status').filter({ hasText: 'Citation C3' })).toHaveText(
+      /2 ledger rows marked/,
+    );
+
+    // A new run starts clean: the old pick does not mark its rows.
+    const results = page.getByRole('heading', { level: 2, name: 'Results' });
+    await page.getByRole('button', { name: 'Replay recorded run' }).click();
+    await expect(results).toBeHidden();
+    await expect(results).toBeVisible({ timeout: 30_000 });
+    await expect(page.locator('li[data-citation="C3"]')).toHaveCount(2);
+    await expect(current).toHaveCount(0);
+  });
 });

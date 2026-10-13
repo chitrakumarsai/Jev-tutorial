@@ -1,9 +1,18 @@
-import { useEffect, useEffectEvent, useId, useMemo, useRef, type KeyboardEvent } from 'react';
+import {
+  Fragment,
+  useEffect,
+  useEffectEvent,
+  useId,
+  useMemo,
+  useRef,
+  type KeyboardEvent,
+} from 'react';
 
 import type { DocumentText } from '../../api/types';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { findMark } from '../trace/findMark';
 import { segmentText, type Highlight, type Segment } from '../../lib/segments';
+import { CitationText } from './CitationText';
 import { documentLabel } from './documentLabel';
 import './documents.css';
 
@@ -15,6 +24,8 @@ type Props = {
   onSelect: (docId: string) => void;
   /** A passage to bring into view and outline; `seq` changes on every request, even a repeat. */
   focus?: { readonly highlightId: string; readonly seq: number } | null;
+  /** When given, a memo's [Cn] markers become buttons that call it with the citation id. */
+  onCitation?: ((citationId: string) => void) | undefined;
 };
 
 const NO_HIGHLIGHTS: readonly Highlight[] = [];
@@ -39,7 +50,14 @@ function quotedBy(segment: Segment): string {
 }
 
 /** Tabs per WAI-ARIA APG (automatic activation): arrows, Home and End move and select. */
-export function DocumentViewer({ documents, highlights, selected, onSelect, focus = null }: Props) {
+export function DocumentViewer({
+  documents,
+  highlights,
+  selected,
+  onSelect,
+  focus = null,
+  onCitation,
+}: Props) {
   const baseId = useId();
   const tabRefs = useRef(new Map<string, HTMLButtonElement>());
   const textRef = useRef<HTMLPreElement>(null);
@@ -149,7 +167,9 @@ export function DocumentViewer({ documents, highlights, selected, onSelect, focu
         <pre ref={textRef} className="source__text">
           {segments.map((segment, i) =>
             segment.highlights.length === 0 ? (
-              segment.text
+              <Fragment key={i}>
+                <CitationText text={segment.text} onCitation={onCitation} />
+              </Fragment>
             ) : (
               // Segments are positional and never reorder, so the index is a stable key.
               <mark
@@ -158,7 +178,7 @@ export function DocumentViewer({ documents, highlights, selected, onSelect, focu
                 data-highlights={segment.highlights.map((h) => h.id).join(' ')}
               >
                 <span className="visually-hidden">{`${quotedBy(segment)}: `}</span>
-                {segment.text}
+                <CitationText text={segment.text} onCitation={onCitation} />
               </mark>
             ),
           )}

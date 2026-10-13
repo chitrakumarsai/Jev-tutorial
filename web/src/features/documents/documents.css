@@ -140,3 +140,18 @@
     color: MarkText;
   }
 }
+
+/* Memo [Cn] markers: inline buttons that keep the memo's monospace rhythm. */
+.citation-marker {
+  padding: 0;
+  border: none;
+  border-block-end: 1px solid currentcolor;
+  background: none;
+  color: var(--color-focus);
+  font: inherit;
+  cursor: pointer;
+}
+
+.citation-marker:hover {
+  background: color-mix(in oklab, var(--color-focus) 10%, transparent);
+}

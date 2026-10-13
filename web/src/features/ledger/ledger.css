@@ -213,3 +213,9 @@
   font-style: italic;
   color: var(--color-muted);
 }
+
+/* The rows of the citation picked in the memo; aria-current says so to a screen reader. */
+.ledger-row--current {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
