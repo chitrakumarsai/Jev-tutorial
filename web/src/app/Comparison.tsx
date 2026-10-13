@@ -1,6 +1,7 @@
 import { LayoutGroup } from 'motion/react';
 import { useCallback, useMemo, useState } from 'react';
 
+import { ConsistencyPanel } from '../features/consistency/ConsistencyPanel';
 import { DocumentViewer } from '../features/documents/DocumentViewer';
 import { documentLabel } from '../features/documents/documentLabel';
 import { highlightsByDocument } from '../features/documents/highlights';
@@ -114,6 +115,7 @@ export function Comparison({ scenario, runView }: Props) {
         </div>
       </LayoutGroup>
       {runView?.result && <Results result={runView.result} />}
+      <ConsistencyPanel key={detail.id} scenarioId={detail.id} />
       {trace?.from && (
         <TraceLine
           key={trace.seq}

@@ -73,4 +73,18 @@ test.describe('replay journey', () => {
     );
     await expect(page.getByText('Citation C3').first()).toBeVisible();
   });
+
+  test('shows Consistency ×3 for the citation check: Jev steady, the LLM changing on C5', async ({
+    page,
+  }) => {
+    await page.getByLabel('Scenario').selectOption({ label: 'Citation check' });
+
+    await page.getByRole('button', { name: 'Consistency ×3' }).click();
+
+    const jev = page.getByRole('table', { name: /Jev \+ code/ });
+    await expect(jev).toHaveAccessibleName(/same answer on all 10 items in 3 runs/);
+    const llm = page.getByRole('table', { name: /Plain LLM/ });
+    await expect(llm).toHaveAccessibleName(/1 item changed/);
+    await expect(llm.getByRole('row', { name: /C5/ })).toContainText('changed');
+  });
 });

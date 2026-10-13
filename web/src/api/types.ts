@@ -5,6 +5,7 @@ export type Schemas = components['schemas'];
 
 export type ApiError = Schemas['ApiError'];
 export type BudgetReport = Schemas['BudgetReport'];
+export type ConsistencyReport = Schemas['ConsistencyReport'];
 export type DocumentText = Schemas['DocumentText'];
 export type Finding = Schemas['Finding'];
 export type Health = Schemas['Health'];

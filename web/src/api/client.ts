@@ -9,6 +9,7 @@ import {
   BudgetReportSchema,
   DocumentTextSchema,
   HealthSchema,
+  ConsistencyReportSchema,
   RecordingMetaSchema,
   RunStartedSchema,
   RunStatusSchema,
@@ -20,6 +21,7 @@ import type {
   BudgetReport,
   DocumentText,
   Health,
+  ConsistencyReport,
   RecordingMeta,
   RunRequest,
   RunStarted,
@@ -57,6 +59,7 @@ const Envelopes = {
   scenario: envelopeOf(ScenarioDetailSchema),
   documents: envelopeOf(z.array(DocumentTextSchema)),
   recordings: envelopeOf(z.array(RecordingMetaSchema)),
+  consistency: envelopeOf(ConsistencyReportSchema),
   runStarted: envelopeOf(RunStartedSchema),
   runStatus: envelopeOf(RunStatusSchema),
   budget: envelopeOf(BudgetReportSchema),
@@ -163,6 +166,14 @@ export function getRecordings(
   options: RequestOptions = {},
 ): Promise<RecordingMeta[]> {
   return get(() => url('scenarios', id(scenarioId), 'recordings'), Envelopes.recordings, options);
+}
+
+/** Consistency ×3: each side's answers across the scenario's recorded runs (no spend). */
+export function getConsistency(
+  scenarioId: string,
+  options: RequestOptions = {},
+): Promise<ConsistencyReport> {
+  return get(() => url('scenarios', id(scenarioId), 'consistency'), Envelopes.consistency, options);
 }
 
 export function getRun(runId: string, options: RequestOptions = {}): Promise<RunStatus> {
