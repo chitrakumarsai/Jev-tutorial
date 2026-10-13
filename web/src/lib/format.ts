@@ -47,6 +47,19 @@ export function formatDuration(ms: number): string {
 }
 
 /** An ISO timestamp as a calendar date, or the input unchanged if it can't be read. */
+const TIME = new Intl.DateTimeFormat(LOCALE, {
+  hour: '2-digit',
+  minute: '2-digit',
+  hourCycle: 'h23',
+  timeZone: 'UTC',
+});
+
+/** "03:21 UTC": tells apart recordings made on the same day. */
+export function formatTime(iso: string): string {
+  const date = new Date(iso);
+  return Number.isNaN(date.getTime()) ? iso : `${TIME.format(date)} UTC`;
+}
+
 export function formatDate(iso: string): string {
   const date = new Date(iso);
   return Number.isNaN(date.getTime()) ? iso : DATE.format(date);

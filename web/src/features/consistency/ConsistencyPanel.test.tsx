@@ -59,7 +59,7 @@ describe('ConsistencyPanel', () => {
     await user.click(screen.getByRole('button', { name: 'Consistency ×3' }));
 
     const jev = await screen.findByRole('table', { name: /Jev \+ code/ });
-    expect(jev).toHaveAccessibleName(/same answer on all 1 items in 3 runs/);
+    expect(jev).toHaveAccessibleName(/same answer on the 1 item in 3 runs/);
     const llm = screen.getByRole('table', { name: /Plain LLM/ });
     expect(llm).toHaveAccessibleName(/1 item changed/);
     const c5 = within(llm).getByRole('row', { name: /C5/ });
@@ -83,5 +83,23 @@ describe('ConsistencyPanel', () => {
     await user.click(screen.getByRole('button', { name: 'Consistency ×3' }));
 
     expect(await screen.findByRole('alert')).toHaveTextContent(/could not be loaded/);
+    getConsistencyMock.mockResolvedValue(REPORT);
+    await user.click(screen.getByRole('button', { name: 'Try again' }));
+    expect(await screen.findByRole('table', { name: /Plain LLM/ })).toBeInTheDocument();
+  });
+
+  it('shows each run with its time, and closing hides the panel', async () => {
+    const user = userEvent.setup();
+    getConsistencyMock.mockResolvedValue(REPORT);
+    render(<ConsistencyPanel scenarioId="s3_citation_check" />);
+    const toggle = screen.getByRole('button', { name: 'Consistency ×3' });
+
+    await user.click(toggle);
+    const llm = await screen.findByRole('table', { name: /Plain LLM/ });
+    expect(within(llm).getByRole('columnheader', { name: /Run 2/ })).toHaveTextContent(/03:21/);
+
+    await user.click(toggle);
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    expect(screen.queryByRole('table')).not.toBeInTheDocument();
   });
 });

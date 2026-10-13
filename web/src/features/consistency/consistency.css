@@ -15,6 +15,19 @@
   cursor: pointer;
 }
 
+.consistency__toggle:hover {
+  border-color: var(--color-ink);
+}
+
+.consistency__retry {
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .consistency__toggle[aria-expanded='true'] {
   background: var(--color-ink);
   color: var(--color-paper);
@@ -29,6 +42,11 @@
   display: grid;
   gap: var(--space-6);
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+}
+
+.consistency__scroll {
+  min-inline-size: 0;
+  overflow-x: auto;
 }
 
 .consistency-table {

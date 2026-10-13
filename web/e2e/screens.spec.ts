@@ -99,3 +99,19 @@ for (const theme of THEMES) {
     }
   });
 }
+
+test.describe('consistency at phone width', () => {
+  test.use({
+    viewport: { width: 320, height: HEIGHT },
+    contextOptions: { reducedMotion: 'reduce' },
+  });
+
+  test('the open Consistency ×3 tables never push the page sideways', async ({ page }) => {
+    await openApp(page);
+    await page.getByLabel('Scenario').selectOption({ label: 'Citation check' });
+    await page.getByRole('button', { name: 'Consistency ×3' }).click();
+    await expect(page.getByRole('table', { name: /Plain LLM/ })).toBeVisible();
+
+    expect(await hasHorizontalOverflow(page)).toBe(false);
+  });
+});
