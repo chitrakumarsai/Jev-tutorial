@@ -17,7 +17,7 @@
   --color-muted: light-dark(#5a6170, #a3afc0);
 
   /* Semantic status: always paired with a glyph (✓ ? ✕), never colour alone */
-  --color-verified: light-dark(#1f7a4d, #5cc08a);
+  --color-verified: light-dark(#1a6b43, #5cc08a); /* 5.4:1 even on the review-lane tint */
   --color-review: light-dark(#8a5a00, #e3a93b);
   --color-discrepancy: light-dark(#b8321a, #f07155);
 

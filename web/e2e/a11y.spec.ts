@@ -23,6 +23,16 @@ for (const theme of THEMES) {
       expect(await violations(page)).toEqual([]);
     });
 
+    for (const scenario of ['Clause risk review', 'Citation check']) {
+      test(`has no WCAG A/AA violations in ${scenario} results`, async ({ page }) => {
+        await openApp(page);
+        await page.getByLabel('Scenario').selectOption({ label: scenario });
+        await replayToResults(page);
+
+        expect(await violations(page)).toEqual([]);
+      });
+    }
+
     test('has no WCAG A/AA violations with Consistency ×3 open', async ({ page }) => {
       await openApp(page);
       await page.getByLabel('Scenario').selectOption({ label: 'Citation check' });
