@@ -22,6 +22,7 @@ from pydantic import ValidationError
 from jev.budget.guard import BudgetExceededError
 from jev.budget.ledger import Ledger, LedgerCorruptError, LedgerMissingError
 from jev.budget.pricing import UnknownModelError
+from jev.budget.report import budget_report
 from jev.config import Settings
 from jev.providers.errors import ProviderError
 from jev.providers.factory import (
@@ -80,6 +81,31 @@ def _budget_init(ledger_path: Path | None) -> int:
         print(f"A spend ledger already exists at {path}; it is never reset.", file=sys.stderr)
         return 1
     print(f"Created an empty spend ledger at {path}.")
+    return 0
+
+
+def _budget_show() -> int:
+    """Spent / cap / headroom per provider. Read-only: never creates the ledger, never
+    prints a key or its fingerprint."""
+    try:
+        initialised, rows = budget_report(Settings())
+    except LedgerCorruptError as exc:  # its message names a line number, never content
+        print(f"The spend ledger is corrupt ({exc}); live calls are refused.", file=sys.stderr)
+        return 1
+    except (OSError, ValidationError) as exc:
+        print(f"Cannot read the budget ({type(exc).__name__}).", file=sys.stderr)
+        return 1
+    if not initialised:
+        print("No spend ledger yet; create it once with `budget init`.", file=sys.stderr)
+        return 1
+    for row in rows:
+        if not row.key_configured or row.spent is None:
+            print(f"{row.provider}: no key configured (cap ${row.cap:.2f})")
+            continue
+        print(
+            f"{row.provider}: spent ${row.spent:.4f} of ${row.cap:.2f}, "
+            f"reserved ${row.reserved or 0:.4f}, remaining ${row.remaining or 0:.4f}"
+        )
     return 0
 
 
@@ -209,6 +235,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     budget_cmds = budget.add_subparsers(dest="command", required=True)
     init = budget_cmds.add_parser("init", help="create the spend ledger (once)")
     init.add_argument("--ledger-path", type=Path, default=None)
+    budget_cmds.add_parser("show", help="spent / cap / headroom per provider (read-only)")
 
     rec = groups.add_parser("record", help="LIVE: record real runs for replay (spends money)")
     rec.add_argument("scenario", type=scenario_arg, help="id or short alias, e.g. s1")
@@ -227,7 +254,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.group == "draft-memo":
         return _draft_memo(args.data_dir, args.out_dir)
     if args.group == "budget":
-        return _budget_init(args.ledger_path)
+        if args.command == "show":
+            return _budget_show()
+        if args.command == "init":
+            return _budget_init(args.ledger_path)
     if args.group == "openapi":
         return _openapi(args.out)
     return _validate(args.data_dir, args.scenario)
