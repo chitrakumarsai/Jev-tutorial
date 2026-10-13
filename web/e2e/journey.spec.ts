@@ -87,4 +87,28 @@ test.describe('replay journey', () => {
     await expect(llm).toHaveAccessibleName(/1 item changed/);
     await expect(llm.getByRole('row', { name: /C5/ })).toContainText('changed');
   });
+
+  test('links a memo citation to its rows on both sides, from the keyboard', async ({ page }) => {
+    await page.getByLabel('Scenario').selectOption({ label: 'Citation check' });
+    await page.getByRole('tab', { name: /Memo/ }).click();
+    const c3 = page.getByRole('button', { name: 'Show citation C3 in the ledgers' });
+
+    await c3.focus();
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('status').filter({ hasText: 'Citation C3' })).toHaveText(
+      /no ledger rows yet/,
+    );
+
+    await replayToResults(page);
+    await c3.focus();
+    await page.keyboard.press('Enter');
+
+    const current = page.locator('li[aria-current="true"]');
+    await expect(current).toHaveCount(2);
+    await expect(current.first()).toContainText('Citation C3');
+    await expect(current.first()).toBeInViewport();
+    await expect(page.getByRole('status').filter({ hasText: 'Citation C3' })).toHaveText(
+      /2 ledger rows marked/,
+    );
+  });
 });

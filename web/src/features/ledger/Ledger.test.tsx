@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import type { Finding, SideResult } from '../../api/types';
 import { completedView } from '../../test/fixtures/replay';
 import { TraceContext } from '../trace/traceContext';
+import { CitationFocusContext } from './citationFocus';
 import { Ledger } from './Ledger';
 import { ReviewLane } from './ReviewLane';
 import { traceTargets, verdicts } from './ledgerRows';
@@ -250,5 +251,19 @@ describe('Ledger', () => {
     expect(screen.getByText('Citation C7')).toBeInTheDocument();
     expect(screen.getByText('“The agreement caps the fuel surcharge at 25%.”')).toBeInTheDocument();
     expect(screen.getByText('Contradicted')).toBeInTheDocument();
+  });
+
+  it('marks the rows of the citation picked in the memo as current', () => {
+    const cite = (id: string) =>
+      finding({ id, kind: 'citation', verdict: 'verified', variance: null, evidence: [] });
+    render(
+      <CitationFocusContext value="C3">
+        <Ledger side="jev" findings={[cite('jev-C3'), cite('jev-C13')]} result={null} />
+      </CitationFocusContext>,
+    );
+
+    const rows = screen.getAllByRole('listitem');
+    expect(rows.filter((r) => r.getAttribute('aria-current') === 'true')).toHaveLength(1);
+    expect(rows.find((r) => r.getAttribute('aria-current'))).toHaveTextContent('Citation C3');
   });
 });

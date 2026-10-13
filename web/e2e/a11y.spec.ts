@@ -33,6 +33,17 @@ for (const theme of THEMES) {
       });
     }
 
+    test('has no WCAG A/AA violations with a memo citation picked', async ({ page }) => {
+      await openApp(page);
+      await page.getByLabel('Scenario').selectOption({ label: 'Citation check' });
+      await replayToResults(page);
+      await page.getByRole('tab', { name: /Memo/ }).click();
+      await page.getByRole('button', { name: 'Show citation C7 in the ledgers' }).click();
+      await expect(page.locator('li[aria-current="true"]')).toHaveCount(2);
+
+      expect(await violations(page)).toEqual([]);
+    });
+
     test('has no WCAG A/AA violations with Consistency ×3 open', async ({ page }) => {
       await openApp(page);
       await page.getByLabel('Scenario').selectOption({ label: 'Citation check' });
