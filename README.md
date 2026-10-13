@@ -33,6 +33,17 @@ uv sync
 nvm use && npm --prefix web ci
 ```
 
+## Run the app
+
+Start the backend and the frontend in two terminals, from the repo root:
+
+```bash
+uv run uvicorn jev.api.app:create_app --factory --port 8000   # terminal 1: the API
+npm --prefix web run dev                                        # terminal 2: the UI
+```
+
+Then open http://localhost:5173. It starts in **Replay**, which plays recorded live runs and costs nothing. Press **Ctrl+C** in each terminal to stop. To present the demo, follow [docs/RUN-OF-SHOW.md](docs/RUN-OF-SHOW.md).
+
 ## Commands
 
 ```bash
