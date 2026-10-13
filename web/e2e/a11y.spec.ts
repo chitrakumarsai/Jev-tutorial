@@ -38,7 +38,7 @@ for (const theme of THEMES) {
       await page.getByLabel('Scenario').selectOption({ label: 'Citation check' });
       await replayToResults(page);
       await page.getByRole('tab', { name: /Memo/ }).click();
-      await page.getByRole('button', { name: 'Show citation C7 in the ledgers' }).click();
+      await page.getByRole('button', { name: 'C7, show in the ledgers' }).click();
       await expect(page.locator('li[aria-current="true"]')).toHaveCount(2);
 
       expect(await violations(page)).toEqual([]);

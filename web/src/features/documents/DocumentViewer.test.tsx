@@ -127,8 +127,8 @@ describe('DocumentViewer', () => {
       />,
     );
 
-    await user.click(screen.getByRole('button', { name: 'Show citation C7 in the ledgers' }));
-    screen.getByRole('button', { name: 'Show citation C1 in the ledgers' }).focus();
+    await user.click(screen.getByRole('button', { name: 'C7, show in the ledgers' }));
+    screen.getByRole('button', { name: 'C1, show in the ledgers' }).focus();
     await user.keyboard('{Enter}');
 
     expect(asked).toEqual(['C7', 'C1']);

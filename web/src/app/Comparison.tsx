@@ -1,5 +1,5 @@
 import { LayoutGroup } from 'motion/react';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } from 'react';
 
 import { ConsistencyPanel } from '../features/consistency/ConsistencyPanel';
 import { DocumentViewer } from '../features/documents/DocumentViewer';
@@ -18,7 +18,7 @@ import type { LoadedScenario } from '../features/scenario/loadScenario';
 import { TraceLine } from '../features/trace/TraceLine';
 import { TraceContext, type TraceFn, type TraceTarget } from '../features/trace/traceContext';
 import { useReducedMotion } from '../hooks/useReducedMotion';
-import { scrollOffset } from '../lib/scrollToRows';
+import { layoutRect, scrollOffset } from '../lib/scrollToRows';
 
 type Props = {
   scenario: LoadedScenario;
@@ -39,6 +39,7 @@ function gateNotes(jev: SideProgress | null): readonly string[] | null {
 
 interface PickedCitation {
   readonly id: string;
+  readonly runId: string | null;
   /** Changes on every pick, so picking the same citation again scrolls again. */
   readonly seq: number;
 }
@@ -69,25 +70,35 @@ export function Comparison({ scenario, runView }: Props) {
   const llm = runView?.sides.llm ?? null;
   const jev = runView?.sides.jev ?? null;
   const notes = gateNotes(jev);
-  const [picked, setPicked] = useState<PickedCitation | null>(null);
+  const [pick, setPick] = useState<PickedCitation | null>(null);
+  // A pick belongs to the run it was made in; a new run starts clean.
+  const runId = runView?.runId ?? null;
+  const picked = pick?.runId === runId ? pick : null;
   const gridRef = useRef<HTMLDivElement>(null);
   const isReduced = useReducedMotion();
   const hasMemo = documents.some((d) => d.doc_id === 'memo');
-  const pickCitation = useCallback((id: string) => {
-    setPicked((previous) => ({ id, seq: (previous?.seq ?? 0) + 1 }));
-  }, []);
+  const pickCitation = useCallback(
+    (id: string) => {
+      setPick((previous) => ({ id, runId, seq: (previous?.seq ?? 0) + 1 }));
+    },
+    [runId],
+  );
 
-  // Bring the picked citation's rows into view, together when they fit, once per pick.
-  useEffect(() => {
-    if (!picked) return;
-    const rows = gridRef.current?.querySelectorAll(`[data-citation="${picked.id}"]`) ?? [];
-    const rects = [...rows].map((row) => row.getBoundingClientRect());
+  const scrollToRows = useEffectEvent((id: string) => {
+    const rows = gridRef.current?.querySelectorAll(`[data-citation="${id}"]`) ?? [];
+    // Layout boxes, not visual ones: rows may still be mid-animation.
+    const rects = [...rows].filter((row) => row instanceof HTMLElement).map(layoutRect);
     if (rects.length === 0) return;
     window.scrollBy({
       top: scrollOffset(rects, window.innerHeight),
       behavior: isReduced ? 'instant' : 'smooth',
     });
-  }, [picked, isReduced]);
+  });
+
+  // Bring the picked citation's rows into view, together when they fit, once per pick.
+  useEffect(() => {
+    if (picked) scrollToRows(picked.id);
+  }, [picked]);
 
   const traceTo = useCallback<TraceFn>((target, from) => {
     setChosenDoc(target.docId);

@@ -18,7 +18,8 @@ export function CitationText({ text, onCitation }: Props) {
         key={i}
         type="button"
         className="citation-marker"
-        aria-label={`Show citation ${piece.citationId} in the ledgers`}
+        // The name starts with what is on screen, so a speech user can say it.
+        aria-label={`${piece.citationId}, show in the ledgers`}
         onClick={() => {
           onCitation(piece.citationId);
         }}

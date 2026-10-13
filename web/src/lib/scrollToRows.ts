@@ -13,3 +13,20 @@ export function scrollOffset(
   const [from, to] = bottom - top <= viewportHeight ? [top, bottom] : [first.top, first.bottom];
   return (from + to) / 2 - viewportHeight / 2;
 }
+
+/**
+ * An element's box in viewport coordinates, ignoring CSS transforms (offsetTop does), so a
+ * row still sliding or springing into place is measured where it will settle.
+ */
+export function layoutRect(element: HTMLElement): { top: number; bottom: number } {
+  let top = 0;
+  for (
+    let node: HTMLElement | null = element;
+    node;
+    node = node.offsetParent as HTMLElement | null
+  ) {
+    top += node.offsetTop;
+  }
+  const viewportTop = top - window.scrollY;
+  return { top: viewportTop, bottom: viewportTop + element.offsetHeight };
+}
