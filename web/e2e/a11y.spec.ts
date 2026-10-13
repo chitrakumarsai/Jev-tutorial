@@ -23,6 +23,15 @@ for (const theme of THEMES) {
       expect(await violations(page)).toEqual([]);
     });
 
+    test('has no WCAG A/AA violations with Consistency ×3 open', async ({ page }) => {
+      await openApp(page);
+      await page.getByLabel('Scenario').selectOption({ label: 'Citation check' });
+      await page.getByRole('button', { name: 'Consistency ×3' }).click();
+      await expect(page.getByRole('table', { name: /Plain LLM/ })).toBeVisible();
+
+      expect(await violations(page)).toEqual([]);
+    });
+
     test('has no WCAG A/AA violations once the results are in', async ({ page }) => {
       await openApp(page);
       await replayToResults(page);

@@ -1,0 +1,83 @@
+/* Consistency ×3: a quiet ledger-style grid; changed rows carry a symbol and words, then tint. */
+.consistency {
+  display: grid;
+  gap: var(--space-3);
+  margin-block-start: var(--space-8);
+}
+
+.consistency__toggle {
+  justify-self: start;
+  padding: var(--space-1) var(--space-3);
+  border: var(--rule-hairline);
+  background: transparent;
+  color: var(--color-ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.consistency__toggle:hover {
+  border-color: var(--color-ink);
+}
+
+.consistency__retry {
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.consistency__toggle[aria-expanded='true'] {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+.consistency__note {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.consistency__tables {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+}
+
+.consistency__scroll {
+  min-inline-size: 0;
+  overflow-x: auto;
+}
+
+.consistency-table {
+  border-collapse: collapse;
+  inline-size: 100%;
+}
+
+.consistency-table caption {
+  text-align: start;
+  font-weight: 600;
+  padding-block-end: var(--space-2);
+}
+
+.consistency-table th,
+.consistency-table td {
+  padding: var(--space-1) var(--space-2);
+  border-block-end: var(--rule-hairline);
+  text-align: start;
+}
+
+.consistency-table__date {
+  display: block;
+  font-weight: 400;
+  color: var(--color-muted);
+}
+
+.consistency-table__changed {
+  background: color-mix(in oklab, var(--color-discrepancy) 7%, transparent);
+}
+
+.consistency-table__flag {
+  color: var(--color-discrepancy);
+  font-weight: 600;
+}

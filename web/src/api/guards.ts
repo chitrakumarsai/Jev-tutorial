@@ -172,6 +172,28 @@ export const RecordingMetaSchema = z.object({
   llm_model: z.string(),
 });
 
+const ItemStatusSchema = z.enum(['correct', 'correct_in_review', 'wrong_value', 'missed']);
+
+export const ConsistencyReportSchema = z.object({
+  scenario_id: z.string(),
+  recordings: z.array(RecordingMetaSchema),
+  sides: z.record(
+    z.string(),
+    z.object({
+      changed: Count,
+      items: z.array(
+        z.object({
+          key_id: z.string(),
+          label: z.string(),
+          answers: z.array(z.string()),
+          statuses: z.array(ItemStatusSchema),
+          changed: z.boolean(),
+        }),
+      ),
+    }),
+  ),
+});
+
 export const BudgetReportSchema = z.object({
   ledger_initialised: z.boolean(),
   providers: z.array(
@@ -210,4 +232,5 @@ export type GuardsMatchSchema = [
   Expect<Same<z.infer<typeof DocumentTextSchema>, Schemas['DocumentText']>>,
   Expect<Same<z.infer<typeof RecordingMetaSchema>, Schemas['RecordingMeta']>>,
   Expect<Same<z.infer<typeof BudgetReportSchema>, Schemas['BudgetReport']>>,
+  Expect<Same<z.infer<typeof ConsistencyReportSchema>, Schemas['ConsistencyReport']>>,
 ];
