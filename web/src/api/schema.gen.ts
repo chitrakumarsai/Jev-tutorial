@@ -912,6 +912,15 @@ export interface operations {
         };
       };
       /** @description Failure envelope */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['Envelope_NoneType_'];
+        };
+      };
+      /** @description Failure envelope */
       422: {
         headers: {
           [name: string]: unknown;

@@ -31,3 +31,23 @@ def test_an_unknown_scenario_is_a_404(client: TestClient) -> None:
 
     assert response.status_code == 404
     assert response.json()["error"]["code"] == "UNKNOWN_SCENARIO"
+
+
+def test_a_scenario_without_recordings_is_a_404(tmp_path: object) -> None:
+    from pathlib import Path
+
+    from jev.replay.store import FileReplayStore
+    from jev.runs.service import RunService
+    from jev.scenarios.registry import get_scenario
+    from tests.s1.facts import DATA
+
+    settings = Settings(_env_file=None, allowed_hosts=["testserver"])  # type: ignore[call-arg]
+    spec = get_scenario("s3")
+    assert spec is not None
+    store = FileReplayStore(Path(str(tmp_path)))
+    service = RunService(settings, scenario=spec, data_dir=DATA, store=store)
+    with TestClient(create_app(settings=settings, service=service)) as client:
+        response = client.get(f"/api/scenarios/{spec.id}/consistency")
+
+    assert response.status_code == 404
+    assert response.json()["error"]["code"] == "NO_RECORDING"

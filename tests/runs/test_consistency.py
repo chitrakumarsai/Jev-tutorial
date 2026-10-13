@@ -61,6 +61,39 @@ async def test_runs_are_listed_oldest_first_with_their_provenance() -> None:
     assert all(r.jev_model and r.llm_model for r in report.recordings)
 
 
-async def test_a_scenario_without_recordings_is_refused(tmp_path: object) -> None:
+async def test_a_scenario_without_recordings_is_refused() -> None:
     with pytest.raises(NoRecordingError):
         await consistency(service("s3", replays_dir="no_such_dir"))
+
+
+def _explode(*args: object) -> object:
+    raise AssertionError("consistency must never build live clients or a budget guard")
+
+
+async def test_it_never_touches_live_clients_or_the_budget() -> None:
+    spec = get_scenario("s2")
+    assert spec is not None
+    svc = RunService(
+        Settings(_env_file=None),  # type: ignore[call-arg]
+        scenario=spec,
+        data_dir=DATA,
+        store=FileReplayStore(DATA / "replays"),
+        live_factory=_explode,  # type: ignore[arg-type]
+        guard_factory=_explode,  # type: ignore[arg-type]
+    )
+
+    report = await consistency(svc)
+
+    assert report.sides["jev"].changed == 0
+
+
+async def test_equal_amounts_written_differently_are_not_a_change() -> None:
+    from decimal import Decimal
+
+    from jev.domain.findings import Finding
+    from jev.runs.consistency import _answer
+
+    a = Finding(id="a", kind="k", doc_id="d", variance=Decimal("100.00"))
+    b = Finding(id="b", kind="k", doc_id="d", variance=Decimal("1E+2"))
+
+    assert _answer(a) == _answer(b) == "100"

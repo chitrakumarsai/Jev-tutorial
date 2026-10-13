@@ -3,6 +3,7 @@ spend) and show, per answer-key item and side, what each run answered and whethe
 Replaying one recording three times would be trivially identical, so separate recordings are
 used, newest three, shown oldest first."""
 
+import asyncio
 from collections.abc import Sequence
 
 from pydantic import BaseModel, ConfigDict, computed_field
@@ -54,32 +55,38 @@ def _answer(finding: Finding | None) -> str:
         return MISSED
     if finding.verdict is not None:
         return f"{finding.verdict} · {finding.risk}" if finding.risk else finding.verdict
-    return str(finding.variance) if finding.variance is not None else MISSED
+    if finding.variance is None:
+        return MISSED
+    return format(finding.variance.normalize(), "f")  # 100.00, 100.0 and 1E+2 compare equal
 
 
 def _side(results: Sequence[SideResult]) -> SideConsistency:
-    first = results[0].scorecard.items
+    """Runs are matched by answer-key id, never by position."""
+    by_key = [{item.key_id: item for item in r.scorecard.items} for r in results]
+    found = [{f.id: f for f in r.findings} for r in results]
     items = []
-    for index, item in enumerate(first):
-        answers, statuses = [], []
-        for result in results:
-            scored = result.scorecard.items[index]
-            found = {f.id: f for f in result.findings}
-            answers.append(_answer(found.get(scored.finding_id or "")))
-            statuses.append(scored.status)
+    for item in results[0].scorecard.items:
+        scored = [run.get(item.key_id) for run in by_key]
+        if any(s is None for s in scored):
+            raise ValueError(f"Key item {item.key_id} is missing from a recorded run")
         items.append(
             ItemConsistency(
                 key_id=item.key_id,
                 label=item.label or item.key_id,
-                answers=tuple(answers),
-                statuses=tuple(statuses),
+                answers=tuple(
+                    _answer(f.get(s.finding_id or ""))
+                    for f, s in zip(found, scored, strict=True)
+                    if s
+                ),
+                statuses=tuple(s.status for s in scored if s),
             )
         )
     return SideConsistency(items=tuple(items))
 
 
 async def consistency(service: RunService, runs: int = RUNS) -> ConsistencyReport:
-    metas = service.recordings()[:runs]  # newest first
+    # Listing reads every recording file: keep it off the event loop.
+    metas = (await asyncio.to_thread(service.recordings))[:runs]  # newest first
     if not metas:
         raise NoRecordingError(f"No recordings for {service.scenario.id} yet.")
     ordered = sorted(metas, key=lambda m: m.recorded_at)

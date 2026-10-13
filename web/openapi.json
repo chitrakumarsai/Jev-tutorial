@@ -1735,6 +1735,16 @@
             },
             "description": "Failure envelope"
           },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope_NoneType_"
+                }
+              }
+            },
+            "description": "Failure envelope"
+          },
           "422": {
             "content": {
               "application/json": {

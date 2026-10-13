@@ -66,7 +66,7 @@ def recordings(scenario_id: str, services: Services) -> Envelope[list[RecordingM
 @router.get(
     "/{scenario_id}/consistency",
     summary="Consistency ×3: each side's answers across the recorded runs (no spend)",
-    responses=error_responses(404, 500),
+    responses=error_responses(404, 409, 500),
 )
 async def scenario_consistency(scenario_id: str, services: Services) -> Envelope[ConsistencyReport]:
     return Envelope.ok(await consistency(service_for(services, scenario_id)))
